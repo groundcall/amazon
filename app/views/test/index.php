@@ -1,6 +1,7 @@
-hello wolrD!
+<table>
+<?php foreach ($users as $user): ?>
+    <?php echo render('test/user', array('user' => $user))?>
+<?php endforeach ?>
+</table>
 
-what a nice try
-
-<a href="<?php echo url("test", array("id" => 2)); ?>"  >hello world! </a>
-<?php echo render('test/something') ?>
+<?php echo render('test/new')?>

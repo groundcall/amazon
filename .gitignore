@@ -1,1 +1,4 @@
 /nbproject/private/
+*.swp
+*.swo
+config/config.php
