@@ -18,8 +18,4 @@ class Database extends \PDO {
 
         return self::$instance;
     }
-
-    function exec($statement) {
-        throw new Exception('Permission denied');
-    }
 }

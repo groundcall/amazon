@@ -1,5 +1,5 @@
 <?php
-namespace Wee\Autoload;
+namespace Wee\Utils;
 
 /**
  * ClassLoader implements a PSR-0 class loader

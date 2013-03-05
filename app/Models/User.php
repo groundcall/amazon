@@ -1,43 +1,55 @@
 <?php
-
 namespace Models;
 
+/**
+ * User model
+ */
 class User extends \Wee\Model {
-    protected $id;
-    protected $username;
-    protected $created_at;
 
-    public function getId() {
-        return $this->id;
+    protected $firstName;
+    protected $lastName;
+    protected $email;
+
+    /**
+     *
+     */
+    public function __construct() {
+        $this->setAttrAccessible(array('firstName', 'lastName', 'email'));
+
+        $this->validate(function($user){
+            if (strlen($user->getFirstName()) < 2) {
+                $user->addError("firstName", "At least 2 characters please");
+                return false;
+            }
+            return true;
+        });
+
+        $this->validate(function($user){
+            if (strlen($user->getLastName()) < 2) {
+                $user->addError("lastName", "At least 2 characters please");
+                return false;
+            }
+            return true;
+        });
+
+        $this->validate(function($user){
+            if (strlen($user->getEmail()) < 2) {
+                $user->addError("email", "At least 2 characters please");
+                return false;
+            }
+            return true;
+        });
     }
 
-    public function getUsername() {
-        return $this->username;
+    public function getFirstName() {
+        return $this->firstName;
     }
 
-    public function setUsername($username) {
-        $this->username = $username;
+    public function getLastName() {
+        return $this->lastName;
     }
 
-    public function getCreatedAt() {
-        return \DateTime::createFromFormat("Y-m-d H:i:s", $this->created_at);
-    }
-
-    public function setCreatedAt($created_at) {
-        $this->created_at = $created_at->format("Y-m-d H:i:s");
-    }
-
-    public static function findAll() {
-        $db = \Wee\Database::sharedInstance();
-        $stmt = $db->prepare("select * from user");
-        $stmt->execute();
-
-        $results = array();
-
-        foreach ($stmt->fetchAll(\PDO::FETCH_ASSOC) as $row) {
-            $results[] = User::hydrate($row);
-        }
-
-        return $results;
+    public function getEmail() {
+        return $this->email;
     }
 }

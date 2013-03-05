@@ -2,76 +2,87 @@
 
 namespace Wee\Traits;
 
+/**
+ * Provides methods for serializing an object to and from a storage
+ *
+ * Persistence is not handled by this class.
+ */
 trait ActiveModel {
 
-    public function __construct() {
-        $this->loadFieldNames();
-        $this->validateProperties();
-    }
+    protected $_attr_accessible = array();
 
     /**
      * Returns the name of this Model
      */
     public function getModelName() {
-        return self::modelFromClass(get_class($this));
+        return \Wee\Utils\Utils::demodulize(get_class($this));
     }
 
+    public function setAttrAccessible($array) {
+        $that = $this;
+        array_map(function($value) use ($that) {
+                    if (!property_exists($that, $value)) {
+                        throw new \Exception("No such attibute '{$value}'");
+                    }
+                }, $array);
 
-    public static function modelFromClass($klass) {
-        return @end(explode('\\', strtolower($klass)));
+        $this->_attr_accessible = $array;
     }
 
-    /**
-     * Updates the row in the database
-     *
-     * @throws \Exception If the object is new
-     */
-    public function update() {
-        if ($this->isNew()) {
-            throw new \Exception("I can't update this object!");
-        } else {
-            $attributes = $this->getAttributes();
-            $this->updateRecord($this->id, $attributes, $this->getModelName());
+    public function updateAttributes($attributes) {
+        foreach ($attributes as $key => $value) {
+            if (property_exists($this, $key) && in_array($key, $this->_attr_accessible)) {
+                if (method_exists($this->$key, 'update_attributes')) {
+                    call_user_func(array($this->$key, 'update_attributes'), $value);
+                } else {
+                    $this->$key = $value;
+                }
+            }
         }
     }
 
     /**
-     * Returns if this object is new
-     * An object is new if there is no primary key set(id)
+     * Updates all the properties of this object from $array
      *
-     * @return boolean
+     * @param mixed $array an array of values with the array keys corresponding to properties on this object
+     * @return throws \Exception if a key is found that is not a property of this object
      */
-    public function isNew() {
-        return !is_numeric($this->id);
-    }
-
-    /**
-     * Persists this object in the database
-     * After saving the object, the primary key will be populated with the
-     * value form the database.
-     *
-     * @throws \Exception If the object is not new
-     */
-    public function insert() {
-        if (!$this->isNew()) {
-            throw new \Exception("Can't insert existing record");
-        } else {
-            $attributes = $this->getAttributes();
-            $this->id = $this->insertRecord($attributes, $this->getModelName());
+    public function updateAllAttributes($array) {
+        foreach ($array as $key => $value) {
+            if (property_exists($this, $key)) {
+                $this->$key = $value;
+            } else {
+                throw new \Exception("No such attribute {$key} for class " . get_class($this));
+            }
         }
     }
 
     /**
-     * Find an object by ID
-     * @param integer $id The id of the object
-     * @return Model
+     * Retrieves the values of the properties of this object defined in $this->attributes
+     *
+     * @return mixed
+     * @see loadFieldNames
+     * @see isReservedAttributeName
      */
-    public static function findById($id) {
-        $klass = get_called_class();
+    public function getAttributes() {
+        $r = array();
 
-        $values = self::selectById($id, self::modelFromClass($klass));
+        foreach (get_object_vars($this) as $key => $value) {
+            if (!$this->isReservedAttributeName($key)) {
+                $r[$key] = $value;
+            }
+        }
 
-        return self::hydrate($values[0], $klass);
+        return $r;
+    }
+
+    /**
+     * Return if $name is a reserved attribute
+     *
+     * @internal
+     */
+    private function isReservedAttributeName($name) {
+        return $name == 'id' || $name[0] == '_';
     }
 
     /**
@@ -85,23 +96,9 @@ trait ActiveModel {
     public static function hydrate($values, $klass = null) {
         $klass = is_null($klass) ? get_called_class() : $klass;
         $instance = new $klass();
-        $instance->updateAttributes($values);
+        $instance->updateAllAttributes($values);
 
         return $instance;
-    }
-
-    protected function loadFieldNames() {
-        $this->attributes = \Wee\Model::getFieldNamesForTable($this->getTableName());
-    }
-
-    protected function validateProperties() {
-        $vars = get_object_vars($this);
-
-        foreach ($this->attributes as $databaseColumn) {
-            if (!array_key_exists($databaseColumn, $vars)) {
-                throw new \Exception("Missing property {$databaseColumn} for " . $this->getModelName());
-            }
-        }
     }
 
 }

@@ -1,23 +1,27 @@
 <?php
-namespace Wee;
 
-define("DEFAULT_CONTROLLER", 'test');
+namespace Wee\Core;
+
+use \Wee\Utils\Utils;
+
+define("DEFAULT_CONTROLLER", 'default');
 define("DEFAULT_ACTION", 'index');
 
 class Kernel {
+
     public function run() {
-        $url = isset($_GET['url']) ? $_GET['url'] : DEFAULT_CONTROLLER;
+        $url = isset($_GET['url']) && strlen($_GET['url']) > 0 ? $_GET['url'] : DEFAULT_CONTROLLER;
         $url = explode('/', trim($url, '/'));
 
         // Controller
-        $controllerName = $this->classify($url[0]);
+        $controllerName = Utils::classify($url[0]);
         array_shift($url);
 
-        $controllerClass = \Wee\Utils::controllerClass($controllerName);
+        $controllerClass = Utils::controllerClass($controllerName);
         $controllerInstance = new $controllerClass();
 
         if (count($url)) {
-            $actionName = $url[0];
+            $actionName = Utils::camelize($url[0]);
             array_shift($url);
         } else {
             $actionName = DEFAULT_ACTION;
@@ -25,10 +29,9 @@ class Kernel {
 
         if (method_exists($controllerInstance, $actionName)) {
             $controllerInstance->$actionName();
+        } else {
+            throw new \Exception("No such action $actionName in $controllerClass");
         }
     }
 
-    public function classify($string) {
-        return ucfirst($string);
-    }
 }
