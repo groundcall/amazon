@@ -108,6 +108,29 @@ app/views/user/inactive.php
 <?php end ?>
 ```
 
+# Helpers #
+
+ApplicationHelper gets mixed into the view. Functions defined in the helper are available in the views using `$view->method()`
+
+```php
+<?php
+
+namespace Helpers;
+
+trait ApplicationHelper {
+    public function errorFor($object, $name) {
+        if ($object->hasError($name)) {
+            return implode(", ", $object->getError($name));
+        }
+        return '';
+    }
+}
+```
+
+```php
+<span><?php echo $view->errorFor($user, 'firstName') ?></span>
+```
+
 # Links #
 
 **url**($controllerAction, $parameters = array())
@@ -201,15 +224,9 @@ class User extends \Wee\Model {
     protected $created_at;
 }
 ```
-A model is a class in app/Models/ that:
-- is named after the SQL table name
-- extends \Wee\Model
-- had properties for all the fields in the table
-- has id as the primary key
 
 # Field types #
-
-The values loaded by the framework are of type string. In order to use other types, getters and setters need to be defined. It is recommended that all fields have getters and setters.
+Just define getters and setters:
 ```php
 public function getId() {
      return $this->id;
@@ -231,4 +248,61 @@ public function setCreatedAt($created_at) {
      $this->created_at = $created_at->format("Y-m-d H:i:s");
 }
 ```
+
+# Validation #
+
+## Adding validation ##
+
+`validate(callable)`
+
+`validate(as, callable)`
+
+See http://php.net/manual/ro/language.types.callable.php
+
+```php
+<?php
+class User extends \Wee\Model {
+  protected $first_name;
+  protected $last_name;
+
+  public __construct() {
+    $this->validate(function($user){
+      //check something
+    });
+  }
+}
+
+```
+
+By default such validators will run every time you call isValid(). It is also possible to control when to run these custom validations by giving an option as the first parameter and callable second.
+
+`$this->validate("admin", array($this, 'check_some_speci_stuff'))`
+
+## Checking if an object is valid ##
+
+`isValid()`
+
+`isValid(as)` - run all default validators + the custom ones.
+
+## Defining validators ##
+
+- functions that take one argument (the subject) and return true if valid, false if not and use addError("key", "message") to set errors.
+
+```php
+<?php
+// in some model
+$this->validate(function($user){
+    if (strlen($user->getFirstName()) < 2) {
+        $user->addError("firstName", "At least 2 characters please");
+        return false;
+      }
+    return true;
+});
+```
+
+## Retrieving errors ##
+
+See:
+- hasError(key)
+- getError(key)
 
