@@ -7,6 +7,8 @@ namespace Wee\Traits;
  */
 trait HasLayout {
 
+    protected $currentUser;
+
     /**
      * Renders a view
      *
@@ -14,7 +16,8 @@ trait HasLayout {
      * @param mixed $params an array of variables to pass to the template
      */
     public function render($view, $params = array()) {
-        $view = new \Wee\View($view, $params);
+        $defaults = array('current_user' => $this->currentUser);
+        $view = new \Wee\View($view, $params, $defaults);
 
         echo $view->getContent();
     }
