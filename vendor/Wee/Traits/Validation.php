@@ -9,6 +9,7 @@ trait Validation {
 
     protected $_validators = array('default' => array());
     protected $_errors = array();
+    protected $_valid = true;
 
     public function validate($as, $callable = null) {
         if (is_callable($as)) {
@@ -21,6 +22,7 @@ trait Validation {
 
     public function clearErrors() {
         $this->_errors = array();
+        $this->_valid = true;
     }
 
     public function getErrors() {
@@ -38,16 +40,11 @@ trait Validation {
     public function addError($key, $message) {
         isset($this->_errors[$key]) or $this->_errors[$key] = array();
         $this->_errors[$key][] = $message;
+        $this->_valid = false;
     }
 
     public function isValid($as = false) {
         $this->clearErrors();
-        $valid = true;
-
-        foreach (get_object_vars($this) as $property) {
-            $r = $this->validProperty($property, $as);
-            $valid = $valid && $r;
-        }
 
         $validators = $this->_validators['default'];
         if ($as !== false) {
@@ -55,27 +52,14 @@ trait Validation {
         }
 
         foreach ($validators as $validator) {
-            $validItem = call_user_func($validator, $this);
-            $valid = $valid && $validItem;
+            call_user_func($validator, $this);
         }
 
-        return $valid;
+        return $this->_valid;
     }
 
-    private function validProperty($object, $as = false) {
-        $result = true;
-
-        if (method_exists($object, "isValid")) {
-            $result = $object->isValid($as);
-        } elseif (is_array($object)) {
-            foreach ($object as $item) {
-                $r = $this->validProperty($item, $as);
-                $result = $result && $r;
-            }
-        }
-
-        return $result;
+    public function mergeValidationResult($valid) {
+        $this->_valid = $this->_valid && $valid;
     }
-
 }
 

@@ -76,6 +76,10 @@ trait ActiveModel {
         return $r;
     }
 
+    public function getAttribute($attributeName) {
+        return $this->$attributeName;
+    }
+
     /**
      * Return if $name is a reserved attribute
      *
