@@ -286,7 +286,7 @@ By default such validators will run every time you call isValid(). It is also po
 
 ## Defining validators ##
 
-- functions that take one argument (the subject) and return true if valid, false if not and use addError("key", "message") to set errors.
+- functions that take one argument (the subject) and use addError("key", "message") to set errors.
 
 ```php
 <?php
@@ -294,9 +294,7 @@ By default such validators will run every time you call isValid(). It is also po
 $this->validate(function($user){
     if (strlen($user->getFirstName()) < 2) {
         $user->addError("firstName", "At least 2 characters please");
-        return false;
-      }
-    return true;
+    }
 });
 ```
 
