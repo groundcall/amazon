@@ -29,6 +29,15 @@ trait ActiveModel {
         $this->_attr_accessible = $array;
     }
 
+    /**
+     * Updates the attributes of this object present in $attributes
+     *
+     * This funciton will ingore keys:
+     * - not declared with setAttrAccessible
+     * - not a property on the object
+     *
+     * @param array $attributes array of values
+     */
     public function updateAttributes($attributes) {
         foreach ($attributes as $key => $value) {
             if (property_exists($this, $key) && in_array($key, $this->_attr_accessible)) {
