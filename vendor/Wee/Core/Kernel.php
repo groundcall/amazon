@@ -4,8 +4,13 @@ namespace Wee\Core;
 
 use \Wee\Utils\Utils;
 
-define("DEFAULT_CONTROLLER", 'default');
-define("DEFAULT_ACTION", 'index');
+if (!defined("DEFAULT_CONTROLLER")) {
+    define("DEFAULT_CONTROLLER", 'default');
+}
+
+if (!defined("DEFAULT_ACTION")) {
+    define("DEFAULT_ACTION", 'index');
+}
 
 class Kernel {
 

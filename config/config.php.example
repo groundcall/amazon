@@ -6,3 +6,5 @@ define('DB_HOST', 'localhost');
 define('DB_NAME', 'test');
 define('DB_USER', 'username');
 define('DB_PASS', 'password');
+
+define("DEFAULT_CONTROLLER", 'default');
