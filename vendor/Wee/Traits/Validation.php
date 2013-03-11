@@ -43,11 +43,18 @@ trait Validation {
         $this->_valid = false;
     }
 
-    public function isValid($as = false) {
+    /**
+     * Checks if this object is valid.
+     * - this function will clear the existing errors and re-run all the registered validators.
+     *
+     * @param string $as run the validators registered under $as in addition to the default ones.
+     * @return boolean
+     */
+    public function isValid($as = "default") {
         $this->clearErrors();
 
         $validators = $this->_validators['default'];
-        if ($as !== false) {
+        if ($as !== "default") {
             $validators = array_merge($validators, $this->_validators[$as]);
         }
 
