@@ -41,28 +41,11 @@ trait ActiveModel {
         }
     }
 
-    /**
-     * Updates all the properties of this object from $array
-     *
-     * @param mixed $array an array of values with the array keys corresponding to properties on this object
-     * @return throws \Exception if a key is found that is not a property of this object
-     */
-    public function updateAllAttributes($array) {
-        foreach ($array as $key => $value) {
-            if (property_exists($this, $key)) {
-                $this->$key = $value;
-            } else {
-                throw new \Exception("No such attribute {$key} for class " . get_class($this));
-            }
-        }
-    }
 
     /**
-     * Retrieves the values of the properties of this object defined in $this->attributes
+     * Retrieves the attributes for this object.
      *
-     * @return mixed
-     * @see loadFieldNames
-     * @see isReservedAttributeName
+     * @return array
      */
     public function getAttributes() {
         $r = array();
@@ -76,6 +59,11 @@ trait ActiveModel {
         return $r;
     }
 
+    /**
+     * Retrieves the value of a given attribute
+     * @param string $attributeName the name of the attribute to retrieve
+     * @return mixed the value
+     */
     public function getAttribute($attributeName) {
         return $this->$attributeName;
     }
@@ -86,7 +74,24 @@ trait ActiveModel {
      * @internal
      */
     private function isReservedAttributeName($name) {
-        return $name == 'id' || $name[0] == '_';
+        return $name[0] == '_';
+    }
+
+    /**
+     * Updates all the properties of this object from $array
+     *
+     * @param mixed $array an array of values with the array keys corresponding to properties on this object
+     * @return throws \Exception if a key is found that is not a property of this object
+     * @see hydrate
+     */
+    private function updateAllAttributes($array) {
+        foreach ($array as $key => $value) {
+            if (property_exists($this, $key)) {
+                $this->$key = $value;
+            } else {
+                throw new \Exception("No such attribute {$key} for class " . get_class($this));
+            }
+        }
     }
 
     /**
@@ -94,8 +99,7 @@ trait ActiveModel {
      *
      * @param mixed $values The field values
      * @param string $klass the class to create
-     * @return An instance of the new class populated with the values from the
-     * database
+     * @return object a new instance of $klass populated with the values from the array
      */
     public static function hydrate($values, $klass = null) {
         $klass = is_null($klass) ? get_called_class() : $klass;
@@ -104,6 +108,5 @@ trait ActiveModel {
 
         return $instance;
     }
-
 }
 
