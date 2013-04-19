@@ -8,3 +8,4 @@ define('DB_USER', 'username');
 define('DB_PASS', 'password');
 
 define("DEFAULT_CONTROLLER", 'default');
+define("SHORT_URLS", false);

@@ -9,9 +9,9 @@ DEFINE("VENDOR_DIR", ROOT_DIR . DIRECTORY_SEPARATOR . 'vendor');
 DEFINE("CONFIG_DIR", ROOT_DIR . DIRECTORY_SEPARATOR . 'config');
 DEFINE("APP_DIR", ROOT_DIR . DIRECTORY_SEPARATOR . 'app');
 
+require CONFIG_DIR . '/config.php';
 require VENDOR_DIR . '/Wee/Utils/ClassLoader.php';
 require VENDOR_DIR . '/Wee/Utils/functions.php';
-require CONFIG_DIR . '/config.php';
 
 $loader = new \Wee\Utils\ClassLoader();
 $loader->add('Wee', VENDOR_DIR);
