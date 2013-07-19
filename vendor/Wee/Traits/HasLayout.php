@@ -9,6 +9,10 @@ trait HasLayout {
 
     protected $currentUser;
 
+    protected function getDefaultViewParameters() {
+        return array('current_user' => $this->currentUser);
+    }
+
     /**
      * Renders a view
      *
@@ -16,8 +20,7 @@ trait HasLayout {
      * @param mixed $params an array of variables to pass to the template
      */
     public function render($view, $params = array()) {
-        $defaults = array('current_user' => $this->currentUser);
-        $view = new \Wee\View($view, $params, $defaults);
+        $view = new \Wee\View($view, $params, $this->getDefaultViewParameters());
 
         echo $view->getContent();
     }
