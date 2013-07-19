@@ -1,9 +1,5 @@
 <?php
 
-if (!defined("SHORT_URLS")) {
-    define("SHORT_URLS", false);
-}
-
 /**
  * Generates a url
  *
@@ -25,8 +21,7 @@ function url($url, $params = array()) {
         throw new Exception("Not a valid controller/action pair");
     }
 
-    $path = SHORT_URLS ? '' : '/index.php?url=';
-    $path .= "/{$controller}/{$action}";
+    $path = "/{$controller}/{$action}";
 
     $x = array();
     foreach ($params as $k => $v) {
@@ -35,7 +30,7 @@ function url($url, $params = array()) {
 
     $variables = implode('&', $x);
     if (strlen($variables) > 0) {
-        $path .= SHORT_URLS ? '?' : '&';
+        $path .= '?';
         $path .= $variables;
     }
 
