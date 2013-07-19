@@ -11,20 +11,24 @@ trait ValidatesAssociated {
      * @param [string] $as Only run this validator when isValid() is called with $as
      */
     public function validatesAssociated($attributeName, $as = 'default') {
-        $validator = function($object) use ($attributeName, &$validator) {
-            $attribute = $object->getAttribute($attributeName);
-
-            if (method_exists($attribute, 'isValid')) {
-                $valid = $attribute->isValid($as);
-                $this->mergeValidationResult($valid);
-            } elseif (is_array($object)) {
-                foreach ($attribute as $item) {
-                    $validator($item);
-                }
-            }
-        };
+        $validator = function($object, $attribute = NULL) use ($attributeName, &$validator, $as) {
+                    if ($attribute == null) {
+                        $attribute = $object->getAttribute($attributeName);
+                        $validator($object, $attribute);
+                    } else {
+                        if (method_exists($attribute, 'isValid')) {
+                            $valid = $attribute->isValid($as);
+                            $object->mergeValidationResult($valid);
+                        } elseif (is_array($attribute)) {
+                            foreach ($attribute as $item) {
+                                $validator($object, $item);
+                            }
+                        }
+                    }
+                };
 
         $this->validate($as, $validator);
     }
+
 }
 
