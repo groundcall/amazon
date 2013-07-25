@@ -53,14 +53,20 @@ class ProfileController extends \Wee\Controller {
 
 # Masterpages #
 
-- any file many extend another file
-- use $view->extend('layout/login')
+- masterpages can be defined in app/views/masterpages/
+- should contain portions of a page that don't change (like the navigation, username, logout link, etc.)
+- use $view->extend('masterpages/login')
 - take a special variable $content
 
-app/views/layout/**profile**.php
+app/views/masterpages/**profile**.php
 
 ```php
 <html>
+    NAVIGATION
+    <?php if $current_user->isLoggedIn(): ?>
+      <?php echo $current_user->getUsername(); ?>
+    <?php endif ?>
+
     <body class="<?php echo $bodyClass ?>">
        <?php echo $content ?>
     </body>
@@ -70,7 +76,7 @@ app/views/layout/**profile**.php
 app/views/profile/index.php
 
 ```php
-<?php $view->extend('layout/profile', array('bodyClass' => 'edit'))
+<?php $view->extend('masterpages/profile', array('bodyClass' => 'edit'))
 
 <p>edit your profile</p>
 <form ... >
