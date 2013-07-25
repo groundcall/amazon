@@ -259,9 +259,7 @@ public function setCreatedAt($created_at) {
 
 ## Adding validation ##
 
-`validate(callable)`
-
-`validate(as, callable)`
+`registerValidator(callable)`
 
 See http://php.net/manual/ro/language.types.callable.php
 
@@ -272,7 +270,7 @@ class User extends \Wee\Model {
   protected $last_name;
 
   public __construct() {
-    $this->validate(function($user){
+    $this->registerValidator(function($user){
       //check something
     });
   }
@@ -280,15 +278,11 @@ class User extends \Wee\Model {
 
 ```
 
-By default such validators will run every time you call isValid(). It is also possible to control when to run these custom validations by giving an option as the first parameter and callable second.
-
-`$this->validate("admin", array($this, 'check_some_speci_stuff'))`
+`$this->registerValidator(array($this, 'check_some_speci_stuff'))`
 
 ## Checking if an object is valid ##
 
 `isValid()`
-
-`isValid(as)` - run all default validators + the custom ones.
 
 ## Defining validators ##
 
@@ -297,7 +291,7 @@ By default such validators will run every time you call isValid(). It is also po
 ```php
 <?php
 // in some model
-$this->validate(function($user){
+$this->registerValidator(function($user){
     if (strlen($user->getFirstName()) < 2) {
         $user->addError("firstName", "At least 2 characters please");
     }

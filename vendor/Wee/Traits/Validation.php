@@ -7,26 +7,17 @@ namespace Wee\Traits;
  */
 trait Validation {
 
-    protected $_validators = array('default' => array());
+    protected $_validators = array();
     protected $_errors = array();
     protected $_valid = true;
 
     /**
      * Register a validator for this object.
      *
-     * This funciton can be called in two ways:
-     * - a single parameter: validate(callable): callable will the added to the list of
-     * default validators.
-     * - a validator type, validate("as_something", callable): callable is registered
-     * as "as_something" and will only run when isValid() is called with isValid("as_something")
+     * @param callable the validator to add to the list of validators
      */
-    public function validate($as, $callable = null) {
-        if (is_callable($as)) {
-            $this->_validators['default'][] = $as;
-        } else {
-            $this->_validators[$as] = isset($this->_validators[$as]) ? $this->_validators[$as] : array();
-            $this->_validators[$as][] = $callable;
-        }
+    public function registerValidator($callable = null) {
+        $this->_validators[] = $callable;
     }
 
 
@@ -79,16 +70,12 @@ trait Validation {
      * Checks if this object is valid.
      * - this function will clear the existing errors and re-run all the registered validators.
      *
-     * @param string $as run the validators registered under $as in addition to the default ones.
      * @return boolean
      */
-    public function isValid($as = "default") {
+    public function isValid() {
         $this->clearErrors();
 
-        $validators = $this->_validators['default'];
-        if ($as !== "default") {
-            $validators = array_merge($validators, $this->_validators[$as]);
-        }
+        $validators = $this->_validators;
 
         foreach ($validators as $validator) {
             call_user_func($validator, $this);
