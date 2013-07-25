@@ -17,6 +17,7 @@ class Database extends \PDO {
 
         if (is_null(self::$instance)) {
             self::$instance = new Database();
+            self::$instance->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             self::$instance->exec('set names utf8');
         }
 
