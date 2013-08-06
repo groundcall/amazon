@@ -5,7 +5,7 @@ A minimal PHP MVC framework.
 
 # Controllers #
 
-app/Controllers/**Test**Controller.php
+app/Controllers/TestController.php
 
 ```php
 namespace Controllers;
