@@ -143,22 +143,22 @@ trait ApplicationHelper {
 
 ```php
 echo url('test');
-=> "/index.php?url=test/index"
+=> "/test/index"
 ```
 
 ```php
 echo url('test/index');
-=> "/index.php?url=test/index"
+=> "/test/index"
 ```
 
 ```php
 echo url('user/edit', array('id' => 1));
-=> "/index.php?url=user/edit&id=1"
+=> "/user/edit?id=1"
 ```
 
 ```php
 echo url('user/list', array('sort' => 'username', 'direction' => 'up'));
-=> "/index.php?url=user/list&sort=username&direction=up"
+=> "/user/list?sort=username&direction=up"
 ```
 
 # Handling parameters #
