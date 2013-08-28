@@ -40,6 +40,17 @@ class Controller {
     }
 
     /**
+     * Redirects to url
+     *
+     * @param string $url a valid url          
+     * @note this method will send a HTTP Location header and end the execution of the current request
+     */
+    public function redirectToUrl($url) {
+        header("Location: $url");
+        exit();
+    }
+
+    /**
      * Override this if you need custom processing before all the actions in this controller
      */
     protected function initialize() {
