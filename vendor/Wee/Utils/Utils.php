@@ -3,6 +3,7 @@
 namespace Wee\Utils;
 
 class Utils {
+    const DAO_CLASS = '\Wee\Dao';
 
     /**
      * Returns a celized string from a lowe case and underscored string by upper-casing the first and each letter preceded by an underscore
@@ -35,7 +36,32 @@ class Utils {
     static function controllerClass($string) {
         $class = self::classify($string);
 
-        return "\\Controllers\\{$class}Controller";
+        $className = "\\Controllers\\{$class}Controller";
+        self::assertClassExists($className);
+
+        return $className;
     }
 
+    static function assertClassExists($name) {
+        if (!class_exists($name)) {
+            die("What is $name?");
+        }
+    }
+
+    static function assertInstanceOf($klassName, $parent) {
+        $klass = new \ReflectionClass($klassName);
+        if (!$klass->isSubclassOf($parent)) {
+            die("{$klassName} must extend $parent");
+        }
+    }
+
+    static function daoClass($name) {
+        $class = self::classify($name);
+
+        $className = "\\Dao\\{$class}Dao";
+        self::assertClassExists($className);
+        self::assertInstanceOf($className, self::DAO_CLASS);
+
+        return $className;
+    }
 }
