@@ -12,4 +12,8 @@ class Dao {
     public static function create($connection) {
         return new Dao($connection);
     }
+
+    public function getConnection() {
+        return $this->connection;
+    }
 }
