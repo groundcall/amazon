@@ -1,10 +1,8 @@
 <?php
-# you need to copy this file to config.php and customize the values
+# you need to copy this file to database.php and customize the values
 
 define('DB_TYPE', 'mysql');
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'test');
 define('DB_USER', 'username');
 define('DB_PASS', 'password');
-
-define("DEFAULT_CONTROLLER", 'default');

@@ -9,9 +9,9 @@ DEFINE("VENDOR_DIR", ROOT_DIR . DIRECTORY_SEPARATOR . 'vendor');
 DEFINE("CONFIG_DIR", ROOT_DIR . DIRECTORY_SEPARATOR . 'config');
 DEFINE("APP_DIR", ROOT_DIR . DIRECTORY_SEPARATOR . 'app');
 
-if (!file_exists(CONFIG_DIR . '/config.php')) {
-    echo "Error: config/config.php not found! <br> <br>";
-    echo "Copy the example config by running: <b>cp ". ROOT_DIR . "/config/config.php{.example,}</b> ";
+if (!file_exists(CONFIG_DIR . '/database.php')) {
+    echo "Error: config/database.php not found! <br> <br>";
+    echo "Copy the example config by running: <b>cp ". ROOT_DIR . "/config/database.php{.example,}</b> ";
     die();
 }
 
