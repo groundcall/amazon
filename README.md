@@ -8,6 +8,8 @@ A minimal PHP MVC framework.
 app/Controllers/TestController.php
 
 ```php
+<?php
+
 namespace Controllers;
 class TestController extends \Wee\Controller {
 }
@@ -16,6 +18,8 @@ class TestController extends \Wee\Controller {
 actions are *public* functions in the controller class
 
 ```php
+<?php
+
 public function index() {
     $this->render('text/index');
 }
@@ -32,6 +36,8 @@ public function update() {
 app/Controllers/ProfileController.php
 
 ```php
+<?php
+
 namespace Controllers;
 class ProfileController extends \Wee\Controller {
     protected function initialize() {
@@ -83,6 +89,8 @@ app/views/profile/index.php
 ```
 
 ```php
+<?php
+
 namespace Controllers;
 class ProfileController extends \Wee\Controller {
     public function edit() {
