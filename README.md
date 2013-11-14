@@ -229,6 +229,8 @@ CREATE TABLE `user` (
 app/Models/User.php
 
 ```php
+<?php
+
 namespace Models;
 
 class User extends \Wee\Model {
@@ -240,8 +242,12 @@ class User extends \Wee\Model {
 ```
 
 # Field types #
+
 Just define getters and setters:
+
 ```php
+<?php
+
 public function getId() {
      return $this->id;
 }
