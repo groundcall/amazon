@@ -17,10 +17,6 @@ function url($url, $params = array()) {
     $controller = isset($url[0]) ? $url[0] : '';
     $action = isset($url[1]) ? $url[1] : DEFAULT_ACTION;
 
-    if (!\Wee\Utils\NameValidator::validateAsControllerAction($controller, $action)) {
-        throw new Exception("Not a valid controller/action pair");
-    }
-
     $path = "/{$controller}/{$action}";
 
     $x = array();
