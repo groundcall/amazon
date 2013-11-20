@@ -314,9 +314,43 @@ $this->registerValidator(function($user){
 
 ## Retrieving errors ##
 
-See:
+```php
+<?php
+
+//isValid executes the registered validators
+if (!$user->isValid()) {
+    echo "User is invalid";
+
+    if ($user->hasError('email')) {
+       echo "Email is invalid";
+
+       foreach ($user->getErrors('email') as $error) {
+         echo $error;
+       }
+    }
+}
+
+```
+
 - hasError(key)
-- getError(key)
+
+checks if `key` as a validation error set.
+
+
+- getErrors(key)
+
+returns a list of errors on `key`, attached with `$object->addError(key, message)`
+
+### Erorrs on views
+
+You can use `errorFor` helper from `app/Helpers/ApplicationHelper.php`
+
+```php
+<div class="errors">
+  <?php echo $view->errorFor($user, 'email') ?>
+</div>
+```
+
 
 ## Database access, DAO
 
