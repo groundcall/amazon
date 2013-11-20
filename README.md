@@ -318,3 +318,29 @@ See:
 - hasError(key)
 - getError(key)
 
+## Database access, DAO
+
+- create dao classes in app/Dao/NameDao.php
+- use $this->getConnection() to get a [PDO](http://www.php.net/manual/en/pdo.prepared-statements.php) object
+
+```php
+<?php
+
+namespace Dao;
+
+class PostDao extends \Wee\Dao {
+
+  public function findById($id) {
+    $sql = 'SELECT * FROM posts WHERE id = ?';
+
+    $stmt = $this->getConnection()->prepare($sql);
+    $stmt->execute(array($id));
+
+    return $this->getRow($stmt);
+  }
+}
+```
+
+## DaoFactory
+
+- once you have created the DAO class, you can access it by name using `\Wee\DaoFactory::getDao('post')`
