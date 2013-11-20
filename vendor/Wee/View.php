@@ -28,8 +28,12 @@ class View {
     }
 
     public function render($template, $vars = array()) {
+        echo $this->getViewContent($template, $vars = array());
+    }
+
+    public function getViewContent($template, $vars = array()) {
         $view = new View($template, $vars, $this->defaults);
-        echo $view->getContent();
+        return $view->getContent();
     }
 
     public function getContent() {
