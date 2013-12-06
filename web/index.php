@@ -16,6 +16,7 @@ if (!file_exists(CONFIG_DIR . '/database.php')) {
 }
 
 require CONFIG_DIR . '/config.php';
+require CONFIG_DIR . '/database.php';
 require VENDOR_DIR . '/Wee/Utils/ClassLoader.php';
 require VENDOR_DIR . '/Wee/Utils/functions.php';
 

@@ -10,7 +10,8 @@ class Dao {
     }
 
     public static function create($connection) {
-        return new Dao($connection);
+        $klass = get_called_class();
+        return new $klass($connection);
     }
 
     public function getConnection() {
