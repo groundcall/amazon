@@ -275,7 +275,11 @@ public function setCreatedAt($created_at) {
 
 `registerValidator(callable)`
 
-See http://php.net/manual/ro/language.types.callable.php
+The registerValidator method takes as an argument a [PHP Callable](http://php.net/manual/ro/language.types.callable.php). The framework internally uses `call_user_func` on this parameter. This means that the following calls are valid, just keep in mind the format of the validators from "Defining validators" :
+
+`registerValidator(function(){...})`
+`registerValidator(array('Some\ClassName', 'someStaticMethod'))`
+`$this->registerValidator(array($this, 'check_some_speci_stuff'))`
 
 ```php
 <?php
@@ -292,7 +296,7 @@ class User extends \Wee\Model {
 
 ```
 
-`$this->registerValidator(array($this, 'check_some_speci_stuff'))`
+Also you can add your validation methods in `Validators\Base.php`. This [trait](http://www.php.net/manual/ro/language.oop5.traits.php) is included in the base model class from the WEE framework so all validators added here will be loaded for all model classes.
 
 ## Checking if an object is valid ##
 
