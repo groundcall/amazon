@@ -2,3 +2,7 @@
 *.swp
 *.swo
 config/config.php
+.idea
+*.swp
+*.swo
+config/database.php
