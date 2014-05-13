@@ -214,6 +214,8 @@ class UserController extends \Wee\Controller {
 
 # Models #
 
+## Defining a model ##
+
 Starting with the following database table
 
 ```sql
@@ -241,7 +243,7 @@ class User extends \Wee\Model {
 }
 ```
 
-# Field types #
+## Field types ##
 
 Just define getters and setters:
 
@@ -266,6 +268,30 @@ public function getCreatedAt() {
 
 public function setCreatedAt($created_at) {
      $this->created_at = $created_at->format("Y-m-d H:i:s");
+}
+```
+
+## Updating fields ##
+
+You can define in the constructor of the model a list of accessible fields.
+These fields are then allowed to be updated by passing an array to `updateAttributes` method of the model.
+
+```php
+<?php
+public function __construct() {
+    $this->setAttrAccessible(array('last_name', 'first_name'));
+}
+```
+
+Then you can call the updateAttributes and pass an array with the fields as keys and the field values as values.
+NOTE : you can pass the whole $_POST array as long as the input fields from the HTML have the same name as the fields from the model.
+
+```php
+$user = new \Models\User();
+$user->updateAttributes($_POST);
+
+if ($user->isValid()) {
+...
 }
 ```
 
