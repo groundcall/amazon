@@ -12,4 +12,10 @@ trait ApplicationHelper {
         }
         return '';
     }
+    
+    public function getCategories() {
+        $categoryDao = \Wee\DaoFactory::getDao('Category');
+        $categories = $categoryDao->getAllCategories();
+        return $categories;
+    }
 }

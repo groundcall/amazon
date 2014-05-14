@@ -83,7 +83,7 @@ trait Validation {
 
         return $this->_valid;
     }
-
+    
     /**
      * Sets a validation error unless there already is one.
      *
