@@ -1,4 +1,5 @@
 <?php $view->extend('masterpages/cpanel'); ?>
+
 <!--  start page-heading -->
 <div id="page-heading">
     <h1>Product list</h1>
@@ -71,12 +72,13 @@
                             </tr>
                             <?php $i = 0; ?>
                             <?php foreach ($products as $product): ?>
+                            
                                  <tr <?php echo $i % 2 == 0 ? "" : "class='alternate-row'"; ?>>
                                     <td><?php echo $product->getTitle(); ?></td>
-                                    <td><?php echo $product->getLabel(); ?></td>
+                                    <td><?php echo $product->getCategory()->getLabel(); ?></td>
                                     <td><?php echo $product->getShort_description(); ?></td>
                                     <td><?php echo $product->getPrice(); ?></td>
-                                    <td><?php echo $product->getStock(); ?></td>
+                                    <td><?php echo ($product->getStock() == 0) ? 'OUT' : $product->getStock(); ?></td>
                                     <td class="options-width">
                                         <form action="<?php echo url('admin_products/show_edit_product'); ?>" method="get" >
                                             <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>" />
