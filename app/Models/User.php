@@ -3,6 +3,8 @@
 namespace Models;
 
 class User extends \Wee\Model {
+    
+    use \Validators\UserValidator;
 
     protected $id;
     protected $username;
@@ -23,27 +25,14 @@ class User extends \Wee\Model {
     function __construct() {
         $this->setAttrAccessible(array('id', 'username', 'password', 'password2', 'firstname', 'lastname', 'email', 'phone', 'gender', 'activated', 'role_id', 'activation_key',
             'billing_address_id', 'shipping_address_id', 'created_at'));
+        
+        $this->validateUserFirstname();
+        $this->validateUserLastname();
+        $this->validateUserUsername();
+        $this->validateUserEmail();
+        $this->validateUserPhone();
+        $this->validateUserGender();
 
-        $this->registerValidator(function($user) {
-            if (!preg_match("/^[a-zA-Z\s]+$/", $user->getFirstname())) {
-                $user->addError("firstname", "Name must contain only letters.");
-            }
-            if (!preg_match("/^[a-zA-Z\s]+$/", $user->getLastname())) {
-                $user->addError("lastname", "LastName must contain only letters.");
-            }
-            if (!preg_match('/^[A-Za-z][A-Za-z0-9]{5,31}$/', $user->getUsername())) {
-                $user->addError("username", "Username format incorrect");
-            }
-            if (!preg_match("/([\w\-]+\@[\w\-]+\.[\w\-]+)/", $user->getEmail())) {
-                $user->addError("email", "Email format incorrect.");
-            }
-            if (strlen($user->getPhone()) != 10 || !is_numeric($user->getPhone())) {
-                $user->addError("phone", "Phone number must contain 10 digits.");
-            }
-            if (!($user->getGender() == "M" || $user->getGender() == "F")) {
-                $user->addError("gender", "Please select a gender.");
-            }
-        });
     }
 
     public function __destruct() {

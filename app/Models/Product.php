@@ -2,12 +2,16 @@
 
 namespace Models;
 
+
+
 class Product extends \Wee\Model {
+    
+    use \Validators\ProductValidator;
+    
     
     protected $id;
     protected $title;
     protected $category_id;
-    protected $label;
     protected $price;
     protected $author_id;
     protected $isbn;
@@ -16,9 +20,17 @@ class Product extends \Wee\Model {
     protected $short_description;
     protected $stock;
     protected $active;
-    
+    protected $category;
+            
     function __construct() {
-        $this->setAttrAccessible(array('id', 'title', 'category_id', 'label', 'price', 'author_id', 'isbn', 'appereance_year', 'description', 'short_description', 'stock', 'active'));
+        $this->setAttrAccessible(array('id', 'title', 'category_id', 'price', 'author_id', 'isbn', 'appereance_year', 'description', 'short_description', 'stock', 'active'));
+    
+        $this->validateProductTitle();
+        $this->validateProductPrice();
+        $this->validateProductStock();
+        $this->validateProductDescription();
+        $this->validateProductShort_description();
+
     }
     
     public function __destruct() {
@@ -77,7 +89,7 @@ class Product extends \Wee\Model {
         $this->title = $title;
     }
 
-    public function setCategory_id($category_id) {
+    public function setCategory_Id($category_id) {
         $this->category_id = $category_id;
     }
 
@@ -129,5 +141,12 @@ class Product extends \Wee\Model {
         $this->appereance_year = $appereance_year;
     }
 
-
+    public function setCategory() {
+        $categoryDao = \Wee\DaoFactory::getDao('Category');
+        $this->category = $categoryDao->getCategoryById($this->category_id);
+    }
+    
+    public function getCategory() {
+        return $this->category;
+    }
 }
