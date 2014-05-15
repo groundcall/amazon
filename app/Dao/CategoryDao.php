@@ -34,4 +34,12 @@ class CategoryDao extends \Wee\Dao {
         $stmt->execute();
         return $this->getCategories($stmt);
     }
+    
+    public function getCategoryById($category_id) {
+        $sql = 'SELECT * FROM categories WHERE id = :id';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':id', $category_id);
+        $stmt->execute();
+        return $this->getCategory($stmt);
+    }
 }
