@@ -51,6 +51,7 @@
                                 <td valign="top">
                                     <input type="submit" value="Filter" class="form-submit" />
                                     <input type="hidden" name="page" value="<?php echo $page; ?>" />
+                                    <input type="hidden" name="filter" value="ON" />
                                     <a href="<?php echo url('admin_products'); ?>" class="form-reset" ></a>
                                 </td>
                                 <td></td>
@@ -62,64 +63,81 @@
                 <!--  start table-content  -->
                 <div id="table-content">
                     <!--  start product-table ..................................................................................... -->
-                        <table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
-                            <tr>
-                                <th class="table-header-repeat line-left minwidth-1"><a href="">Product Name</a>	</th>
-                                <th class="table-header-repeat line-left minwidth-1"><a href="">Category</a>	</th>
-                                <th class="table-header-repeat line-left minwidth-1"><a href="">Short description</a></th>
-                                <th class="table-header-repeat line-left minwidth-1"><a href="">Price</a></th>
-                                <th class="table-header-repeat line-left"><a href="">Stock</a></th>
-                                <th class="table-header-options line-left"><a href="">Options</a></th>
+                    <table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
+                        <tr>
+                            <th class="table-header-repeat line-left minwidth-1"><a href="">Product Name</a>	</th>
+                            <th class="table-header-repeat line-left minwidth-1"><a href="">Category</a>	</th>
+                            <th class="table-header-repeat line-left minwidth-1"><a href="">Short description</a></th>
+                            <th class="table-header-repeat line-left minwidth-1"><a href="">Price</a></th>
+                            <th class="table-header-repeat line-left"><a href="">Stock</a></th>
+                            <th class="table-header-options line-left"><a href="">Options</a></th>
+                        </tr>
+                        <?php $i = 0; ?>
+                        <?php foreach ($products as $product): ?>
+
+                            <tr <?php echo $i % 2 == 0 ? "" : "class='alternate-row'"; ?>>
+                                <td><?php echo $product->getTitle(); ?></td>
+                                <td><?php echo $product->getCategory()->getLabel(); ?></td>
+                                <td><?php echo $product->getShort_description(); ?></td>
+                                <td><?php echo $product->getPrice(); ?></td>
+                                <td><?php echo ($product->getStock() == 0) ? 'OUT' : $product->getStock(); ?></td>
+                                <td class="options-width">
+                                    <form action="<?php echo url('admin_products/show_edit_product'); ?>" method="get" >
+                                        <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>" />
+                                        <input type="submit" value="Edit" />
+                                    </form>
+
+                                    <form action="<?php echo url('admin_products/delete_product'); ?>" method="post" >
+                                        <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>" />
+                                        <input type="submit" value="Delete" />
+                                    </form>
+
+                                    <form action="<?php echo url('admin_products/activate_product'); ?>" method="post" >
+                                        <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>" />
+                                        <input type="submit" value="<?php echo ($product->getActive() == 1) ? 'Deactivate' : 'Activate'; ?>" name="<?php echo ($product->getActive() == 1) ? 'deactivate' : 'activate'; ?>" />
+                                    </form>
+                                </td>
                             </tr>
-                            <?php $i = 0; ?>
-                            <?php foreach ($products as $product): ?>
-                            
-                                 <tr <?php echo $i % 2 == 0 ? "" : "class='alternate-row'"; ?>>
-                                    <td><?php echo $product->getTitle(); ?></td>
-                                    <td><?php echo $product->getCategory()->getLabel(); ?></td>
-                                    <td><?php echo $product->getShort_description(); ?></td>
-                                    <td><?php echo $product->getPrice(); ?></td>
-                                    <td><?php echo ($product->getStock() == 0) ? 'OUT' : $product->getStock(); ?></td>
-                                    <td class="options-width">
-                                        <form action="<?php echo url('admin_products/show_edit_product'); ?>" method="get" >
-                                            <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>" />
-                                            <input type="submit" value="Edit" />
-                                        </form>
-                                        
-                                        <form action="<?php echo url('admin_products/delete_product'); ?>" method="post" >
-                                            <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>" />
-                                            <input type="submit" value="Delete" />
-                                        </form>
-                                        
-                                        <form action="<?php echo url('admin_products/activate_product'); ?>" method="post" >
-                                            <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>" />
-                                            <input type="submit" value="<?php echo ($product->getActive() == 1) ? 'Deactivate' : 'Activate'; ?>" name="<?php echo ($product->getActive() == 1) ? 'deactivate' : 'activate'; ?>" />
-                                        </form>
-                                    </td>
-                                </tr>
-                                <?php $i = $i + 1; ?>
-                            <?php endforeach; ?>
-                            
-                        </table>
-                        <!--  end product-table................................... --> 
+                            <?php $i = $i + 1; ?>
+                        <?php endforeach; ?>
+
+                    </table>
+                    <!--  end product-table................................... --> 
                 </div>
                 <!--  end content-table  -->
 
                 <!--  start paging..................................................... -->
                 <table border="0" cellpadding="0" cellspacing="0" id="paging-table">
                     <tr>
-                        <?php $numberOfPages = $view->numberOfProductPages(); ?>
-                        
-                        <?php if ($page > $numberOfPages): ?>
-                            <?php $page = $numberOfPages; ?>
-                        <?php endif; ?>                        
-                        <td>
-                            <a href="<?php echo url('admin_products', array('page' => 1)); ?>" class="page-far-left"></a>
-                            <a href="<?php echo url("admin_products", array("page" => ($current = ($page > 1) ? $page - 1 : 1))); ?>" class="page-left"></a>
-                            <div id="page-info">Page <strong><?php echo $page; ?></strong> / <?php echo $numberOfPages; ?></div>
-                            <a href="<?php echo url("admin_products", array("page" => ($current = ($page < $numberOfPages) ? $page+1 : $numberOfPages))); ?>" class="page-right"></a>
-                            <a href="<?php echo url('admin_products', array('page' => $numberOfPages)); ?>" class="page-far-right"></a>
-                        </td>
+                        <?php if (!(isset($_GET['category']) || isset($_GET['product_name']) || isset($_GET['stock']))): ?>
+                            <?php $numberOfPages = $view->numberOfProductPages(); ?>
+
+                            <?php if ($page > $numberOfPages): ?>
+                                <?php $page = $numberOfPages; ?>
+                            <?php endif; ?>                        
+                            <td>
+                                <a href="<?php echo url('admin_products', array('page' => 1)); ?>" class="page-far-left"></a>
+                                <a href="<?php echo url("admin_products", array("page" => ($current = ($page > 1) ? $page - 1 : 1))); ?>" class="page-left"></a>
+                                <div id="page-info">Page <strong><?php echo $page; ?></strong> / <?php echo $numberOfPages; ?></div>
+                                <a href="<?php echo url("admin_products", array("page" => ($current = ($page < $numberOfPages) ? $page + 1 : $numberOfPages))); ?>" class="page-right"></a>
+                                <a href="<?php echo url('admin_products', array('page' => $numberOfPages)); ?>" class="page-far-right"></a>
+                            </td>
+                        <?php else: ?>
+                            <?php $numberOfPages = $numberofpages; ?>
+
+                            <?php if ($page > $numberOfPages): ?>
+                                <?php $page = $numberOfPages; ?>
+                            <?php endif; ?>                        
+                            <td>
+                                <?php $get_array = array('category' => $_GET['category'], 'title' => $_GET['product_name']); ?>
+                                <?php if (isset($_GET['stock'])): $get_array = array_merge($get_array, array('stock' => $_GET['stock'])); endif; ?>
+                                <a href="<?php echo url('admin_products/filter_products', $get_array = array_merge($get_array, array('page' => 1))); ?>" class="page-far-left"></a>
+                                <a href="<?php echo url("admin_products/filter_products", $get_array = array_merge($get_array, array("page" => ($current = ($page > 1) ? $page - 1 : 1)))); ?>" class="page-left"></a>
+                                <div id="page-info">Page <strong><?php echo $page; ?></strong> / <?php echo $numberOfPages; ?></div>
+                                <a href="<?php echo url("admin_products/filter_products", array("page" => ($current = ($page < $numberOfPages) ? $page + 1 : $numberOfPages))); ?>" class="page-right"></a>
+                                <a href="<?php echo url('admin_products/filter_products', array('page' => $numberOfPages)); ?>" class="page-far-right"></a>
+                            </td>
+                        <?php endif; ?>
                     </tr>
                 </table>
                 <!--  end paging................ -->

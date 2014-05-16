@@ -11,11 +11,18 @@ class AdminProductsController extends \Wee\Controller {
      * The default action
      */
     public function index() {
+        if (isset($_GET['filter'])) {
+            $this->filterProducts();
+        } else {
+            $this->showAllProducts();
+        }
+    }
+
+    public function showAllProducts() {
         $productPerPage = 10;
         if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
             $page = $_GET['page'];
-        }
-        else {
+        } else {
             $page = 1;
         }
         $start = ($page - 1) * $productPerPage;
@@ -23,6 +30,27 @@ class AdminProductsController extends \Wee\Controller {
         $productDao = \Wee\DaoFactory::getDao('Product');
         $products = $productDao->getAllProducts($start, $limit);
         $this->render('admin/list_products', array('products' => $products, 'page' => $page));
+    }
+
+    public function filterProducts() {
+        $filter_query = parse_url($_SERVER['REQUEST_URI']); 
+        $productPerPage = 10;
+        if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
+            $page = $_GET['page'];
+        } else {
+            $page = 1;
+        }
+        $start = ($page - 1) * $productPerPage;
+        $limit = $productPerPage;
+        if (!isset($_GET['stock'])) {
+            $stock = 0;
+        } else {
+            $stock = 1;
+        }
+        $productDao = \Wee\DaoFactory::getDao('Product');
+        $products = $productDao->getFilterProducts($_GET['product_name'], $_GET['category'], $stock, $start, $limit);
+        $numberofpages = intval(sizeof($products) / $productPerPage) + 1;
+        $this->render('admin/list_products', array('products' => $products, 'page' => $page, 'numberofpages' => $numberofpages));
     }
 
     public function deleteProduct() {
@@ -53,26 +81,6 @@ class AdminProductsController extends \Wee\Controller {
         $this->redirect('admin_products');
     }
 
-    public function filterProducts() {
-        $productPerPage = 10;
-        if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
-            $page = $_GET['page'];
-        }
-        else {
-            $page = 1;
-        }
-        $start = ($page - 1) * $productPerPage;
-        $limit = $productPerPage;
-        if (!isset($_GET['stock'])) {
-            $stock = 0;
-        } else {
-            $stock = 1;
-        }
-        $productDao = \Wee\DaoFactory::getDao('Product');
-        $products = $productDao->getFilterProducts($_GET['product_name'], $_GET['category'], $stock, $start, $limit);
-        $this->render('admin/list_products', array('products' => $products, 'page' => $page));
-    }
-
     public function showProductForm() {
         $this->render('admin/add_product', array('product' => null));
     }
@@ -94,7 +102,7 @@ class AdminProductsController extends \Wee\Controller {
             $product->setImage($image);
             $product->validateProductImageType();
             $product->validateProductImageSize();
-            
+
             if ($product->isValid()) {
                 $productDao = \Wee\DaoFactory::getDao('Product');
                 $productDao->addProduct($product);
@@ -102,13 +110,12 @@ class AdminProductsController extends \Wee\Controller {
                 $image->saveImage();
                 $product->setImage($image);
                 $this->showProductForm();
-            }
-            else {
+            } else {
                 $this->render('admin/add_product', array('product' => $product));
             }
         }
     }
-    
+
     public function editProduct() {
         $product = null;
         $image = null;
@@ -117,11 +124,11 @@ class AdminProductsController extends \Wee\Controller {
             $old_product = $productDao->getProductById($_POST['data']['id']);
             $product = new \Models\Product();
             $product->updateAttributes($_POST['data']);
-            
+
             if ($product->getTitle() != $old_product->getTitle()) {
                 $product->productTitleNotExists();
             }
-            
+
             if (!empty($_FILES['image']['name'])) {
                 $image = new \Models\Image();
                 $image->setPath($_FILES['image']['tmp_name']);
@@ -131,16 +138,15 @@ class AdminProductsController extends \Wee\Controller {
                 $product->setImage($image);
                 $product->validateProductImageType();
                 $product->validateProductImageSize();
-                
             }
-            
+
             if ($product->isValid()) {
                 $productDao = \Wee\DaoFactory::getDao('Product');
                 $productDao->updateProduct($product);
                 if (!empty($_FILES['image']['name'])) {
                     $imageDao = \Wee\DaoFactory::getDao('Image');
                     $old_image = $imageDao->getImageNameByProductId($old_product->getId());
-                    unlink($old_image); 
+                    unlink($old_image);
                     $image->setProduct_id($old_product->getId());
                     $image->updateImage();
                     $product->setImage($image);
