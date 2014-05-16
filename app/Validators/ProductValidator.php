@@ -51,5 +51,30 @@ trait ProductValidator {
             }
         });
     }
+    
+    public function validateProductImageType() {
+        $this->registerValidator(function($product) {
+            $allowedExts = array("gif", "jpeg", "jpg", "png");
+            $temp = explode(".", $product->getImage()->getFilename());
+            $extension = end($temp);
+            if (!((($product->getImage()->getType() == "image/gif") || 
+                    ($product->getImage()->getType() == "image/jpeg") ||
+                    ($product->getImage()->getType() == "image/jpg") || 
+                    ($product->getImage()->getType() == "image/pjpeg") ||
+                    ($product->getImage()->getType() == "image/x-png") ||
+                    ($product->getImage()->getType() == "image/png")) 
+                    && in_array($extension, $allowedExts))) {
+                $product->addError('image', 'Invalid image type.');
+            }
+        });
+    }
+    
+    public function validateProductImageSize() {
+        $this->registerValidator(function($product) {
+            if ($product->getImage()->getSize() > 5 * 1024 * 1024) {
+                $product->addError('image', 'Image too large.');
+            }
+        });
+    }
 
 }

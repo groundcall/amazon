@@ -17,7 +17,7 @@ trait ImageValidator {
     
     public function validateImageSize() {
         $this->registerValidator(function($image) {
-            if ($image->getSize() > 5 ) {
+            if ($image->getSize() > 5 * 1024 * 1024) {
                 $image->addError('size', 'Image too large.');
             }
         });

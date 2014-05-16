@@ -28,9 +28,11 @@ class ProductDao extends \Wee\Dao {
         return $result;
     }
     
-    public function getAllProducts() {
-        $sql = 'SELECT * FROM products ORDER BY id DESC';
+    public function getAllProducts($start, $limit) {
+        $sql = 'SELECT * FROM products ORDER BY id DESC LIMIT :start, :limit';
         $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindParam(':start', $start, \PDO::PARAM_INT);
+        $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
         $stmt->execute();
         return $this->getProducts($stmt);
     }
@@ -50,7 +52,7 @@ class ProductDao extends \Wee\Dao {
         $stmt->execute();
     }
     
-    public function getFilterProducts($title, $category_id, $stock) {
+    public function getFilterProducts($title, $category_id, $stock, $start, $limit) {
        $sql = 'SELECT * FROM products WHERE title LIKE :title';
        if ($category_id != 0) {
            $sql .= ' AND category_id = :category_id';
@@ -58,7 +60,7 @@ class ProductDao extends \Wee\Dao {
        if ($stock != 0) {
            $sql .= ' AND stock >= :stock';
        }
-       $sql .= ' ORDER BY id DESC';
+       $sql .= ' ORDER BY id DESC LIMIT :start, :limit';
        $stmt = $this->getConnection()->prepare($sql);
        $stmt->bindValue(':title', '%' . $title . '%');
        if ($category_id != 0) {
@@ -67,6 +69,8 @@ class ProductDao extends \Wee\Dao {
        if ($stock != 0) {
            $stmt->bindValue(':stock', 1);
        }
+       $stmt->bindParam(':start', $start, \PDO::PARAM_INT);
+       $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
        $stmt->execute();
        return $this->getProducts($stmt);
    }
@@ -105,5 +109,26 @@ class ProductDao extends \Wee\Dao {
         $stmt->execute();
         $product = $this->getProduct($stmt);
         return $product->getId();
+    }
+    
+    public function updateProduct($product) {
+        $sql = "UPDATE products SET title = :title, category_id = :category_id, price = :price, description = :description, short_description = :short_description, stock = :stock WHERE id = :id";
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':id', $product->getId());
+        $stmt->bindValue(':title', $product->getTitle());
+        $stmt->bindValue(':category_id', $product->getCategory_id());
+        $stmt->bindValue(':price', $product->getPrice());
+        $stmt->bindValue(':description', $product->getDescription());
+        $stmt->bindValue(':short_description', $product->getShort_description());
+        $stmt->bindValue(':stock', $product->getStock());
+        $stmt->execute();
+    }
+    
+    public function getProductCount() {
+        $sql = "SELECT COUNT(*) FROM products";
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch();
+        return $result[0];
     }
 }

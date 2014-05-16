@@ -71,12 +71,17 @@
                 <!--  start paging..................................................... -->
                 <table border="0" cellpadding="0" cellspacing="0" id="paging-table">
                     <tr>
+                        <?php $numberOfPages = $view->numberOfUserPages(); ?>
+                        
+                        <?php if ($page > $numberOfPages): ?>
+                            <?php $page = $numberOfPages; ?>
+                        <?php endif; ?>                        
                         <td>
-                            <a href="" class="page-far-left"></a>
-                            <a href="" class="page-left"></a>
-                            <div id="page-info">Page <strong>1</strong> / ??</div>
-                            <a href="" class="page-right"></a>
-                            <a href="" class="page-far-right"></a>
+                            <a href="<?php echo url('admin_users', array('page' => 1)); ?>" class="page-far-left"></a>
+                            <a href="<?php echo url("admin_users", array("page" => ($current = ($page > 1) ? $page - 1 : 1))); ?>" class="page-left"></a>
+                            <div id="page-info">Page <strong><?php echo $page; ?></strong> / <?php echo $numberOfPages; ?></div>
+                            <a href="<?php echo url("admin_users", array("page" => ($current = ($page < $numberOfPages) ? $page+1 : $numberOfPages))); ?>" class="page-right"></a>
+                            <a href="<?php echo url('admin_users', array('page' => $numberOfPages)); ?>" class="page-far-right"></a>
                         </td>
                     </tr>
                 </table>

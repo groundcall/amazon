@@ -27,9 +27,11 @@ class UserDao extends \Wee\Dao {
         return $result;
     }
 
-    public function getAllUsers() {
-        $sql = 'SELECT * FROM users ORDER BY id DESC';
+    public function getAllUsers($start, $limit) {
+        $sql = 'SELECT * FROM users ORDER BY id DESC LIMIT :start, :limit';
         $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindParam(':start', $start, \PDO::PARAM_INT);
+        $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
         $stmt->execute();
         return $this->getUsers($stmt);
     }
@@ -99,5 +101,13 @@ class UserDao extends \Wee\Dao {
         $stmt->bindValue(':id', $user_id);
         $stmt->bindValue(':activated', $active);
         $stmt->execute();
+    }
+    
+    public function getUserCount() {
+        $sql = "SELECT COUNT(*) FROM users";
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch();
+        return $result[0];
     }
 }

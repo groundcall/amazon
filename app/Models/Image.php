@@ -77,14 +77,25 @@ class Image extends \Wee\Model {
     public function setSize($size) {
         $this->size = $size;
     }
-
-    public function saveImage() {
+    
+    public function setFilenameAndPath() {
         $path = '../web/product_images/public/image/';
         $filename = uniqid("product_") . $this->getFilename();
         move_uploaded_file($this->getPath(), $path . $filename);
         $this->setFilename($filename);
         $this->setPath($path);
+    }
+
+    public function saveImage() {
+        $this->setFilenameAndPath();
         $imageDao = \Wee\DaoFactory::getDao('Image');
         $imageDao->addImage($this);
     }
+    
+    public function updateImage() {
+        $this->setFilenameAndPath();
+        $imageDao = \Wee\DaoFactory::getDao('Image');
+        $imageDao->updateImageFilename($this);
+    }
+    
 }

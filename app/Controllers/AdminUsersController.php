@@ -11,9 +11,18 @@ class AdminUsersController extends \Wee\Controller {
      * The default action
      */
     public function index() {
+        $userPerPage = 2;
+        if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
+            $page = $_GET['page'];
+        }
+        else {
+            $page = 1;
+        }
+        $start = ($page - 1) * $userPerPage;
+        $limit = $userPerPage;
         $userDao = \Wee\DaoFactory::getDao('User');
-        $users = $userDao->getAllUsers();
-        $this->render('admin/list_users', array('users' => $users));
+        $users = $userDao->getAllUsers($start, $limit);
+        $this->render('admin/list_users', array('users' => $users, 'page' => $page));
     }
 
     public function showUserForm() {

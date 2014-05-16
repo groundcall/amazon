@@ -20,7 +20,9 @@ class Product extends \Wee\Model {
     protected $short_description;
     protected $stock;
     protected $active;
+    
     protected $category;
+    protected $image;
             
     function __construct() {
         $this->setAttrAccessible(array('id', 'title', 'category_id', 'price', 'author_id', 'isbn', 'appereance_year', 'description', 'short_description', 'stock', 'active'));
@@ -30,7 +32,7 @@ class Product extends \Wee\Model {
         $this->validateProductStock();
         $this->validateProductDescription();
         $this->validateProductShort_description();
-
+        
     }
     
     public function __destruct() {
@@ -148,5 +150,14 @@ class Product extends \Wee\Model {
     
     public function getCategory() {
         return $this->category;
+    }
+    
+    
+    public function getImage() {
+        return $this->image;
+    }
+    
+    public function setImage($image) {
+        $this->image = $image;
     }
 }

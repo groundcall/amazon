@@ -8,7 +8,7 @@
         <div id="message-red">
             <table border="0" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
-                    <td class="red-left">Error. <a href="<?php echo url('admin_products/add_product'); ?>">Please try again.</a></td>
+                    <td class="red-left">Error. <a href="<?php echo url('admin_products/show_edit_product'); ?>">Please try again.</a></td>
                     <td class="red-right"><a class="close-red" href="<?php echo url('admin_products'); ?>"><img src="../images/table/icon_close_red.gif"/></a></td>
                 </tr>
             </table>
@@ -101,14 +101,11 @@
                                         <th>Image:</th>
                                         <td><input type="file" class="file_1" name="image" /></td>
                                         <td>
-                                            <?php if ($image && $image->hasError('type')): ?>
+                                            <?php if ($product && $product->hasError('image')): ?>
                                                 <div class="error-left"></div>
-                                                <div class="error-inner" style="font-size: 12px;"><?php echo $view->errorFor($image, "type"); ?></div>
+                                                <div class="error-inner" style="font-size: 12px;"><?php echo $view->errorFor($product, "image"); ?></div>
                                             <?php endif; ?>
-                                            <?php if ($image && $image->hasError('size')): ?>
-                                                <div class="error-left"></div>
-                                                <div class="error-inner" style="font-size: 12px;"><?php echo $view->errorFor($image, "size"); ?></div>
-                                            <?php endif; ?></div>
+                                            
                                         </td>
                                     </tr>
 
