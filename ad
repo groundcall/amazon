@@ -1,0 +1,356 @@
+[33mcommit d8568ffc90962a91d198d6451fd954971022faaf[m
+Author: Alexandru.Butnar <abutnar@pitechnologies.ro>
+Date:   Fri May 16 17:13:44 2014 +0300
+
+    Updates in Admin INDEX - (filter).See #5.
+
+[33mcommit 02756f18c79cd2cae06ee534b987aeda52db9a5f[m
+Author: Alexandru.Butnar <abutnar@pitechnologies.ro>
+Date:   Fri May 16 15:38:03 2014 +0300
+
+    Last project update
+
+[33mcommit 9bf09a0d68e908079c11e6788450e13b3f097ad3[m
+Author: Alexandru.Butnar <abutnar@pitechnologies.ro>
+Date:   Fri May 16 15:35:17 2014 +0300
+
+    Added Admin Edit Product functionality
+
+[33mcommit ee70585d9ed333facb4af96e0869ccb90bcc5acf[m
+Author: Alexandru.Butnar <abutnar@pitechnologies.ro>
+Date:   Thu May 15 18:59:42 2014 +0300
+
+    Folder with database and upload images
+
+[33mcommit 56ce7b788456c245562558476970c54a95436299[m
+Author: Alexandru.Butnar <abutnar@pitechnologies.ro>
+Date:   Thu May 15 18:59:05 2014 +0300
+
+    Modified views for Admin
+
+[33mcommit f3822e6d8a91060f2a1ac6c383c36be43af02211[m
+Author: Alexandru.Butnar <abutnar@pitechnologies.ro>
+Date:   Thu May 15 18:58:07 2014 +0300
+
+    Modified Controller for Admin Products
+
+[33mcommit ba3a61e7beeb4529969015b7b33de3a087385feb[m
+Author: Alexandru.Butnar <abutnar@pitechnologies.ro>
+Date:   Thu May 15 18:57:28 2014 +0300
+
+    DAO for Products, Images and Category
+
+[33mcommit 8addc41d343c316ad577486d74dddb78834ecb7f[m
+Author: Alexandru.Butnar <abutnar@pitechnologies.ro>
+Date:   Thu May 15 18:56:34 2014 +0300
+
+    Product, Users and Image Models and Validators. See #5.
+
+[33mcommit bf21285e20ab616b7640717bcad61af608a47888[m
+Author: Alexandru.Butnar <abutnar@pitechnologies.ro>
+Date:   Wed May 14 18:57:10 2014 +0300
+
+    Modified helpers and validators.
+
+[33mcommit 57ccc7a0c1b7aec00bd8a985f0b68fd77c36af90[m
+Author: Alexandru.Butnar <abutnar@pitechnologies.ro>
+Date:   Wed May 14 18:56:17 2014 +0300
+
+    Added css and images.
+
+[33mcommit 718799e04b6bb293a0f7b536e2f98a0fa23d588e[m
+Author: Alexandru.Butnar <abutnar@pitechnologies.ro>
+Date:   Wed May 14 18:55:17 2014 +0300
+
+    Added views for admin.
+
+[33mcommit 07d03bfac6b17372903c3589597a2486f4f9ad2a[m
+Author: Alexandru.Butnar <abutnar@pitechnologies.ro>
+Date:   Wed May 14 18:53:49 2014 +0300
+
+    Added Category and Product functionality.
+
+[33mcommit d691223ca32c24879b0f8a8fb3f8d87d50056c55[m
+Author: Alexandru.Butnar <abutnar@pitechnologies.ro>
+Date:   Wed May 14 18:50:29 2014 +0300
+
+    Added user functionallity.
+
+[33mcommit e3f0c548d7dd6fd515d3a9ebb91e18321552165b[m
+Author: Lenard Palko <lpalko@pitechnologies.ro>
+Date:   Tue May 13 16:31:33 2014 +0300
+
+    Added docs about attrAccesible and updateAttributes.
+
+[33mcommit 28db229fcb59340ce52f8ef05b3caf12cb8f0c20[m
+Author: Lenard Palko <lpalko@pitechnologies.ro>
+Date:   Tue May 13 16:13:00 2014 +0300
+
+    Updated validation docs.
+
+[33mcommit 9f33cb873a45d48f1c0da113027844520df24053[m
+Author: Lenard Palko <lpalko@pitechnologies.ro>
+Date:   Tue May 13 16:10:53 2014 +0300
+
+    Ignore PHPStorm metadata.
+
+[33mcommit f530c7bf3f21fb0070bf66fcc8c1dba18f229f83[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Tue May 13 13:59:44 2014 +0300
+
+    fix routing with php dev server
+
+[33mcommit f7fade6aea5073972fbbcb2b5fbfd3e75043c8c6[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Fri Dec 6 10:34:06 2013 +0200
+
+    fix dao
+
+[33mcommit b6d7407792c29d60bfd5ddb40864d8080419cef0[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Wed Nov 20 19:09:22 2013 +0200
+
+    Remove ValidatesAssociated
+
+[33mcommit d7395fdfecd82c455ca7cbb28bc7b328ca9eaa47[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Wed Nov 20 19:06:41 2013 +0200
+
+    Add getViewContent function on view
+
+[33mcommit d6d1d5c6790e928670d7b2d758a70b436399eb33[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Wed Nov 20 18:57:36 2013 +0200
+
+    Add getViewContent in controller
+
+[33mcommit f2dc0923d08dac09a87e97c418a379e28c1eb0b4[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Wed Nov 20 18:50:26 2013 +0200
+
+    Validation documentation
+
+[33mcommit 46740fe7207afc8cb1087345ef3279062f668f43[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Wed Nov 20 17:00:47 2013 +0200
+
+    Update README
+
+[33mcommit a6fdbe6717664de5ec232d6dbb09b3426e428955[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Thu Nov 14 16:55:52 2013 +0200
+
+    More README fixes.
+
+[33mcommit add93b86673e6b344d3a30c403a1b9f953f9d462[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Thu Nov 14 16:54:41 2013 +0200
+
+    Fix README
+
+[33mcommit 30848a4df46350f249f00910e34ed9f3677ba6ac[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Thu Nov 14 16:48:00 2013 +0200
+
+    Issue #1. Move database config to separate file and add config.php to
+    repo.
+
+[33mcommit 8d41905210e99c49a0aac0fa039c258b263fc1ba[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Thu Nov 14 16:35:00 2013 +0200
+
+    Add getConnection method.
+
+[33mcommit 43f3a7a0110ae6fb11c7b66508b1ce097934b860[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Thu Nov 14 16:32:55 2013 +0200
+
+    Implement DaoFactory.
+
+[33mcommit a8655b819233ebd3eb3b96fcbf13240b690bee65[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Thu Nov 14 16:30:35 2013 +0200
+
+    Remove restrictions on generating urls.
+
+[33mcommit c253db98159077a32405067f92dd99c5d13a4542[m
+Author: Cristi Bordei <cbordei@pitechnologies.ro>
+Date:   Wed Aug 28 16:14:27 2013 +0300
+
+    added new function to redirect to url
+
+[33mcommit 16ab31ee9f8f003103ee63bec60cc3fc94d86db4[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Tue Aug 13 15:43:17 2013 +0300
+
+    Disable warnings for now.
+
+[33mcommit a256d96d922735fa802d38449bf2d181eed87303[m
+Author: Alexandru Keszeg <namlessone@gmail.com>
+Date:   Wed Aug 7 20:02:53 2013 +0300
+
+    Fix validatesPresenceOf validator.
+
+[33mcommit 1acbeffcec96560f788a72f262efa94fd2a8841f[m
+Author: Alexandru Keszeg <namlessone@gmail.com>
+Date:   Wed Aug 7 20:02:19 2013 +0300
+
+    routing file for PHP builtin server.
+
+[33mcommit c668b1369b67aaf986455798922141145ec54d18[m
+Author: Alexandru Keszeg <namlessone@gmail.com>
+Date:   Tue Aug 6 18:20:44 2013 +0300
+
+    Update README
+
+[33mcommit 260414e34597ec33812114dcfddf749fd94663b3[m
+Author: Alexandru Keszeg <namlessone@gmail.com>
+Date:   Tue Aug 6 18:19:03 2013 +0300
+
+    Update url examples.
+
+[33mcommit c92d269a3c856745de05ff176cb9ed5729c2f378[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Thu Jul 25 17:07:11 2013 +0300
+
+    Set database to throw exception by default.
+
+[33mcommit 491591661f94e5e094bc426c72a2e6ce4f47584e[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Thu Jul 25 16:57:19 2013 +0300
+
+    Remove support for multiple validation types.
+    
+    Rename validate to registerValidator.
+
+[33mcommit 52456d7b7ad68167d8ba32c0a39cbe5aab8d3393[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Thu Jul 25 16:50:54 2013 +0300
+
+    Rename layouts to masterpages
+
+[33mcommit 32bbf38646371f8ca6165d16547c9986f08cae50[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Thu Jul 25 16:44:27 2013 +0300
+
+    Warning when the config file in not found.
+
+[33mcommit 58c7eff51246cfeda40d3720fae5f9e932312c2b[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Thu Jul 25 16:37:53 2013 +0300
+
+    Remove stuff.
+
+[33mcommit 8a4b18c91ac1ebee66b47c5f99d66d2f962dbc94[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Fri Jul 19 14:40:14 2013 +0300
+
+    Fix ValidatesAssociated
+
+[33mcommit 8aa0eac11403623c88ff362c081481fb38864fe5[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Fri Jul 19 14:39:48 2013 +0300
+
+    Add support for default parameters.
+
+[33mcommit 3371fcd66ed311af7384e22eb195fd7bb4cad18f[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Fri Jul 19 13:53:28 2013 +0300
+
+    Database UTF8 by default
+
+[33mcommit 4981761e63db3ed88bfa2d5f884aa9c772db8a8b[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Fri Jul 19 13:51:17 2013 +0300
+
+    Only short urls support.
+
+[33mcommit f7cea7247429ca35fa73da0877d3ea13caeb6be5[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Fri Apr 19 17:51:02 2013 +0300
+
+    Add support for short urls.
+
+[33mcommit 35625a33bef8ee3b1d7ff801dfe2b39cf85a0413[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Mon Mar 11 15:13:53 2013 +0200
+
+    Add the option to override default controller name.
+
+[33mcommit b567c7bc58ad54c326d08345c5e20ff9def5edb5[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Mon Mar 11 15:13:38 2013 +0200
+
+    Update docs.
+
+[33mcommit ea7bdc4999164e21d381cd4f85f8ab93de465734[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Mon Mar 11 15:12:54 2013 +0200
+
+    Refactor isValid, update docs.
+
+[33mcommit c9830fde0f74f44a002b7e79b59332bf0ae34709[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Mon Mar 11 15:09:55 2013 +0200
+
+    Refactor hydrate and supporting functions.
+
+[33mcommit 6f748c5bacdbec9b17f0228e58d3f9ce13b51117[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Mon Mar 11 15:06:31 2013 +0200
+
+    Call validate with $as.
+
+[33mcommit a6d8c1a9c65a264af45ff0a2457d32d0e84cf2be[m
+Author: Keszeg Alexandru <akeszeg@pitechnologies.ro>
+Date:   Sun Mar 10 22:07:02 2013 +0200
+
+    Documentation fixes.
+
+[33mcommit 45dda43f753f7ec09ab95737e53e2f504e19d0e0[m
+Author: Keszeg Alexandru <akeszeg@pitechnologies.ro>
+Date:   Sun Mar 10 10:23:31 2013 +0200
+
+    Refactored associated object validation into its own class.
+
+[33mcommit 8acce07e8471b4c9dcb14ec86af8e11098504cf9[m
+Author: Keszeg Alexandru <akeszeg@pitechnologies.ro>
+Date:   Sat Mar 9 11:24:17 2013 +0200
+
+    Make current user available to templates.
+
+[33mcommit 5fe3cd4c44f741f9b795149c6413ccc5cf335a89[m
+Author: Alexandru Keszeg <akeszeg@pitechnologies.ro>
+Date:   Fri Mar 8 02:06:44 2013 +0200
+
+    Some docu fixes
+
+[33mcommit 7795951ca7b2c1cf21770772c95e26037394d19a[m
+Author: Alexandru Keszeg <namlessone@gmail.com>
+Date:   Tue Mar 5 22:07:24 2013 +0200
+
+    Major refactor.
+
+[33mcommit 7bd0a37ac5e13256c6ca94c5531ed26a5d3f627f[m
+Author: Keszeg Alexandru <namlessone@gmail.com>
+Date:   Tue Nov 27 18:11:29 2012 +0200
+
+    Add model implementation.
+
+[33mcommit eac9546064854b4084a1c2139d9a98844639c6dc[m
+Author: Keszeg Alexandru <namlessone@gmail.com>
+Date:   Tue Nov 27 03:08:21 2012 +0200
+
+    first commit
+
+[33mcommit b94f5e7f9a0896771ee33b9415b3a140f4195617[m
+Author: Alexandru.Butnar <abutnar@pitechnologies.ro>
+Date:   Wed May 14 13:48:21 2014 +0300
+
+    Finalised Admin CRUD for Users. See #2.
+
+[33mcommit 93155f62ad0fe017d7b5997dacd323fcb869c8ee[m
+Author: Dumitrache Adrian <adumitrache@pitechnologies.ro>
+Date:   Mon May 12 16:28:34 2014 +0300
+
+    Init.
