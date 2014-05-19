@@ -42,6 +42,7 @@ class AdminUsersController extends \Wee\Controller {
             $user->verifyPasswordsMatch();
             $user->emailNotExists();
 //            $user->userNotExists();
+            
 
             if ($user->isValid()) {
                 $userDao = \Wee\DaoFactory::getDao('User');

@@ -34,7 +34,7 @@ class User extends \Wee\Model {
         $this->validateUserGender();
         
         $this->userNotExists();
-        
+
     }
 
     public function __destruct() {

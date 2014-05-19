@@ -17,8 +17,8 @@ class Image extends \Wee\Model {
     public function __construct() {
         $this->setAttrAccessible(array('product_id', 'path', 'filename', 'type', 'size'));
 
-        $this->validateImageType();
-        $this->validateImageSize();
+//        $this->validateImageType();
+//        $this->validateImageSize();
     }
 
     public function getId() {
@@ -83,6 +83,7 @@ class Image extends \Wee\Model {
         $filename = uniqid("product_") . $this->getFilename();
         move_uploaded_file($this->getPath(), $path . $filename);
         $this->setFilename($filename);
+        $path = '/public/image/';
         $this->setPath($path);
     }
 

@@ -9,6 +9,7 @@ class ProductDao extends \Wee\Dao {
         $product->updateAttributes($row);
         $product->setId($row['id']);
         $product->setCategory();
+        $product->setImageByProductId();
         return $product;
     }
 
@@ -133,6 +134,7 @@ class ProductDao extends \Wee\Dao {
         return $result[0];
     }
     
+<<<<<<< HEAD
     public function getFilteredProductCount($title, $category_id, $stock) {
         $sql = "SELECT COUNT(*) FROM products WHERE title LIKE :title";
         if ($category_id != 0) {
@@ -152,5 +154,13 @@ class ProductDao extends \Wee\Dao {
         $stmt->execute();
         $result = $stmt->fetch();
         return $result[0];
+=======
+    public function getLastProducts($limit) {
+        $sql = "SELECT * FROM products p INNER JOIN images i ON p.id = i.product_id ORDER BY p.id DESC LIMIT :limit";
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+        $stmt->execute();
+        return $this->getProducts($stmt);
+>>>>>>> THIS REALLY IS THE LAST COMMIT BEFORE BRANCHING
     }
 }

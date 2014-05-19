@@ -11,6 +11,6 @@ class AdminCategoriesController extends \Wee\Controller {
      * The default action
      */
     public function index() {
-        
+        $this->render('users/homepage');
     }
 }

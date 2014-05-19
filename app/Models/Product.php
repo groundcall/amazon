@@ -8,7 +8,6 @@ class Product extends \Wee\Model {
     
     use \Validators\ProductValidator;
     
-    
     protected $id;
     protected $title;
     protected $category_id;
@@ -32,7 +31,6 @@ class Product extends \Wee\Model {
         $this->validateProductStock();
         $this->validateProductDescription();
         $this->validateProductShort_description();
-        
     }
     
     public function __destruct() {
@@ -127,16 +125,8 @@ class Product extends \Wee\Model {
         $this->active = $active;
     }
 
-    public function getLabel() {
-        return $this->label;
-    }
-
     public function getAppereance_year() {
         return $this->appereance_year;
-    }
-
-    public function setLabel($label) {
-        $this->label = $label;
     }
 
     public function setAppereance_year($appereance_year) {
@@ -149,7 +139,7 @@ class Product extends \Wee\Model {
     }
     
     public function getCategory() {
-        return $this->category;
+        return $this->category->getLabel();
     }
     
     
@@ -159,5 +149,10 @@ class Product extends \Wee\Model {
     
     public function setImage($image) {
         $this->image = $image;
+    }
+    
+    public function setImageByProductId() {
+        $imageDao = \Wee\DaoFactory::getDao('Image');
+        $this->image = $imageDao->getImageNameByProductId($this->id);
     }
 }

@@ -78,7 +78,7 @@
 
                             <tr <?php echo $i % 2 == 0 ? "" : "class='alternate-row'"; ?>>
                                 <td><?php echo $product->getTitle(); ?></td>
-                                <td><?php echo $product->getCategory()->getLabel(); ?></td>
+                                <td><?php echo $product->getCategory(); ?></td>
                                 <td><?php echo $product->getShort_description(); ?></td>
                                 <td><?php echo $product->getPrice(); ?></td>
                                 <td><?php echo ($product->getStock() == 0) ? 'OUT' : $product->getStock(); ?></td>
