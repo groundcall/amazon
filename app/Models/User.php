@@ -33,7 +33,10 @@ class User extends \Wee\Model {
         $this->validateUserPhone();
         $this->validateUserGender();
         
-        $this->userNotExists();
+        $this->usernameNotExists();
+        $this->emailNotExists();
+        $this->verifyPassword();
+        $this->verifyPasswordsMatch();
 
     }
 

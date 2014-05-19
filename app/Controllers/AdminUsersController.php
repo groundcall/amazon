@@ -38,11 +38,7 @@ class AdminUsersController extends \Wee\Controller {
             $user = new \Models\User();
             $user->updateAttributes($_POST['data']);
 
-            $user->verifyPassword();
-            $user->verifyPasswordsMatch();
-            $user->emailNotExists();
-//            $user->userNotExists();
-            
+
 
             if ($user->isValid()) {
                 $userDao = \Wee\DaoFactory::getDao('User');
@@ -69,22 +65,11 @@ class AdminUsersController extends \Wee\Controller {
         $user = null;
         if (!empty($_POST['data'])) {
             $userDao = \Wee\DaoFactory::getDao('User');
-//            $old_user = $userDao->getUserById($_POST['data']['id']);
+
             $user = new \Models\User();
             $user->updateAttributes($_POST['data']);
-//            if ($user->getUsername() != $old_user->getUsername()) {
-//                $user->userNotExists();
-//            }
-//            if ($user->getEmail() != $old_user->getEmail()) {
-//                $user->emailNotExists();
-//            }
-//            if ($_POST['data']['password'] != '') {
-//                $user->verifyPassword();
-//                $user->verifyPasswordsMatch();
-//            }
-//            else {
-//                $user->setPassword($old_user->getPassword());
-//            }
+            $user->setId($_POST['data']['id']);
+            
             if ($user->isValid()) {
                 $userDao = \Wee\DaoFactory::getDao('User');
                 $userDao->updateUser($user);
@@ -95,14 +80,15 @@ class AdminUsersController extends \Wee\Controller {
     }
     
     public function activateUser() {
-        if (isset($_POST['activate'])) {
-            $active = 1;
-        }
-        if (isset($_POST['deactivate'])) {
-            $active = 0;
-        }
         $userDao = \Wee\DaoFactory::getDao('User');
-        $userDao->setUserActivity($_POST['user_id'], $active);
+        $userDao->setUserActivity($_POST['user_id'], 1);
         $this->redirect('admin_users');
     }
+    
+    public function deactivateUser() {
+        $userDao = \Wee\DaoFactory::getDao('User');
+        $userDao->setUserActivity($_POST['user_id'], 0);
+        $this->redirect('admin_users');
+    }
+    
 }

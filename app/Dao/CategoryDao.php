@@ -8,6 +8,11 @@ class CategoryDao extends \Wee\Dao {
         $category = new \Models\Category();
         $category->updateAttributes($row);
         $category->setId($row['id']);
+<<<<<<< HEAD
+=======
+//        $category->setLabel($row['label']);
+
+>>>>>>> All Validators moved in constructors, removed id in attributes accesible function
         return $category;
     }
 

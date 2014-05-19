@@ -75,14 +75,14 @@ class AdminProductsController extends \Wee\Controller {
     }
 
     public function activateProduct() {
-        if (isset($_POST['activate'])) {
-            $active = 1;
-        }
-        if (isset($_POST['deactivate'])) {
-            $active = 0;
-        }
         $productDao = \Wee\DaoFactory::getDao('Product');
-        $productDao->setProductActivity($_POST['product_id'], $active);
+        $productDao->setProductActivity($_POST['product_id'], 1);
+        $this->redirect('admin_products');
+    }
+    
+    public function deactivateProduct() {
+        $productDao = \Wee\DaoFactory::getDao('Product');
+        $productDao->setProductActivity($_POST['product_id'], 0);
         $this->redirect('admin_products');
     }
 
@@ -97,16 +97,10 @@ class AdminProductsController extends \Wee\Controller {
 
             $product = new \Models\Product();
             $product->updateAttributes($_POST['data']);
-            $product->productTitleNotExists();
 
             $image = new \Models\Image();
-            $image->setPath($_FILES['image']['tmp_name']);
-            $image->setFilename($_FILES['image']['name']);
-            $image->setType($_FILES['image']['type']);
-            $image->setSize($_FILES['image']['size']);
+            $image->updateAttributes(array('path' => $_FILES['image']['tmp_name'], 'size' => $_FILES['image']['size'], 'filename' => $_FILES['image']['name'], 'type' =>$_FILES['image']['type']));
             $product->setImage($image);
-            $product->validateProductImageType();
-            $product->validateProductImageSize();
 
             if ($product->isValid()) {
                 $productDao = \Wee\DaoFactory::getDao('Product');
@@ -129,20 +123,13 @@ class AdminProductsController extends \Wee\Controller {
             $old_product = $productDao->getProductById($_POST['data']['id']);
             $product = new \Models\Product();
             $product->updateAttributes($_POST['data']);
+            $product->setId($_POST['data']['id']);
 
-            if ($product->getTitle() != $old_product->getTitle()) {
-                $product->productTitleNotExists();
-            }
 
             if (!empty($_FILES['image']['name'])) {
                 $image = new \Models\Image();
-                $image->setPath($_FILES['image']['tmp_name']);
-                $image->setFilename($_FILES['image']['name']);
-                $image->setType($_FILES['image']['type']);
-                $image->setSize($_FILES['image']['size']);
+                $image->updateAttributes(array('path' => $_FILES['image']['tmp_name'], 'size' => $_FILES['image']['size'], 'filename' => $_FILES['image']['name'], 'type' =>$_FILES['image']['type']));
                 $product->setImage($image);
-                $product->validateProductImageType();
-                $product->validateProductImageSize();
             }
 
             if ($product->isValid()) {

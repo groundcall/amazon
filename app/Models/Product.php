@@ -31,6 +31,11 @@ class Product extends \Wee\Model {
         $this->validateProductStock();
         $this->validateProductDescription();
         $this->validateProductShort_description();
+        
+        $this->productTitleNotExists();
+        
+        $this->validateProductImageType();
+        $this->validateProductImageSize();
     }
     
     public function __destruct() {

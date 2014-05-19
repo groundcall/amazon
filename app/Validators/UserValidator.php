@@ -52,9 +52,9 @@ trait UserValidator {
         });
     }
 
-    public function userNotExists($attributeName = 'username', $message = 'Username already exists.') {
+    public function usernameNotExists($attributeName = 'username', $message = 'Username already exists.') {
         $this->registerValidator(function($object) use ($attributeName, $message) {
-            if (\Wee\DaoFactory::getDao('User')->getUserByUsernameAndId($object) != null) {
+            if ((\Wee\DaoFactory::getDao('User')->getUserByUsername($object) != null) && !(\Wee\DaoFactory::getDao('User')->pairUsernameIdExists($object))) {
                 $object->addError($attributeName, $message);
             }
         });
@@ -62,20 +62,28 @@ trait UserValidator {
 
     public function emailNotExists($attributeName = 'email', $message = 'Email already exists.') {
         $this->registerValidator(function($object) use ($attributeName, $message) {
-            if (\Wee\DaoFactory::getDao('User')->getUserByEmail($object) != null) {
+            if ((\Wee\DaoFactory::getDao('User')->getUserByEmail($object) != null) && !(\Wee\DaoFactory::getDao('User')->pairEmailIdExists($object))) {
                 $object->addError($attributeName, $message);
             }
         });
     }
-    
+
     public function verifyPassword($attributeName = 'password', $message = 'Password must have at least 6 characters.') {
         $this->registerValidator(function($object) use ($attributeName, $message) {
-            if (strlen($object->getPassword()) < 6) {
-                $object->addError($attributeName, $message);
+
+            if ($object->getId()) {
+                if ($object->getPassword() != '' && strlen($object->getPassword()) < 6) {
+
+                    $object->addError($attributeName, $message);
+                }
+            } else {
+                if (strlen($object->getPassword()) < 6) {
+                    $object->addError($attributeName, $message);
+                }
             }
         });
     }
-    
+
     public function verifyPasswordsMatch($attributeName = 'password2', $message = "Passwords don't match.") {
         $this->registerValidator(function($object) use ($attributeName, $message) {
             if ($object->getPassword() != $object->getPassword2()) {
@@ -83,4 +91,5 @@ trait UserValidator {
             }
         });
     }
+
 }

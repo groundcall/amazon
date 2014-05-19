@@ -54,7 +54,7 @@
                                         <input type="submit" value="Delete"/>
                                     </form>
 
-                                    <form action="<?php echo url('admin_users/activate_user'); ?>" method="post" >
+                                    <form action="<?php echo ($user->getActivated() == 1) ? url('admin_users/deactivate_user') : url('admin_users/activate_user'); ?>" method="post" >
                                         <input type="hidden" name="user_id" value="<?php echo $user->getId(); ?>" />
                                         <input type="submit" value="<?php echo ($user->getActivated() == 1) ? 'Deactivate' : 'Activate'; ?>" name="<?php echo ($user->getActivated() == 1) ? 'deactivate' : 'activate'; ?>" />
                                     </form>

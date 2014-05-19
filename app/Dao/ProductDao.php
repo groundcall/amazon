@@ -10,6 +10,16 @@ class ProductDao extends \Wee\Dao {
         $product->setId($row['id']);
         $product->setCategory();
         $product->setImageByProductId();
+        
+        $product->setId($row['id']);
+        $product->setTitle($row['title']);
+        $product->setCategory_id($row['category_id']);
+        $product->setPrice($row['price']);
+        $product->setDescription($row['description']);
+        $product->setShort_description($row['short_description']);
+        $product->setStock($row['stock']);
+        $product->setActive($row['active']);
+        
         return $product;
     }
 
@@ -19,6 +29,7 @@ class ProductDao extends \Wee\Dao {
         foreach ($rows as $row){
             $result[]=$this->readRow($row);
         }
+
         return $result;
     }
     
@@ -162,5 +173,20 @@ class ProductDao extends \Wee\Dao {
         $stmt->execute();
         return $this->getProducts($stmt);
 >>>>>>> THIS REALLY IS THE LAST COMMIT BEFORE BRANCHING
+    }
+    
+    public function pairTitleIdExists($product) {
+        $sql = 'SELECT * FROM products WHERE title = :title AND id = :id';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':title', $product->getTitle());
+        $stmt->bindValue(':id', $product->getId());
+        $stmt->execute();
+        $result=$stmt->fetch();
+        if ($result) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

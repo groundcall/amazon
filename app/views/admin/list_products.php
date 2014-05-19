@@ -93,7 +93,7 @@
                                         <input type="submit" value="Delete" />
                                     </form>
 
-                                    <form action="<?php echo url('admin_products/activate_product'); ?>" method="post" >
+                                    <form action="<?php echo ($product->getActive() == 1) ? url('admin_products/deactivate_product') : url('admin_products/activate_product'); ?>" method="post" >
                                         <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>" />
                                         <input type="submit" value="<?php echo ($product->getActive() == 1) ? 'Deactivate' : 'Activate'; ?>" name="<?php echo ($product->getActive() == 1) ? 'deactivate' : 'activate'; ?>" />
                                     </form>
