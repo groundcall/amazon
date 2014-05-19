@@ -23,7 +23,7 @@ class User extends \Wee\Model {
     protected $created_at;
 
     function __construct() {
-        $this->setAttrAccessible(array('id', 'username', 'password', 'password2', 'firstname', 'lastname', 'email', 'phone', 'gender', 'activated', 'role_id', 'activation_key',
+        $this->setAttrAccessible(array('username', 'password', 'password2', 'firstname', 'lastname', 'email', 'phone', 'gender', 'activated', 'role_id', 'activation_key',
             'billing_address_id', 'shipping_address_id', 'created_at'));
         
         $this->validateUserFirstname();
@@ -32,7 +32,9 @@ class User extends \Wee\Model {
         $this->validateUserEmail();
         $this->validateUserPhone();
         $this->validateUserGender();
-
+        
+        $this->userNotExists();
+        
     }
 
     public function __destruct() {

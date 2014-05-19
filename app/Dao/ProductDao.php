@@ -7,6 +7,7 @@ class ProductDao extends \Wee\Dao {
     private function readRow($row) {
         $product = new \Models\Product();
         $product->updateAttributes($row);
+        $product->setId($row['id']);
         $product->setCategory();
         return $product;
     }
@@ -127,6 +128,27 @@ class ProductDao extends \Wee\Dao {
     public function getProductCount() {
         $sql = "SELECT COUNT(*) FROM products";
         $stmt = $this->getConnection()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch();
+        return $result[0];
+    }
+    
+    public function getFilteredProductCount($title, $category_id, $stock) {
+        $sql = "SELECT COUNT(*) FROM products WHERE title LIKE :title";
+        if ($category_id != 0) {
+           $sql .= ' AND category_id = :category_id';
+        } 
+        if ($stock != 0) {
+           $sql .= ' AND stock >= :stock';
+        }
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':title', '%' . $title . '%');
+        if ($category_id != 0) {
+           $stmt->bindValue(':category_id', $category_id);
+        }
+        if ($stock != 0) {
+           $stmt->bindValue(':stock', 1);
+        }
         $stmt->execute();
         $result = $stmt->fetch();
         return $result[0];

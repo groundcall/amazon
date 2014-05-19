@@ -7,7 +7,7 @@ class CategoryDao extends \Wee\Dao {
     private function readRow($row) {
         $category = new \Models\Category();
         $category->updateAttributes($row);
-
+        $category->setId($row['id']);
         return $category;
     }
 

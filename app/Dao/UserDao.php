@@ -7,6 +7,7 @@ class UserDao extends \Wee\Dao {
     private function readRow($row) {
         $user = new \Models\User();
         $user->updateAttributes($row);
+        $user->setId($row['id']);
         return $user;
     }
 
@@ -21,8 +22,9 @@ class UserDao extends \Wee\Dao {
     
     private function getUser($stmt) {
         $row = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        if ($row == null)
+        if ($row == null) {
             return null;
+        }
         $result = $this->readRow($row[0]);
         return $result;
     }
@@ -48,6 +50,15 @@ class UserDao extends \Wee\Dao {
         $sql = 'SELECT * FROM users WHERE username = :username';
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':username', $user->getUsername());
+        $stmt->execute();
+        return $this->getUser($stmt);
+    }
+    
+    public function getUserByUsernameAndId($user) {
+        $sql = 'SELECT * FROM users WHERE username = :username AND id = :id';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':username', $user->getUsername());
+        $stmt->bindValue(':id', $user->getId());
         $stmt->execute();
         return $this->getUser($stmt);
     }

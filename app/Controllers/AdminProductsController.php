@@ -11,7 +11,7 @@ class AdminProductsController extends \Wee\Controller {
      * The default action
      */
     public function index() {
-        if (isset($_GET['filter'])) {
+        if (isset($_GET['product_name']) || isset($_GET['category']) || isset($_GET['stock'])) {
             $this->filterProducts();
         } else {
             $this->showAllProducts();
@@ -19,38 +19,43 @@ class AdminProductsController extends \Wee\Controller {
     }
 
     public function showAllProducts() {
-        $productPerPage = 10;
+        $paginator = new \Models\Paginator();
+        $paginator->setCount('Product');
+        $paginator->setPerpage('Product');
         if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
-            $page = $_GET['page'];
+            $paginator->setCurrent($_GET['page']);
         } else {
-            $page = 1;
+            $paginator->setCurrent(1);
         }
-        $start = ($page - 1) * $productPerPage;
-        $limit = $productPerPage;
+        $paginator->setPages();
+        $start = ($paginator->getCurrent() - 1) * $paginator->getPerpage();
+        $limit = $paginator->getPerpage();
         $productDao = \Wee\DaoFactory::getDao('Product');
         $products = $productDao->getAllProducts($start, $limit);
-        $this->render('admin/list_products', array('products' => $products, 'page' => $page));
+        $this->render('admin/list_products', array('products' => $products, 'paginator' => $paginator));
     }
 
     public function filterProducts() {
-        $filter_query = parse_url($_SERVER['REQUEST_URI']); 
-        $productPerPage = 10;
+        $paginator = new \Models\Paginator();
         if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
-            $page = $_GET['page'];
+            $paginator->setCurrent($_GET['page']);
         } else {
-            $page = 1;
+            $paginator->setCurrent(1);
         }
-        $start = ($page - 1) * $productPerPage;
-        $limit = $productPerPage;
-        if (!isset($_GET['stock'])) {
+        $paginator->setItemsPerpage();
+        if (!isset($_GET['stock']) || $_GET['stock'] == 0) {
             $stock = 0;
-        } else {
+        } 
+        else {
             $stock = 1;
         }
+        $start = ($paginator->getCurrent() - 1) * $paginator->getPerpage();
+        $limit = $paginator->getPerpage();
         $productDao = \Wee\DaoFactory::getDao('Product');
+        $paginator->setItemsCount($productDao->getFilteredProductCount($_GET['product_name'], $_GET['category'], $stock));
+        $paginator->setPages();
         $products = $productDao->getFilterProducts($_GET['product_name'], $_GET['category'], $stock, $start, $limit);
-        $numberofpages = intval(sizeof($products) / $productPerPage) + 1;
-        $this->render('admin/list_products', array('products' => $products, 'page' => $page, 'numberofpages' => $numberofpages));
+        $this->render('admin/list_products', array('products' => $products, 'paginator' => $paginator));
     }
 
     public function deleteProduct() {
@@ -156,5 +161,4 @@ class AdminProductsController extends \Wee\Controller {
         }
         $this->render('admin/edit_product', array('product' => $product));
     }
-
 }

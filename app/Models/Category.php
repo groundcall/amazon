@@ -8,7 +8,7 @@ class Category extends \Wee\Model {
     protected $label;
     
     public function __construct() {
-        $this->setAttrAccessible(array('id', 'label'));
+        $this->setAttrAccessible(array('label'));
     }
     
     public function getId() {

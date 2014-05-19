@@ -11,18 +11,21 @@ class AdminUsersController extends \Wee\Controller {
      * The default action
      */
     public function index() {
-        $userPerPage = 2;
+        $paginator = new \Models\Paginator();
+        $paginator->setCount('User');
+        $paginator->setPerpage('User');
         if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
-            $page = $_GET['page'];
+            $paginator->setCurrent($_GET['page']);
         }
         else {
-            $page = 1;
+            $paginator->setCurrent(1);
         }
-        $start = ($page - 1) * $userPerPage;
-        $limit = $userPerPage;
+        $paginator->setPages();
+        $start = ($paginator->getCurrent() - 1) * $paginator->getPerpage();
+        $limit = $paginator->getPerpage();
         $userDao = \Wee\DaoFactory::getDao('User');
         $users = $userDao->getAllUsers($start, $limit);
-        $this->render('admin/list_users', array('users' => $users, 'page' => $page));
+        $this->render('admin/list_users', array('users' => $users, 'paginator' => $paginator));
     }
 
     public function showUserForm() {
@@ -38,7 +41,7 @@ class AdminUsersController extends \Wee\Controller {
             $user->verifyPassword();
             $user->verifyPasswordsMatch();
             $user->emailNotExists();
-            $user->userNotExists();
+//            $user->userNotExists();
 
             if ($user->isValid()) {
                 $userDao = \Wee\DaoFactory::getDao('User');
@@ -65,22 +68,22 @@ class AdminUsersController extends \Wee\Controller {
         $user = null;
         if (!empty($_POST['data'])) {
             $userDao = \Wee\DaoFactory::getDao('User');
-            $old_user = $userDao->getUserById($_POST['data']['id']);
+//            $old_user = $userDao->getUserById($_POST['data']['id']);
             $user = new \Models\User();
             $user->updateAttributes($_POST['data']);
-            if ($user->getUsername() != $old_user->getUsername()) {
-                $user->userNotExists();
-            }
-            if ($user->getEmail() != $old_user->getEmail()) {
-                $user->emailNotExists();
-            }
-            if ($_POST['data']['password'] != '') {
-                $user->verifyPassword();
-                $user->verifyPasswordsMatch();
-            }
-            else {
-                $user->setPassword($old_user->getPassword());
-            }
+//            if ($user->getUsername() != $old_user->getUsername()) {
+//                $user->userNotExists();
+//            }
+//            if ($user->getEmail() != $old_user->getEmail()) {
+//                $user->emailNotExists();
+//            }
+//            if ($_POST['data']['password'] != '') {
+//                $user->verifyPassword();
+//                $user->verifyPasswordsMatch();
+//            }
+//            else {
+//                $user->setPassword($old_user->getPassword());
+//            }
             if ($user->isValid()) {
                 $userDao = \Wee\DaoFactory::getDao('User');
                 $userDao->updateUser($user);

@@ -54,7 +54,7 @@ trait UserValidator {
 
     public function userNotExists($attributeName = 'username', $message = 'Username already exists.') {
         $this->registerValidator(function($object) use ($attributeName, $message) {
-            if (\Wee\DaoFactory::getDao('User')->getUserByUsername($object) != null) {
+            if (\Wee\DaoFactory::getDao('User')->getUserByUsernameAndId($object) != null) {
                 $object->addError($attributeName, $message);
             }
         });

@@ -43,15 +43,16 @@
                             </tr>
                             <tr>
                                 <th valign="top">Stock:</th>
-                                <td><input type="checkbox" class="inp-form" name="stock" <?php echo (isset($_GET['stock']) && ($_GET['stock'] == 'on')) ? 'checked="checked"' : ''; ?>/></td>
+<!--                            <input type="hidden" value="0" name="stock"/>-->
+<!--                                <td><input type="checkbox" class="inp-form" name="stock" value="1" <?php //echo (isset($_GET['stock']) && ($_GET['stock'] == '1')) ? 'checked="checked"' : ''; ?>/></td>-->
+                                    <td><input type="checkbox" class="inp-form" name="stock" value="1" <?php echo (isset($_GET['stock']) && ($_GET['stock'] == 1)) ? 'checked="checked"' : '';?>/></td>
+
                                 <td></td>
                             </tr>
                             <tr>
                                 <th>&nbsp;</th>
                                 <td valign="top">
                                     <input type="submit" value="Filter" class="form-submit" />
-                                    <input type="hidden" name="page" value="<?php echo $page; ?>" />
-                                    <input type="hidden" name="filter" value="ON" />
                                     <a href="<?php echo url('admin_products'); ?>" class="form-reset" ></a>
                                 </td>
                                 <td></td>
@@ -109,35 +110,24 @@
                 <!--  start paging..................................................... -->
                 <table border="0" cellpadding="0" cellspacing="0" id="paging-table">
                     <tr>
-                        <?php if (!(isset($_GET['category']) || isset($_GET['product_name']) || isset($_GET['stock']))): ?>
-                            <?php $numberOfPages = $view->numberOfProductPages(); ?>
-
-                            <?php if ($page > $numberOfPages): ?>
-                                <?php $page = $numberOfPages; ?>
-                            <?php endif; ?>                        
-                            <td>
+                        <?php if ($paginator->getCurrent() > $paginator->getPages()): ?>
+                            <?php $paginator->setCurrent($paginator->getPages()); ?>
+                        <?php endif; ?>                        
+                        <td>
+                            <?php if (!(isset($_GET['product_name']) || isset($_GET['category']) || isset($_GET['stock']))): ?>
                                 <a href="<?php echo url('admin_products', array('page' => 1)); ?>" class="page-far-left"></a>
-                                <a href="<?php echo url("admin_products", array("page" => ($current = ($page > 1) ? $page - 1 : 1))); ?>" class="page-left"></a>
-                                <div id="page-info">Page <strong><?php echo $page; ?></strong> / <?php echo $numberOfPages; ?></div>
-                                <a href="<?php echo url("admin_products", array("page" => ($current = ($page < $numberOfPages) ? $page + 1 : $numberOfPages))); ?>" class="page-right"></a>
-                                <a href="<?php echo url('admin_products', array('page' => $numberOfPages)); ?>" class="page-far-right"></a>
-                            </td>
-                        <?php else: ?>
-                            <?php $numberOfPages = $numberofpages; ?>
-
-                            <?php if ($page > $numberOfPages): ?>
-                                <?php $page = $numberOfPages; ?>
-                            <?php endif; ?>                        
-                            <td>
-                                <?php $get_array = array('category' => $_GET['category'], 'title' => $_GET['product_name']); ?>
-                                <?php if (isset($_GET['stock'])): $get_array = array_merge($get_array, array('stock' => $_GET['stock'])); endif; ?>
-                                <a href="<?php echo url('admin_products/filter_products', $get_array = array_merge($get_array, array('page' => 1))); ?>" class="page-far-left"></a>
-                                <a href="<?php echo url("admin_products/filter_products", $get_array = array_merge($get_array, array("page" => ($current = ($page > 1) ? $page - 1 : 1)))); ?>" class="page-left"></a>
-                                <div id="page-info">Page <strong><?php echo $page; ?></strong> / <?php echo $numberOfPages; ?></div>
-                                <a href="<?php echo url("admin_products/filter_products", array("page" => ($current = ($page < $numberOfPages) ? $page + 1 : $numberOfPages))); ?>" class="page-right"></a>
-                                <a href="<?php echo url('admin_products/filter_products', array('page' => $numberOfPages)); ?>" class="page-far-right"></a>
-                            </td>
-                        <?php endif; ?>
+                                <a href="<?php echo url("admin_products", array("page" => ($current = ($paginator->getCurrent() > 1) ? $paginator->getCurrent() - 1 : 1))); ?>" class="page-left"></a>
+                                <div id="page-info">Page <strong><?php echo $paginator->getCurrent(); ?></strong> / <?php echo $paginator->getPages(); ?></div>
+                                <a href="<?php echo url("admin_products", array("page" => ($current = ($paginator->getCurrent() < $paginator->getPages()) ? $paginator->getCurrent() + 1 : $paginator->getPages()))); ?>" class="page-right"></a>
+                                <a href="<?php echo url('admin_products', array('page' => $paginator->getPages())); ?>" class="page-far-right"></a>
+                            <?php else: ?>
+                                <a href="<?php echo url('admin_products', array('page' => 1, 'product_name' => $_GET['product_name'], 'category' => $_GET['category'], 'stock' => (isset($_GET['stock']) && $_GET['stock'] == 1) ? 1 : 0)); ?>" class="page-far-left"></a>
+                                <a href="<?php echo url("admin_products", array("page" => ($current = ($paginator->getCurrent() > 1) ? $paginator->getCurrent() - 1 : 1), 'product_name' => $_GET['product_name'], 'category' => $_GET['category'], 'stock' => (isset($_GET['stock']) && $_GET['stock'] == 1) ? 1 : 0)); ?>" class="page-left"></a>
+                                <div id="page-info">Page <strong><?php echo $paginator->getCurrent(); ?></strong> / <?php echo $paginator->getPages(); ?></div>
+                                <a href="<?php echo url("admin_products", array("page" => ($current = ($paginator->getCurrent() < $paginator->getPages()) ? $paginator->getCurrent() + 1 : $paginator->getPages()), 'product_name' => $_GET['product_name'], 'category' => $_GET['category'], 'stock' => (isset($_GET['stock']) && $_GET['stock'] == 1) ? 1 : 0)); ?>" class="page-right"></a>
+                                <a href="<?php echo url('admin_products', array('page' => $paginator->getPages(), 'product_name' => $_GET['product_name'], 'category' => $_GET['category'], 'stock' => (isset($_GET['stock']) && $_GET['stock'] == 1) ? 1 : 0)); ?>" class="page-far-right"></a>
+                            <?php endif; ?>
+                        </td>
                     </tr>
                 </table>
                 <!--  end paging................ -->

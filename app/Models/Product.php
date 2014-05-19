@@ -25,7 +25,7 @@ class Product extends \Wee\Model {
     protected $image;
             
     function __construct() {
-        $this->setAttrAccessible(array('id', 'title', 'category_id', 'price', 'author_id', 'isbn', 'appereance_year', 'description', 'short_description', 'stock', 'active'));
+        $this->setAttrAccessible(array('title', 'category_id', 'price', 'author_id', 'isbn', 'appereance_year', 'description', 'short_description', 'stock', 'active'));
     
         $this->validateProductTitle();
         $this->validateProductPrice();

@@ -15,7 +15,7 @@ class Image extends \Wee\Model {
     protected $product;
 
     public function __construct() {
-        $this->setAttrAccessible(array('id', 'product_id', 'path', 'filename', 'type', 'size'));
+        $this->setAttrAccessible(array('product_id', 'path', 'filename', 'type', 'size'));
 
         $this->validateImageType();
         $this->validateImageSize();
