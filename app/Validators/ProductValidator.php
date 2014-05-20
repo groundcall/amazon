@@ -54,7 +54,7 @@ trait ProductValidator {
 
     public function validateProductImageType() {
         $this->registerValidator(function($product) {
-            if (!($product->getId() || $product->getImage())) {
+            if (!$product->getId() || $product->getImage()->getId() == null) {
                 $allowedExts = array("gif", "jpeg", "jpg", "png");
                 $temp = explode(".", $product->getImage()->getFilename());
                 $extension = end($temp);

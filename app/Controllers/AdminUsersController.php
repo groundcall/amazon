@@ -57,6 +57,9 @@ class AdminUsersController extends \Wee\Controller {
 
     public function showEditUser() {
         $userDao = \Wee\DaoFactory::getDao('User');
+        if (!$userDao->getUserById($_GET['user_id'])){
+          $this->redirect('admin_users/index');
+        }
         $user = $userDao->getUserById($_GET['user_id']);
         $this->render('admin/edit_user', array('user' => $user));
     }

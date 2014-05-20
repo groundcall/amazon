@@ -12,6 +12,9 @@ class ProductsController extends \Wee\Controller {
     
     public function showDetails() {
         $productDao = \Wee\DaoFactory::getDao('Product');
+        if (!$productDao->getProductById($_GET['product_id'])){
+            $this->redirect('products/index');
+        }
         $product = $productDao->getProductById($_GET['product_id']);
         $randomProducts = $productDao->getRandomProducts($_GET['product_id'], 4);
         $this->render('users/product_detail', array('product' => $product, 'randomProducts' => $randomProducts));
@@ -19,6 +22,9 @@ class ProductsController extends \Wee\Controller {
 
     public function category() {
         $categoryDao = \Wee\DaoFactory::getDao('Category');
+        if (!$categoryDao->getCategoryById($_GET['category'])){
+            $this->redirect('products/index');
+        }
         $category = $categoryDao->getCategoryById($_GET['category']);
         $this->render('users/category', array('category'=>$category));
     }

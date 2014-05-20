@@ -23,6 +23,7 @@ class AdminProductsController extends \Wee\Controller {
         $productDao = \Wee\DaoFactory::getDao('Product');
         $paginator->setCount($productDao->getProductCount());
         $paginator->setPerpage();
+        
         if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
             $paginator->setCurrent($_GET['page']);
         } else {
@@ -70,6 +71,9 @@ class AdminProductsController extends \Wee\Controller {
 
     public function showEditProduct() {
         $productDao = \Wee\DaoFactory::getDao('Product');
+        if (!$productDao->getProductById($_GET['product_id'])){
+          $this->redirect('admin_products/index');
+        }
         $product = $productDao->getProductById($_GET['product_id']);
         $this->render('admin/edit_product', array('product' => $product));
     }
@@ -118,11 +122,11 @@ class AdminProductsController extends \Wee\Controller {
             $imageDao = \Wee\DaoFactory::getDao('Image');
             $image = $imageDao->getImageByProductId($_POST['data']['id']);
             $product->setImage($image);
+                       
             
-
             if (!empty($_FILES['image']['name'])) {
                 $product->createImage($_FILES['image']['tmp_name'], $_FILES['image']['name'], $_FILES['image']['type'], $_FILES['image']['tmp_name']);
-            }
+                }
 
             if ($product->isValid()) {
                 $productDao = \Wee\DaoFactory::getDao('Product');

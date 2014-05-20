@@ -28,7 +28,7 @@
                                                         </a>
                                                         <div class="product-description">
                                                             <p><a href="<?php echo url('products/show_details', array('product_id' => $products[$k]->getId())); ?>"><?php echo $products[$k]->getTitle(); ?></a></p>
-                                                            <p>See all <a href="#"><?php echo $products[$k]->getCategory(); ?></a></p>
+                                                            <p>See all <a href="<?php echo url('products/category', array('category' => $products[$k]->getCategory_id()))?>"><?php echo $products[$k]->getCategory(); ?></a></p>
                                                         </div>
                                                     </td>
                                                     <td>
@@ -37,7 +37,7 @@
                                                         </a>
                                                         <div class="product-description">
                                                             <p><a href="<?php echo url('products/show_details', array('product_id' => $products[$k + 1]->getId())); ?>"><?php echo $products[$k + 1]->getTitle(); ?></a></p>
-                                                            <p>See all <a href="#"><?php echo $products[$k + 1]->getCategory(); ?></a></p>
+                                                            <p>See all <a href="<?php echo url('products/category', array('category' => $products[$k+1]->getCategory_id()))?>"><?php echo $products[$k + 1]->getCategory(); ?></a></p>
                                                         </div>
                                                     </td>
                                                 </tr>
