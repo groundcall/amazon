@@ -12,8 +12,9 @@ class AdminUsersController extends \Wee\Controller {
      */
     public function index() {
         $paginator = new \Models\Paginator();
-        $paginator->setCount('User');
-        $paginator->setPerpage('User');
+        $userDao = \Wee\DaoFactory::getDao('User');
+        $paginator->setCount($userDao->getUserCount());
+        $paginator->setPerpage();
         if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
             $paginator->setCurrent($_GET['page']);
         }
@@ -23,7 +24,6 @@ class AdminUsersController extends \Wee\Controller {
         $paginator->setPages();
         $start = ($paginator->getCurrent() - 1) * $paginator->getPerpage();
         $limit = $paginator->getPerpage();
-        $userDao = \Wee\DaoFactory::getDao('User');
         $users = $userDao->getAllUsers($start, $limit);
         $this->render('admin/list_users', array('users' => $users, 'paginator' => $paginator));
     }
@@ -66,11 +66,9 @@ class AdminUsersController extends \Wee\Controller {
         if (!empty($_POST['data'])) {
             $userDao = \Wee\DaoFactory::getDao('User');
 
-            $user = new \Models\User();
             
-//            $user=$userDao(getUserById($))
+            $user = $userDao->getUserById($_POST['data']['id']);
             $user->updateAttributes($_POST['data']);
-            $user->setId($_POST['data']['id']);
             
             if ($user->isValid()) {
                 $userDao = \Wee\DaoFactory::getDao('User');

@@ -20,8 +20,9 @@ class AdminProductsController extends \Wee\Controller {
 
     public function showAllProducts() {
         $paginator = new \Models\Paginator();
-        $paginator->setCount('Product');
-        $paginator->setPerpage('Product');
+        $productDao = \Wee\DaoFactory::getDao('Product');
+        $paginator->setCount($productDao->getProductCount());
+        $paginator->setPerpage();
         if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
             $paginator->setCurrent($_GET['page']);
         } else {
@@ -30,7 +31,6 @@ class AdminProductsController extends \Wee\Controller {
         $paginator->setPages();
         $start = ($paginator->getCurrent() - 1) * $paginator->getPerpage();
         $limit = $paginator->getPerpage();
-        $productDao = \Wee\DaoFactory::getDao('Product');
         $products = $productDao->getAllProducts($start, $limit);
         $this->render('admin/list_products', array('products' => $products, 'paginator' => $paginator));
     }
@@ -42,7 +42,7 @@ class AdminProductsController extends \Wee\Controller {
         } else {
             $paginator->setCurrent(1);
         }
-        $paginator->setItemsPerpage();
+        $paginator->setPerpage();
         if (!isset($_GET['stock']) || $_GET['stock'] == 0) {
             $stock = 0;
         } 
@@ -52,7 +52,7 @@ class AdminProductsController extends \Wee\Controller {
         $start = ($paginator->getCurrent() - 1) * $paginator->getPerpage();
         $limit = $paginator->getPerpage();
         $productDao = \Wee\DaoFactory::getDao('Product');
-        $paginator->setItemsCount($productDao->getFilteredProductCount($_GET['product_name'], $_GET['category'], $stock));
+        $paginator->setCount($productDao->getFilteredProductCount($_GET['product_name'], $_GET['category'], $stock));
         $paginator->setPages();
         $products = $productDao->getFilterProducts($_GET['product_name'], $_GET['category'], $stock, $start, $limit);
         $this->render('admin/list_products', array('products' => $products, 'paginator' => $paginator));
@@ -62,8 +62,8 @@ class AdminProductsController extends \Wee\Controller {
         $productDao = \Wee\DaoFactory::getDao('Product');
         $productDao->deleteProduct($_POST['product_id']);
         $imageDao = \Wee\DaoFactory::getDao('Image');
-        $image = $imageDao->getImageNameByProductId($_POST['product_id']);
-        unlink($image);
+        $image = $imageDao->getImageByProductId($_POST['product_id']);
+        $image->deleteImage();
         $imageDao->deleteImage($_POST['product_id']);
         $this->redirect('admin_products');
     }
@@ -92,22 +92,18 @@ class AdminProductsController extends \Wee\Controller {
 
     public function addProduct() {
         $product = null;
-        $image = null;
         if (!empty($_POST['data'])) {
 
             $product = new \Models\Product();
             $product->updateAttributes($_POST['data']);
-
-            $image = new \Models\Image();
-            $image->updateAttributes(array('path' => $_FILES['image']['tmp_name'], 'size' => $_FILES['image']['size'], 'filename' => $_FILES['image']['name'], 'type' =>$_FILES['image']['type']));
-            $product->setImage($image);
-
+            
+            $product->createImage($_FILES['image']['tmp_name'], $_FILES['image']['name'], $_FILES['image']['type'], $_FILES['image']['tmp_name']);
+            
             if ($product->isValid()) {
                 $productDao = \Wee\DaoFactory::getDao('Product');
                 $productDao->addProduct($product);
-                $image->setProduct_id($productDao->getLastInsertedProduct());
-                $image->saveImage();
-                $product->setImage($image);
+                $product->getImage()->setProduct_id($productDao->getLastInsertedProduct());
+                $product->getImage()->saveImage();
                 $this->showProductForm();
             } else {
                 $this->render('admin/add_product', array('product' => $product));
@@ -117,31 +113,25 @@ class AdminProductsController extends \Wee\Controller {
 
     public function editProduct() {
         $product = null;
-        $image = null;
         if (!empty($_POST['data'])) {
             $productDao = \Wee\DaoFactory::getDao('Product');
-            $old_product = $productDao->getProductById($_POST['data']['id']);
-            $product = new \Models\Product();
-            $product->updateAttributes($_POST['data']);
-            $product->setId($_POST['data']['id']);
-
+            $product = $productDao->getProductById($_POST['data']['id']);
+            $imageDao = \Wee\DaoFactory::getDao('Image');
+            $image = $imageDao->getImageByProductId($_POST['data']['id']);
+            $product->setImage($image);
+            
 
             if (!empty($_FILES['image']['name'])) {
-                $image = new \Models\Image();
-                $image->updateAttributes(array('path' => $_FILES['image']['tmp_name'], 'size' => $_FILES['image']['size'], 'filename' => $_FILES['image']['name'], 'type' =>$_FILES['image']['type']));
-                $product->setImage($image);
+                $product->createImage($_FILES['image']['tmp_name'], $_FILES['image']['name'], $_FILES['image']['type'], $_FILES['image']['tmp_name']);
             }
 
             if ($product->isValid()) {
                 $productDao = \Wee\DaoFactory::getDao('Product');
                 $productDao->updateProduct($product);
                 if (!empty($_FILES['image']['name'])) {
-                    $imageDao = \Wee\DaoFactory::getDao('Image');
-                    $old_image = $imageDao->getImageNameByProductId($old_product->getId());
-                    unlink($old_image);
-                    $image->setProduct_id($old_product->getId());
-                    $image->updateImage();
-                    $product->setImage($image);
+                    $image->deleteImage();
+                    $product->getImage()->setProduct_id($_POST['data']['id']);
+                    $product->getImage()->updateImage();
                 }
                 $this->redirect('admin_products');
             }

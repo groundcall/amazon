@@ -156,6 +156,12 @@ class Product extends \Wee\Model {
         $this->image = $image;
     }
     
+    public function createImage($path, $filename, $type, $size) {
+        $image = new \Models\Image();
+        $image->updateAttributes(array('path' => $path, 'size' => $size, 'filename' => $filename, 'type' =>$type));
+        $this->setImage($image);
+    }
+    
     public function setImageByProductId() {
         $imageDao = \Wee\DaoFactory::getDao('Image');
         $this->image = $imageDao->getImageNameByProductId($this->id);
