@@ -74,8 +74,8 @@
                             <?php for ($k=0; $k < sizeof($products); $k += 3): ?>
                             <ul class="products-grid">
                                 <li class="item first">
-                                    <a href="<?php echo url('products/product_detail', array('product_id' => $products[$k]->getId()));?>" title="<?php echo $products[$k]->getTitle(); ?>" class="product-image"><img src="<?php echo '../product_images' . $products[$k]->getImage(); ?>" width="135" height="135" alt="<?php echo $products[$k]->getTitle(); ?>" /></a>
-                                    <h2 class="product-name"><a href="<?php echo url('products/product_detail', array('product_id' => $products[$k]->getId()));?>" title="<?php echo $products[$k]->getTitle(); ?>"><?php echo $products[$k]->getTitle(); ?></a></h2>
+                                    <a href="<?php echo url('products/show_details', array('product_id' => $products[$k]->getId()));?>" title="<?php echo $products[$k]->getTitle(); ?>" class="product-image"><img src="<?php echo '../product_images' . $products[$k]->getImage(); ?>" width="135" height="135" alt="<?php echo $products[$k]->getTitle(); ?>" /></a>
+                                    <h2 class="product-name"><a href="<?php echo url('products/show_details', array('product_id' => $products[$k]->getId()));?>" title="<?php echo $products[$k]->getTitle(); ?>"><?php echo $products[$k]->getTitle(); ?></a></h2>
                                     <div class="price-box">
                                         <span class="regular-price" id="product-price-168">
                                             <span class="price"><?php echo $products[$k]->getPrice(); ?> US$</span>
@@ -90,52 +90,53 @@
                                 </li>
                                
                                 <li class="item">
+
                                      <?php if (isset($products[$k+1])): ?>
-                                    <a href="<?php echo url('products/product_detail', array('product_id' => $products[$k+1]->getId()));?>" title="<?php echo $products[$k+1]->getTitle(); ?>" class="product-image">
-                                        <img src="<?php echo '../product_images' . $products[$k+1]->getImage(); ?>" width="135" height="135" alt="<?php echo $products[$k+1]->getTitle(); ?>" />
-                                    </a>
+                                        <a href="<?php echo url('products/show_details', array('product_id' => $products[$k+1]->getId()));?>" title="<?php echo $products[$k+1]->getTitle(); ?>" class="product-image">
+                                            <img src="<?php echo '../product_images' . $products[$k+1]->getImage(); ?>" width="135" height="135" alt="<?php echo $products[$k+1]->getTitle(); ?>" />
+                                        </a>
 
-                                    <h2 class="product-name">
-                                        <a href="<?php echo url('products/product_detail', array('product_id' => $products[$k+1]->getId()));?>" title="<?php echo $products[$k+1]->getTitle(); ?>"><?php echo $products[$k+1]->getTitle(); ?></a>
-                                    </h2>
+                                        <h2 class="product-name">
+                                            <a href="<?php echo url('products/show_details', array('product_id' => $products[$k+1]->getId()));?>" title="<?php echo $products[$k+1]->getTitle(); ?>"><?php echo $products[$k+1]->getTitle(); ?></a>
+                                        </h2>
 
-                                    <div class="price-box">
-                                        <span class="regular-price" id="product-price-170">
-                                            <span class="price"><?php echo $products[$k]->getPrice(); ?> US$</span>
-                                        </span>
-                                    </div>
+                                        <div class="price-box">
+                                            <span class="regular-price" id="product-price-170">
+                                                <span class="price"><?php echo $products[$k]->getPrice(); ?> US$</span>
+                                            </span>
+                                        </div>
 
-                                    <div class="actions">
-                                        <button type="button" title="Add to Cart" class="button btn-cart" >
-                                            <span><span>Add to Cart</span></span>
-                                        </button>
-                                    </div>
+                                        <div class="actions">
+                                            <button type="button" title="Add to Cart" class="button btn-cart" >
+                                                <span><span>Add to Cart</span></span>
+                                            </button>
+                                        </div>
                                     <?php endif;?>
                                 </li>
                                 
                                 
                                 <li class="item">
                                     <?php if (isset($products[$k+2])): ?>
-                                    <a href="<?php echo url('products/product_detail', array('product_id' => $products[$k+2]->getId()));?>" title="<?php echo $products[$k+2]->getTitle(); ?>" class="product-image">
-                                        <img src="<?php echo '../product_images' . $products[$k+2]->getImage(); ?>" width="135" height="135" alt="<?php echo $products[$k+2]->getTitle(); ?>" />
-                                    </a>
+                                        <a href="<?php echo url('products/show_details', array('product_id' => $products[$k+2]->getId()));?>" title="<?php echo $products[$k+2]->getTitle(); ?>" class="product-image">
+                                            <img src="<?php echo '../product_images' . $products[$k+2]->getImage(); ?>" width="135" height="135" alt="<?php echo $products[$k+2]->getTitle(); ?>" />
+                                        </a>
 
-                                    <h2 class="product-name">
-                                        <a href="<?php echo url('products/product_detail', array('product_id' => $products[$k+2]->getId()));?>" title="<?php echo $products[$k+2]->getTitle(); ?>"><?php echo $products[$k+2]->getTitle(); ?></a>
-                                    </h2>
+                                        <h2 class="product-name">
+                                            <a href="<?php echo url('products/show_details', array('product_id' => $products[$k+2]->getId()));?>" title="<?php echo $products[$k+2]->getTitle(); ?>"><?php echo $products[$k+2]->getTitle(); ?></a>
+                                        </h2>
 
-                                    <div class="price-box">
-                                        <span class="regular-price" id="product-price-170">
-                                            <span class="price"><?php echo $products[$k]->getPrice(); ?> US$</span>
-                                        </span>
-                                    </div>
+                                        <div class="price-box">
+                                            <span class="regular-price" id="product-price-170">
+                                                <span class="price"><?php echo $products[$k]->getPrice(); ?> US$</span>
+                                            </span>
+                                        </div>
 
-                                    <div class="actions">
-                                        <button type="button" title="Add to Cart" class="button btn-cart" >
-                                            <span><span>Add to Cart</span></span>
-                                        </button>
-                                    </div>
-                                    <?php endif;?>
+                                        <div class="actions">
+                                            <button type="button" title="Add to Cart" class="button btn-cart" >
+                                                <span><span>Add to Cart</span></span>
+                                            </button>
+                                        </div>
+                                    <?php endif; ?>
                                 </li>
                             </ul>
                             <?php endfor; ?>

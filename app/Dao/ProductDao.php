@@ -198,7 +198,6 @@ class ProductDao extends \Wee\Dao {
         }
     }
 
-
     public function getCategoryByProductId($product_id) {
         $sql = "SELECT category_id FROM products WHERE id = :id";
         $stmt = $this->getConnection()->prepare($sql);
@@ -230,4 +229,6 @@ class ProductDao extends \Wee\Dao {
         
         return $this->getProducts($stmt);
     }
-  }
+}
+
+

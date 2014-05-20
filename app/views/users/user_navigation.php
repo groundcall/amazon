@@ -1,10 +1,10 @@
 <div class="header-container">
     <div class="header">
         <div class="quick-access">
-            <form id="search_mini_form" action="product_list.html" method="get">
+            <form id="search_mini_form" action="<?php echo url('products/search'); ?>" method="get">
                 <div class="form-search">
                     <label for="search">Search:</label>
-                    <input id="search" type="text" name="q" value="" class="input-text" maxlength="128" />
+                    <input id="search" type="text" name="title" value="" class="input-text" maxlength="128" />
                     <button type="submit" title="Search" class="button"><span><span>Search</span></span></button>
                 </div>
             </form>
