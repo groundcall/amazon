@@ -54,7 +54,7 @@ trait ProductValidator {
 
     public function validateProductImageType() {
         $this->registerValidator(function($product) {
-            if (!$product->getId() || $product->getImage()) {
+            if (!($product->getId() || $product->getImage())) {
                 $allowedExts = array("gif", "jpeg", "jpg", "png");
                 $temp = explode(".", $product->getImage()->getFilename());
                 $extension = end($temp);
@@ -72,7 +72,7 @@ trait ProductValidator {
 
     public function validateProductImageSize() {
         $this->registerValidator(function($product) {
-            if (!$product->getId() || $product->getImage()) {
+            if (!($product->getId() || $product->getImage())) {
                 if ($product->getImage()->getSize() > 5 * 1024 * 1024) {
                     $product->addError('image', 'Image too large.');
                 }

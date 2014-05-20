@@ -99,4 +99,8 @@ class Image extends \Wee\Model {
         $imageDao->updateImageFilename($this);
     }
     
+    public function deleteImage() {
+//        var_dump('../web/product_images' . $this->getPath() . $this->getFilename());
+        unlink('../web/product_images' . $this->getPath() . $this->getFilename());
+    }
 }

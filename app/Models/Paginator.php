@@ -2,6 +2,8 @@
 
 namespace Models;
 
+define('ITEMS_PER_PAGE', 2);
+
 class Paginator extends \Wee\Model {
     
     protected $current;
@@ -32,35 +34,13 @@ class Paginator extends \Wee\Model {
     public function setCurrent($current) {
         $this->current = $current;
     }
-
-    public function setCount($type) {
-        if ($type == 'Product') {
-            $productDao = \Wee\DaoFactory::getDao('Product');
-            $numberOfProducts = $productDao->getProductCount();
-            $this->count = $numberOfProducts;
-        }
-        if ($type == 'User') {
-            $userDao = \Wee\DaoFactory::getDao('User');
-            $numberOfUsers = $userDao->getUserCount();
-            $this->count = $numberOfUsers;
-        }
-    }
     
-    public function setItemsCount($number) {
-        $this->count = $number;
+    public function setCount($count) {
+        $this->count = $count;
     }
 
-    public function setPerpage($type) {
-        if ($type == 'Product') {
-            $this->perpage = 10;
-        }
-        if ($type == 'User') {
-            $this->perpage = 2;
-        }
-    }
-    
-    public function setItemsPerpage() {
-        $this->perpage = 3;
+    public function setPerpage() {
+        $this->perpage = ITEMS_PER_PAGE;
     }
 
     public function setPages() {

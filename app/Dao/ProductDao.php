@@ -194,6 +194,7 @@ class ProductDao extends \Wee\Dao {
         }
     }
     
+<<<<<<< HEAD
     public function getProductsByCategoryId($category_id){
         $sql = 'SELECT * FROM products WHERE category_id = :category_id';
         $stmt = $this->getConnection()->prepare($sql);
@@ -203,3 +204,25 @@ class ProductDao extends \Wee\Dao {
         return $this->getProducts($stmt);
     }
 }
+=======
+    public function getCategoryByProductId($product_id) {
+        $sql = "SELECT category_id FROM products WHERE id <> :id";
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':id', $product_id, \PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch();
+        return $result[0];
+    }
+    
+    public function getRandomProducts($product_id, $limit) {
+        $sql = "SELECT * FROM products p INNER JOIN images i ON p.id = i.product_id WHERE p.id <> :id"
+                . " AND category_id = :category_id ORDER BY RAND() LIMIT :limit";
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':id', $product_id, \PDO::PARAM_INT);
+        $stmt->bindValue(':category_id', $this->getCategoryByProductId($product_id), \PDO::PARAM_INT);
+        $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+        $stmt->execute();
+        return $this->getProducts($stmt);
+    }
+}
+>>>>>>> Modified DAO and added product page
