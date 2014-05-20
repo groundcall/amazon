@@ -7,8 +7,7 @@ class UserDao extends \Wee\Dao {
     private function readRow($row) {
         $user = new \Models\User();
         $user->updateAttributes($row);
-<<<<<<< HEAD
-=======
+
 //        $user->setUsername($row['username']);
 //        $user->setPassword($row['password']);
 //        $user->setFirstname($row['firstname']);
@@ -18,7 +17,6 @@ class UserDao extends \Wee\Dao {
 //        $user->setGender($row['gender']);
 //        $user->setActivated($row['activated']);
 //        $user->setCreated_at($row['created_at']);
->>>>>>> All Validators moved in constructors, removed id in attributes accesible function
         $user->setId($row['id']);
         return $user;
     }
