@@ -67,6 +67,8 @@ class AdminUsersController extends \Wee\Controller {
             $userDao = \Wee\DaoFactory::getDao('User');
 
             $user = new \Models\User();
+            
+//            $user=$userDao(getUserById($))
             $user->updateAttributes($_POST['data']);
             $user->setId($_POST['data']['id']);
             
