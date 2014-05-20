@@ -88,8 +88,9 @@
                                         </button>
                                     </div>
                                 </li>
-
+                               
                                 <li class="item">
+                                     <?php if (isset($products[$k+1])): ?>
                                     <a href="<?php echo url('products/product_detail', array('product_id' => $products[$k+1]->getId()));?>" title="<?php echo $products[$k+1]->getTitle(); ?>" class="product-image">
                                         <img src="<?php echo '../product_images' . $products[$k+1]->getImage(); ?>" width="135" height="135" alt="<?php echo $products[$k+1]->getTitle(); ?>" />
                                     </a>
@@ -109,9 +110,12 @@
                                             <span><span>Add to Cart</span></span>
                                         </button>
                                     </div>
+                                    <?php endif;?>
                                 </li>
-
+                                
+                                
                                 <li class="item">
+                                    <?php if (isset($products[$k+2])): ?>
                                     <a href="<?php echo url('products/product_detail', array('product_id' => $products[$k+2]->getId()));?>" title="<?php echo $products[$k+2]->getTitle(); ?>" class="product-image">
                                         <img src="<?php echo '../product_images' . $products[$k+2]->getImage(); ?>" width="135" height="135" alt="<?php echo $products[$k+2]->getTitle(); ?>" />
                                     </a>
@@ -131,6 +135,7 @@
                                             <span><span>Add to Cart</span></span>
                                         </button>
                                     </div>
+                                    <?php endif;?>
                                 </li>
                             </ul>
                             <?php endfor; ?>
@@ -149,7 +154,7 @@
                                                 <li><a href="#">2</a></li>
                                                 <li>
                                                     <a class="next i-next" href="#" title="Next">
-                                                        <img src="images/pager_arrow_right.gif" alt="Next" class="v-middle" />
+                                                        <img src="../images/pager_arrow_right.gif" alt="Next" class="v-middle" />
                                                     </a>
                                                 </li>
                                             </ol>
