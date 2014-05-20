@@ -163,9 +163,13 @@ class ProductDao extends \Wee\Dao {
     }
         
     public function getLastProducts($limit) {
-        $sql = "SELECT * FROM products p INNER JOIN images i ON p.id = i.product_id ORDER BY p.id DESC LIMIT :limit";
+        $sql = "SELECT p.id, p.title, p.category_id, p.price, p.author_id, p.isbn, p.appereance_year, p.description, p.short_description,"
+                . " p.stock, p.active, i.path, i.filename, i.product_id FROM products p INNER JOIN images i ON p.id = i.product_id "
+                . " WHERE p.active = :active ORDER BY p.id DESC LIMIT :limit";
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+        $active = 1;
+        $stmt->bindValue(':active', $active, \PDO::PARAM_INT);
         $stmt->execute();
         return $this->getProducts($stmt);
     }
@@ -176,7 +180,7 @@ class ProductDao extends \Wee\Dao {
         $stmt->bindValue(':title', $product->getTitle());
         $stmt->bindValue(':id', $product->getId());
         $stmt->execute();
-        $result=$stmt->fetch();
+        $result = $stmt->fetch();
         if ($result) {
             return true;
         }
@@ -186,7 +190,7 @@ class ProductDao extends \Wee\Dao {
     }
     
     public function getCategoryByProductId($product_id) {
-        $sql = "SELECT category_id FROM products WHERE id <> :id";
+        $sql = "SELECT category_id FROM products WHERE id = :id";
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':id', $product_id, \PDO::PARAM_INT);
         $stmt->execute();
@@ -195,12 +199,15 @@ class ProductDao extends \Wee\Dao {
     }
     
     public function getRandomProducts($product_id, $limit) {
-        $sql = "SELECT * FROM products p INNER JOIN images i ON p.id = i.product_id WHERE p.id <> :id"
-                . " AND category_id = :category_id ORDER BY RAND() LIMIT :limit";
+        $sql = "SELECT p.id, p.title, p.category_id, p.price, p.author_id, p.isbn, p.appereance_year, p.description, p.short_description,"
+                . " p.stock, p.active, i.path, i.filename, i.product_id FROM products p INNER JOIN images i ON p.id = i.product_id "
+                . " WHERE p.id <> :id AND category_id = :category_id AND p.active = :active ORDER BY RAND() LIMIT :limit";
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':id', $product_id, \PDO::PARAM_INT);
         $stmt->bindValue(':category_id', $this->getCategoryByProductId($product_id), \PDO::PARAM_INT);
         $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+        $active = 1;
+        $stmt->bindValue(':active', $active, \PDO::PARAM_INT);
         $stmt->execute();
         return $this->getProducts($stmt);
     }

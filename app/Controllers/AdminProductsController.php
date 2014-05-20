@@ -93,7 +93,6 @@ class AdminProductsController extends \Wee\Controller {
     public function addProduct() {
         $product = null;
         if (!empty($_POST['data'])) {
-
             $product = new \Models\Product();
             $product->updateAttributes($_POST['data']);
             
