@@ -193,6 +193,15 @@ class ProductDao extends \Wee\Dao {
             return false;
         }
     }
+
+    public function getCategoryByProductId($product_id) {
+        $sql = "SELECT category_id FROM products WHERE id = :id";
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':id', $product_id, \PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch();
+        return $result[0];
+    }
     
     public function getProductsByCategoryId($category_id){
         $sql = 'SELECT * FROM products WHERE category_id = :category_id';

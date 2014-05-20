@@ -14,4 +14,7 @@ class ProductsController extends \Wee\Controller {
         $this->render('users/category', array('category'=>$category));
     }
 
+    public function search() {
+        $this->render('users/search');
+    }
 }
