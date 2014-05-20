@@ -18,7 +18,7 @@ trait ApplicationHelper {
         $categories = $categoryDao->getAllCategories();
         return $categories;
     }
-    
+
     public function numberOfProducts() {
         $productDao = \Wee\DaoFactory::getDao('Product');
         $numberOfProducts = $productDao->getProductCount();

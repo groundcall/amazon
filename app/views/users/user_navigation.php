@@ -23,11 +23,11 @@
 
 <div class="nav-container">
     <ul id="nav">
-        <?php foreach ($view->getCategories() as $category): ?>
+        <?php $categories = $view->getCategories(); ?>
+        <?php foreach ($categories as $category): ?>
             <li class="level0 nav-1 level-top first">
-                <a href="<?php echo url('products/category', array('category' => $category->getId()));?>" class="level-top" ><span><?php echo $category->getLabel(); ?></span></a>
+                <a href="#" class="level-top" ><span><?php echo $category->getLabel(); ?></span></a>
             </li>
-            <option value="<?php echo $category->getId(); ?>" <?php echo (isset($_GET['category']) && ($_GET['category'] == $category->getId())) ? 'selected="selected"' : ''; ?>><?php echo $category->getLabel(); ?></option>
         <?php endforeach; ?>
     </ul>
 </div>
