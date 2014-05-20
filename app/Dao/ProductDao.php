@@ -34,6 +34,7 @@ class ProductDao extends \Wee\Dao {
         if ($row == null)
             return null;
         $result = $this->readRow($row[0]);
+        
         return $result;
     }
     
@@ -43,6 +44,7 @@ class ProductDao extends \Wee\Dao {
         $stmt->bindParam(':start', $start, \PDO::PARAM_INT);
         $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
         $stmt->execute();
+        
         return $this->getProducts($stmt);
     }
     
@@ -81,6 +83,7 @@ class ProductDao extends \Wee\Dao {
        $stmt->bindParam(':start', $start, \PDO::PARAM_INT);
        $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
        $stmt->execute();
+       
        return $this->getProducts($stmt);
    }
    
@@ -89,6 +92,7 @@ class ProductDao extends \Wee\Dao {
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':title', $product->getTitle());
         $stmt->execute();
+        
         return $this->getProduct($stmt);
     }
     
@@ -109,6 +113,7 @@ class ProductDao extends \Wee\Dao {
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':product_id', $product_id);
         $stmt->execute();
+        
         return $this->getProduct($stmt);
     }
     
@@ -117,6 +122,7 @@ class ProductDao extends \Wee\Dao {
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->execute();
         $product = $this->getProduct($stmt);
+        
         return $product->getId();
     }
     
@@ -138,6 +144,7 @@ class ProductDao extends \Wee\Dao {
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch();
+        
         return $result[0];
     }
     
@@ -159,6 +166,7 @@ class ProductDao extends \Wee\Dao {
         }
         $stmt->execute();
         $result = $stmt->fetch();
+        
         return $result[0];
     }
         
@@ -171,6 +179,7 @@ class ProductDao extends \Wee\Dao {
         $active = 1;
         $stmt->bindValue(':active', $active, \PDO::PARAM_INT);
         $stmt->execute();
+        
         return $this->getProducts($stmt);
     }
     
@@ -189,6 +198,7 @@ class ProductDao extends \Wee\Dao {
         }
     }
     
+
     public function getCategoryByProductId($product_id) {
         $sql = "SELECT category_id FROM products WHERE id = :id";
         $stmt = $this->getConnection()->prepare($sql);
@@ -209,6 +219,15 @@ class ProductDao extends \Wee\Dao {
         $active = 1;
         $stmt->bindValue(':active', $active, \PDO::PARAM_INT);
         $stmt->execute();
+        return $this->getProducts($stmt);
+    }
+
+    public function getProductsByCategoryId($category_id){
+        $sql = 'SELECT * FROM products WHERE category_id = :category_id';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':category_id', $category_id, \PDO::PARAM_INT);
+        $stmt->execute();
+        
         return $this->getProducts($stmt);
     }
 }

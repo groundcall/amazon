@@ -2,7 +2,6 @@
 
 namespace Controllers;
 
-
 class ProductsController extends \Wee\Controller {
 
     public function index() {
@@ -16,6 +15,12 @@ class ProductsController extends \Wee\Controller {
         $product = $productDao->getProductById($_GET['product_id']);
         $randomProducts = $productDao->getRandomProducts($_GET['product_id'], 4);
         $this->render('users/product_detail', array('product' => $product, 'randomProducts' => $randomProducts));
+    }
+
+    public function category() {
+        $categoryDao = \Wee\DaoFactory::getDao('Category');
+        $category = $categoryDao->getCategoryById($_GET['category']);
+        $this->render('users/category', array('category'=>$category));
     }
 
 }
