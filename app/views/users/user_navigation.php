@@ -26,7 +26,7 @@
         <?php $categories = $view->getCategories(); ?>
         <?php foreach ($categories as $category): ?>
             <li class="level0 nav-1 level-top first">
-                <a href="#" class="level-top" ><span><?php echo $category->getLabel(); ?></span></a>
+                <a href="<?php echo url('products/category', array('category' => $category->getId()));?>" class="level-top" ><span><?php echo $category->getLabel(); ?></span></a>
             </li>
         <?php endforeach; ?>
     </ul>

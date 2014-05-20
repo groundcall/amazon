@@ -145,8 +145,7 @@ class Product extends \Wee\Model {
     
     public function getCategory() {
         return $this->category->getLabel();
-    }
-    
+    }    
     
     public function getImage() {
         return $this->image;
