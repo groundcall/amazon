@@ -81,12 +81,14 @@
                                             <span class="price"><?php echo $products[$k]->getPrice(); ?> US$</span>
                                         </span>
                                     </div>
-
-                                    <div class="actions">
-                                        <button type="button" title="Add to Cart" class="button btn-cart" >
-                                            <span><span>Add to Cart</span></span>
-                                        </button>
-                                    </div>
+                                    
+                                    <?php if (!empty($_SESSION)): ?>
+                                        <div class="actions">
+                                            <button type="button" title="Add to Cart" class="button btn-cart" >
+                                                <span><span>Add to Cart</span></span>
+                                            </button>
+                                        </div>
+                                    <?php endif; ?>
                                 </li>
                                
                                 <li class="item">
@@ -106,11 +108,13 @@
                                             </span>
                                         </div>
 
-                                        <div class="actions">
-                                            <button type="button" title="Add to Cart" class="button btn-cart" >
-                                                <span><span>Add to Cart</span></span>
-                                            </button>
-                                        </div>
+                                        <?php if (!empty($_SESSION)): ?>
+                                            <div class="actions">
+                                                <button type="button" title="Add to Cart" class="button btn-cart" >
+                                                    <span><span>Add to Cart</span></span>
+                                                </button>
+                                            </div>
+                                        <?php endif; ?>
                                     <?php endif;?>
                                 </li>
                                 
@@ -130,12 +134,14 @@
                                                 <span class="price"><?php echo $products[$k+2]->getPrice(); ?> US$</span>
                                             </span>
                                         </div>
-
-                                        <div class="actions">
-                                            <button type="button" title="Add to Cart" class="button btn-cart" >
-                                                <span><span>Add to Cart</span></span>
-                                            </button>
-                                        </div>
+                                        
+                                        <?php if (!empty($_SESSION)): ?>
+                                            <div class="actions">
+                                                <button type="button" title="Add to Cart" class="button btn-cart" >
+                                                    <span><span>Add to Cart</span></span>
+                                                </button>
+                                            </div>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                 </li>
                             </ul>
@@ -221,17 +227,21 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-right sidebar">
-                    <div class="block block-cart">
-                        <div class="block-title">
-                            <strong><span>My Cart</span></strong>
+                
+                <?php if (!empty($_SESSION)): ?>
+                    <div class="col-right sidebar">
+                        <div class="block block-cart">
+                            <div class="block-title">
+                                <strong><span>My Cart</span></strong>
+                            </div>
+                            <div class="block-content">
+                                <p class="empty">You have no items in your shopping cart.</p>
+                            </div>
                         </div>
-                        <div class="block-content">
-                            <p class="empty">You have no items in your shopping cart.</p>
-                        </div>
-                    </div>
 
-                </div>
+                    </div>
+                <?php endif; ?>
+                
             </div>
         </div>
         <div class="footer-container">

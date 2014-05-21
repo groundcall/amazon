@@ -64,17 +64,15 @@
                                             </div>
 
 
-
-                                            <div class="add-to-box">
-                                                <div class="add-to-cart">
-                                                    <label for="qty">Quantity:</label>
-                                                    <input type="text" name="qty" id="qty" maxlength="12" value="1" title="Qty" class="input-text qty" />
-                                                    <button type="button" title="Add to Cart" class="button btn-cart" ><span><span>Add to Cart</span></span></button>
+                                            <?php if (!empty($_SESSION)): ?>
+                                                <div class="add-to-box">
+                                                    <div class="add-to-cart">
+                                                        <label for="qty">Quantity:</label>
+                                                        <input type="text" name="qty" id="qty" maxlength="12" value="1" title="Qty" class="input-text qty" />
+                                                        <button type="button" title="Add to Cart" class="button btn-cart" ><span><span>Add to Cart</span></span></button>
+                                                    </div>
                                                 </div>
-                                            </div>
-
-
-
+                                            <?php endif; ?>
 
                                         </div>
 
@@ -123,56 +121,60 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-right sidebar">
-                            <div class="block block-cart">
-                                <div class="block-title">
-                                    <strong><span>My Cart</span></strong>
-                                </div>
-                                <div class="block-content">
-                                    <div class="summary">
-                                        <p class="amount">There are <a href="cart.html">2 items</a> in your cart.</p>
-                                        <p class="subtotal">
-                                            <span class="label">Cart Subtotal:</span> <span class="price">299,98 US$</span>
-                                        </p>
+                        
+                        <?php if (!empty($_SESSION)): ?>
+                            <div class="col-right sidebar">
+                                <div class="block block-cart">
+                                    <div class="block-title">
+                                        <strong><span>My Cart</span></strong>
                                     </div>
+                                    <div class="block-content">
+                                        <div class="summary">
+                                            <p class="amount">There are <a href="cart.html">2 items</a> in your cart.</p>
+                                            <p class="subtotal">
+                                                <span class="label">Cart Subtotal:</span> <span class="price">299,98 US$</span>
+                                            </p>
+                                        </div>
 
-                                    <div class="actions">
-                                        <button type="button" title="Checkout" class="button" ><span><span>Checkout</span></span></button>
+                                        <div class="actions">
+                                            <button type="button" title="Checkout" class="button" ><span><span>Checkout</span></span></button>
+                                        </div>
+
+                                        <p class="block-subtitle">Recently added item(s)</p>
+
+                                        <ol id="cart-sidebar" class="mini-products-list">
+
+                                            <li class="item">
+                                                <a href="#" title="Ottoman" class="product-image">
+                                                    <img src="images/couchlarge_2.jpg" width="50" height="50" alt="Ottoman" />
+                                                </a>
+                                                <div class="product-details">
+                                                    <a href="#" title="Remove This Item" class="btn-remove">Remove This Item</a>
+                                                    <a href="#" title="Edit item" class="btn-edit">Edit item</a>
+                                                    <p class="product-name"><a href="#">Ottoman</a></p>
+                                                    <strong>1</strong> x
+                                                    <span class="price">199,99 US$</span>
+                                                </div>
+                                            </li>
+
+                                            <li class="item">
+                                                <a href="#" title="Chair" class="product-image">
+                                                    <img src="images/couchlarge_2.jpg" width="50" height="50" alt="Chair" />
+                                                </a>
+                                                <div class="product-details">
+                                                    <a href="#" title="Remove This Item" class="btn-remove">Remove This Item</a>
+                                                    <a href="#" title="Edit item" class="btn-edit">Edit item</a>
+                                                    <p class="product-name"><a href="#">Chair</a></p>
+                                                    <strong>1</strong> x
+                                                    <span class="price">99,99 US$</span>
+                                                </div>
+                                            </li>
+                                        </ol>
+
                                     </div>
-
-                                    <p class="block-subtitle">Recently added item(s)</p>
-
-                                    <ol id="cart-sidebar" class="mini-products-list">
-
-                                        <li class="item">
-                                            <a href="#" title="Ottoman" class="product-image">
-                                                <img src="images/couchlarge_2.jpg" width="50" height="50" alt="Ottoman" />
-                                            </a>
-                                            <div class="product-details">
-                                                <a href="#" title="Remove This Item" class="btn-remove">Remove This Item</a>
-                                                <a href="#" title="Edit item" class="btn-edit">Edit item</a>
-                                                <p class="product-name"><a href="#">Ottoman</a></p>
-                                                <strong>1</strong> x
-                                                <span class="price">199,99 US$</span>
-                                            </div>
-                                        </li>
-
-                                        <li class="item">
-                                            <a href="#" title="Chair" class="product-image">
-                                                <img src="images/couchlarge_2.jpg" width="50" height="50" alt="Chair" />
-                                            </a>
-                                            <div class="product-details">
-                                                <a href="#" title="Remove This Item" class="btn-remove">Remove This Item</a>
-                                                <a href="#" title="Edit item" class="btn-edit">Edit item</a>
-                                                <p class="product-name"><a href="#">Chair</a></p>
-                                                <strong>1</strong> x
-                                                <span class="price">99,99 US$</span>
-                                            </div>
-                                        </li>
-                                    </ol>
-
                                 </div>
-                            </div>
+                            <?php endif; ?>
+                                
                         </div>
                     </div>
                 </div>

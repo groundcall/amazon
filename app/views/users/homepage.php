@@ -49,17 +49,21 @@
                             </div>
                             <div class="col-left sidebar"></div>
                         </div>
-                        <div class="col-right sidebar">
-                            <div class="block block-cart">
-                                <div class="block-title">
-                                    <strong><span>My Cart</span></strong>
+                        
+                        <?php if (!empty($_SESSION)): ?>
+                            <div class="col-right sidebar">
+                                <div class="block block-cart">
+                                    <div class="block-title">
+                                        <strong><span>My Cart</span></strong>
+                                    </div>
+                                    <div class="block-content">
+                                        <p class="empty">You have no items in your shopping cart.</p>
+                                    </div>
                                 </div>
-                                <div class="block-content">
-                                    <p class="empty">You have no items in your shopping cart.</p>
-                                </div>
-                            </div>
 
-                        </div>
+                            </div>
+                        <?php endif; ?>
+                        
                     </div>
                 </div>
                 <div class="footer-container">

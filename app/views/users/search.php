@@ -125,12 +125,14 @@
                                                     <span class="price"><?php echo $products[$i]->getPrice() . ' $'; ?></span>
                                                 </span>
                                             </div>
-
-                                            <div class="actions">
-                                                <button type="button" title="Add to Cart" class="button btn-cart" >
-                                                    <span><span>Add to Cart</span></span>
-                                                </button>
-                                            </div>
+                                            
+                                            <?php if (!empty($_SESSION)): ?>
+                                                <div class="actions">
+                                                    <button type="button" title="Add to Cart" class="button btn-cart" >
+                                                        <span><span>Add to Cart</span></span>
+                                                    </button>
+                                                </div>
+                                            <?php endif; ?>
                                         </li>
                                     
                                         <?php if ($k % 3 == 0 || $i == sizeof($products) - 1): echo '</ul>'; endif; ?>
@@ -252,16 +254,18 @@
                             </div>
                         </div>
                         
-                        <div class="col-right sidebar">
-                            <div class="block block-cart">
-                                <div class="block-title">
-                                    <strong><span>My Cart</span></strong>
-                                </div>
-                                <div class="block-content">
-                                    <p class="empty">You have no items in your shopping cart.</p>
+                        <?php if (!empty($_SESSION)): ?>
+                            <div class="col-right sidebar">
+                                <div class="block block-cart">
+                                    <div class="block-title">
+                                        <strong><span>My Cart</span></strong>
+                                    </div>
+                                    <div class="block-content">
+                                        <p class="empty">You have no items in your shopping cart.</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        <?php endif; ?>
                         
                     </div>
                 </div>

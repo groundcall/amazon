@@ -9,12 +9,24 @@
                 </div>
             </form>
 
-            <p class="welcome-msg">Welcome </p>
+            <?php if (!empty($_SESSION['username'])): ?>
+                <?php if ($_SESSION['is_admin'] != 1): ?>
+                <p class="welcome-msg"><?php echo 'Welcome, ' . $_SESSION['username']; ?><br /></p>;
+                <?php else: ?>
+                <a href="<?php echo url("admin_products"); ?>" class="welcome-msg"><?php echo 'Welcome, ' . $_SESSION['username']; ?><br /></a>
+                <?php endif; ?>
+            <?php endif; ?>
 
             <ul class="links">
-                <li class="first" ><a href="dashboard.html" title="My Account" >My Account</a></li>
-                <li ><a href="cart.html" title="My Cart" class="top-link-cart">My Cart</a></li>
-                <li class="last" ><a href="checkout.html" title="Checkout" class="top-link-checkout">Checkout</a></li>
+                <?php if (!empty($_SESSION)): ?>
+                    <li class="first" ><a href="dashboard.html" title="My Account" >My Account</a></li>
+                    <li ><a href="cart.html" title="My Cart" class="top-link-cart">My Cart</a></li>
+                    <li class="last" ><a href="checkout.html" title="Checkout" class="top-link-checkout">Checkout</a></li>
+                    <li ><a href="<?php echo url('users/logout'); ?>" title="Log Out" class="top-link-cart">Log Out</a></li>
+                <?php else: ?>
+                    <li class="first" ><a href="<?php echo url('users/show_login_form'); ?>" title="Log In" >Log In</a></li>
+                    <li ><a href="<?php echo url('users/show_user_form'); ?>" title="Register" class="top-link-cart">Register</a></li>
+                <?php endif; ?>
             </ul>
 
         </div>
