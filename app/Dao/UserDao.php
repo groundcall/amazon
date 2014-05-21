@@ -8,15 +8,6 @@ class UserDao extends \Wee\Dao {
         $user = new \Models\User();
         $user->updateAttributes($row);
 
-//        $user->setUsername($row['username']);
-//        $user->setPassword($row['password']);
-//        $user->setFirstname($row['firstname']);
-//        $user->setLastname($row['lastname']);
-//        $user->setEmail($row['email']);
-//        $user->setPhone($row['phone']);
-//        $user->setGender($row['gender']);
-//        $user->setActivated($row['activated']);
-//        $user->setCreated_at($row['created_at']);
         $user->setId($row['id']);
         return $user;
     }
