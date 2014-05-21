@@ -10,6 +10,7 @@ class Paginator extends \Wee\Model {
     protected $count;
     protected $perpage;
     protected $pages;
+    protected $filter;
     
     public function __construct() {
         
@@ -52,5 +53,12 @@ class Paginator extends \Wee\Model {
         }
     }
 
+    public function getFilter() {
+        return $this->filter;
+    }
+
+    public function setFilter($filter) {
+        $this->filter = $filter;
+    }
 }
 

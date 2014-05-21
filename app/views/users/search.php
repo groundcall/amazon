@@ -90,7 +90,7 @@
 
                                         <div class="sorter">
                                             <div class="sort-by">
-                                                <form action='<?php echo url('products/sort'); ?>' method='get'>
+                                                <form action='<?php echo url('products/search'); ?>' method='get'>
                                                     <label>Sort By</label>
                                                     <select name='by'>
                                                         <option value="title">Name</option>
@@ -226,9 +226,9 @@
                                             <dt>Category</dt>
                                             <dd>
                                                 <ol>
-                                                    <li><a href="#">Shirts</a></li>
-                                                    <li><a href="#">Shoes</a></li>
-                                                    <li><a href="#">Hoodies</a></li>
+                                                    <li><a href="<?php echo url("products/search", array('category' => 1)); ?>">Shirts</a></li>
+                                                    <li><a href="<?php echo url("products/search", array('category' => 2)); ?>">Shoes</a></li>
+                                                    <li><a href="<?php echo url("products/search", array('category' => 3)); ?>">Hoodies</a></li>
                                                 </ol>
                                             </dd>
                                             <dt>Price</dt>

@@ -102,7 +102,7 @@
 
                                         <div class="price-box">
                                             <span class="regular-price" id="product-price-170">
-                                                <span class="price"><?php echo $products[$k]->getPrice(); ?> US$</span>
+                                                <span class="price"><?php echo $products[$k+1]->getPrice(); ?> US$</span>
                                             </span>
                                         </div>
 
@@ -127,7 +127,7 @@
 
                                         <div class="price-box">
                                             <span class="regular-price" id="product-price-170">
-                                                <span class="price"><?php echo $products[$k]->getPrice(); ?> US$</span>
+                                                <span class="price"><?php echo $products[$k+2]->getPrice(); ?> US$</span>
                                             </span>
                                         </div>
 

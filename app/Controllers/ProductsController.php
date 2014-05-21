@@ -53,4 +53,5 @@ class ProductsController extends \Wee\Controller {
         die();
     }
 
+    
 }
