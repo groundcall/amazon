@@ -28,12 +28,19 @@
 
                         <div class="col-wrapper">
                             <div class="col-main">
+                                <?php if (sizeof($products)==0): ?>
+                                <div class="page-title category-title">
+                                    <h1>No results found for '<?php echo $title; ?>'</h1>
+                                </div>
+                                <?php else: ?>
                                 <div class="page-title category-title">
                                     <h1>Search results for '<?php echo $title; ?>'</h1>
                                 </div>
+                                <?php endif; ?>
 
                                 <div class="category-products">
                                     <div class="toolbar">
+                                        <?php if (sizeof($products)>0): ?>
                                         <div class="pager">
                                             <p class="amount">
                                                 <strong><?php echo $paginator->getCount(); ?> Item(s)</strong>
@@ -99,6 +106,7 @@
                                                 </form>
                                             </div>
                                         </div>
+                                     <?php endif; ?>
                                     </div>
 
 
@@ -129,6 +137,7 @@
                                     <?php endfor; ?>
 
                                     <div class="toolbar-bottom">
+                                        <?php if (sizeof($products)>0): ?>
                                         <div class="toolbar">
                                             <div class="pager">
                                                 <p class="amount">
@@ -192,6 +201,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>

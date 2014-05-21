@@ -173,7 +173,7 @@ class ProductDao extends \Wee\Dao {
     public function getLastProducts($limit) {
         $sql = "SELECT p.id, p.title, p.category_id, p.price, p.author_id, p.isbn, p.appereance_year, p.description, p.short_description,"
                 . " p.stock, p.active, i.path, i.filename, i.product_id FROM products p INNER JOIN images i ON p.id = i.product_id "
-                . " WHERE p.active = :active ORDER BY p.id DESC LIMIT :limit";
+                . " WHERE p.active = :active AND p.stock > 0 ORDER BY p.id DESC LIMIT :limit";
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
         $active = 1;

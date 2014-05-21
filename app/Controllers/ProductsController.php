@@ -9,10 +9,10 @@ class ProductsController extends \Wee\Controller {
         $products = $productDao->getLastProducts(6);
         $this->render('users/homepage', array('products' => $products));
     }
-    
+
     public function showDetails() {
         $productDao = \Wee\DaoFactory::getDao('Product');
-        if (!$productDao->getProductById($_GET['product_id'])){
+        if (!$productDao->getProductById($_GET['product_id'])) {
             $this->redirect('products/index');
         }
         $product = $productDao->getProductById($_GET['product_id']);
@@ -22,11 +22,11 @@ class ProductsController extends \Wee\Controller {
 
     public function category() {
         $categoryDao = \Wee\DaoFactory::getDao('Category');
-        if (!$categoryDao->getCategoryById($_GET['category'])){
+        if (!$categoryDao->getCategoryById($_GET['category'])) {
             $this->redirect('products/index');
         }
         $category = $categoryDao->getCategoryById($_GET['category']);
-        $this->render('users/category', array('category'=>$category));
+        $this->render('users/category', array('category' => $category));
     }
 
     public function search() {
@@ -45,10 +45,12 @@ class ProductsController extends \Wee\Controller {
         $products = $productDao->searchProductTitle($_GET['title'], $start, $limit);
         $this->render('users/search', array('title' => $_GET['title'], 'products' => $products, 'paginator' => $paginator));
     }
-    
+
     public function sort() {
         $orderBy = $_GET['by'];
         $order = $_GET['order'];
-        var_dump($order, $orderBy); die();
+        var_dump($order, $orderBy);
+        die();
     }
+
 }
