@@ -229,6 +229,30 @@ class ProductDao extends \Wee\Dao {
         
         return $this->getProducts($stmt);
     }
+    
+    public function searchProductTitle($title, $start, $limit) {
+        $sql = "SELECT p.id, p.title, p.category_id, p.price, p.author_id, p.isbn, p.appereance_year, p.description, p.short_description,"
+                . " p.stock, p.active, i.path, i.filename, i.product_id FROM products p INNER JOIN images i ON p.id = i.product_id "
+                . " WHERE p.title LIKE :title LIMIT :start, :limit";
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':title', '%' . $title . '%');
+       $stmt->bindParam(':start', $start, \PDO::PARAM_INT);
+       $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
+        $stmt->execute();
+        
+        return $this->getProducts($stmt);
+    }
+    
+    public function searchProductTitleCount($title) {
+        $sql = "SELECT COUNT(*) FROM products p INNER JOIN images i ON p.id = i.product_id "
+                . " WHERE p.title LIKE :title";
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':title', '%' . $title . '%');
+        $stmt->execute();
+        $result = $stmt->fetch();
+        
+        return $result[0];
+    }
 }
 
 
