@@ -6,3 +6,4 @@ config/config.php
 *.swp
 *.swo
 config/database.php
+web/
