@@ -91,5 +91,4 @@ trait UserValidator {
             }
         });
     }
-
 }

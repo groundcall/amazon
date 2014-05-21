@@ -52,19 +52,21 @@
 
                                 <div class="sorter">
                                     <div class="sort-by">
-                                        <form>
+                                        <form method="get" action="<?php echo url('products/category', array('category' => $category->getId()))?>">
                                             <label>Sort By</label>
-                                            <select>
-                                                <option value="">Name</option>
-                                                <option value="">Price</option>
+                                            <select name='filter[sort]'>
+                                                <option value=''>---</option>
+                                                <option value="1">Name</option>
+                                                <option value="2">Price</option>
                                             </select>
                                             &nbsp;
                                             <label>Direction</label>
-                                            <select>
-                                                <option value="">Asc</option>
-                                                <option value="">Desc</option>
+                                            <select name='filter[order]'>
+                                                <option value=''>---</option>
+                                                <option value="1">Asc</option>
+                                                <option value="2">Desc</option>
                                             </select>
-                                            <input type="submit" name="submit" value="Go!" />
+                                            <input type="submit" name="submit"  />
                                         </form>
                                     </div>
                                 </div>

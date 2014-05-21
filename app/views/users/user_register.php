@@ -29,8 +29,8 @@
                                                     <div class="field name-firstname">
                                                         <label for="firstname" class="required"><em>*</em>First Name</label>
                                                         <div class="input-box">
-                                                            <input type="text" id="firstname" name="data[firstname]" value="<?php echo ($user) ? $user->getFirstname() : ""; ?>" title="First Name" maxlength="255" class="input-text required-entry <?php echo ($user->errorFor($user, "firstname"))? ' validation-failed' : '' ?>"  />
-                                                            <?php if ($user->hasError('firstname')): ?>
+                                                            <input type="text" id="firstname" name="data[firstname]" value="<?php echo ($user) ? $user->getFirstname() : ""; ?>" title="First Name" maxlength="255" class="input-text required-entry <?php echo ($user && $view->errorFor($user, "firstname")) ? ' validation-failed' : '' ?>"  />
+                                                            <?php if ($user && $user->hasError('firstname')): ?>
                                                                 <div class="validation-advice" id="advice-required-entry-email" style=""><?php echo $view->errorFor($user, "firstname"); ?></div>
                                                             <?php endif; ?>
                                                         </div>
@@ -38,7 +38,10 @@
                                                     <div class="field name-lastname">
                                                         <label for="lastname" class="required"><em>*</em>Last Name</label>
                                                         <div class="input-box">
-                                                            <input type="text" id="lastname" name="data[lastname]" value="" title="Last Name" maxlength="255" class="input-text required-entry validation-failed"  />
+                                                            <input type="text" id="lastname" name="data[lastname]" value="<?php echo ($user) ? $user->getLastname() : ""; ?>" title="Last Name" maxlength="255" class="input-text required-entry <?php echo ($user && $view->errorFor($user, "lastname")) ? ' validation-failed' : '' ?>"  />
+                                                            <?php if ($user && $user->hasError('lastname')): ?>
+                                                                <div class="validation-advice" id="advice-required-entry-email" style=""><?php echo $view->errorFor($user, "lastname"); ?></div>
+                                                            <?php endif; ?>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -47,13 +50,19 @@
                                                 <div class="field">
                                                     <label for="email_address" class="required"><em>*</em>Email Address</label>
                                                     <div class="input-box">
-                                                        <input type="text" name="email" id="email_address" value="" title="Email Address" class="input-text validate-email required-entry" />
+                                                        <input type="text" name="data[email]" id="email_address" value="<?php echo ($user) ? $user->getEmail() : ""; ?>" title="Email Address" class="input-text validate-email required-entry <?php echo ($user && $view->errorFor($user, "email")) ? ' validation-failed' : '' ?>" />
+                                                        <?php if ($user && $user->hasError('email')): ?>
+                                                            <div class="validation-advice" id="advice-required-entry-email" style=""><?php echo $view->errorFor($user, "email"); ?></div>
+                                                        <?php endif; ?>
                                                     </div>
                                                 </div>
                                                 <div class="field">
                                                     <label for="mobile">Mobile</label>
                                                     <div class="input-box">
-                                                        <input type="text" name="mobile" id="mobile" value="" title="Mobile" class="input-text" />
+                                                        <input type="text" name="data[phone]" id="mobile" value="<?php echo ($user) ? $user->getPhone() : ""; ?>" title="Mobile" class="input-text <?php echo ($user && $view->errorFor($user, "phone")) ? ' validation-failed' : '' ?>" />
+                                                        <?php if ($user && $user->hasError('phone')): ?>
+                                                            <div class="validation-advice" id="advice-required-entry-email" style=""><?php echo $view->errorFor($user, "phone"); ?></div>
+                                                        <?php endif; ?>
                                                     </div>
                                                 </div>
                                             </li>
@@ -61,22 +70,25 @@
                                                 <div class="field">
                                                     <label>Gender</label>
                                                     <div class="input-box">
-                                                        <input type="radio" name="gender" title="Female" value="0" id="gender-female" class="radio" />Female
-                                                        <input type="radio" name="gender" title="Male" value="1" id="gender-male" class="radio" />Male
+                                                        <input type="radio" name="data[gender]" title="Female" value="F" id="gender-female" class="radio" <?php echo ($user && $user->getGender()=='F')? 'checked' : ''; ?>/>Female
+                                                        <input type="radio" name="data[gender]" title="Male" value="M" id="gender-male" class="radio" <?php echo ($user && $user->getGender()=='M')? 'checked' : ''; ?>/>Male
+                                                        <?php if ($user && $user->hasError('gender')): ?>
+                                                            <div class="validation-advice" id="advice-required-entry-email" style=""><?php echo $view->errorFor($user, "gender"); ?></div>
+                                                        <?php endif; ?>
                                                     </div>
                                                 </div>
-                                                <div class="field">
-                                                    <label for="education" class="required">Education</label>
-                                                    <div class="input-box">
-                                                        <select name="education" title="Education" id="education" class="select">
-                                                            <option value="0"></option>
-                                                            <option value="1">Under graduate</option>
-                                                            <option value="2">Graduate</option>
-                                                            <option value="3">University</option>
-                                                            <option value="4">Post university</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
+                                                <!--                                                                                                <div class="field">
+                                                                                                                                                    <label for="education" class="required">Education</label>
+                                                                                                                                                    <div class="input-box">
+                                                                                                                                                        <select name="data[education]" title="Education" id="education" class="select">
+                                                                                                                                                            <option value="0"></option>
+                                                                                                                                                            <option value="1">Under graduate</option>
+                                                                                                                                                            <option value="2">Graduate</option>
+                                                                                                                                                            <option value="3">University</option>
+                                                                                                                                                            <option value="4">Post university</option>
+                                                                                                                                                        </select>
+                                                                                                                                                    </div>
+                                                                                                                                                </div>-->
                                             </li>
                                         </ul>
                                     </div>
@@ -86,20 +98,29 @@
                                             <li>
                                                 <label for="username" class="required"><em>*</em>Username</label>
                                                 <div class="input-box">
-                                                    <input type="text" name="username" id="username" value="" title="Username" class="input-text required-entry" />
+                                                    <input type="text" name="data[username]" id="username" value="<?php echo ($user) ? $user->getUsername() : ""; ?>" title="Username" class="input-text required-entry <?php echo ($user && $view->errorFor($user, "username")) ? ' validation-failed' : '' ?>" />
+                                                    <?php if ($user && $user->hasError('username')): ?>
+                                                        <div class="validation-advice" id="advice-required-entry-email" style=""><?php echo $view->errorFor($user, "username"); ?></div>
+                                                    <?php endif; ?>
                                                 </div>
                                             </li>
                                             <li class="fields">
                                                 <div class="field">
                                                     <label for="password" class="required"><em>*</em>Password</label>
                                                     <div class="input-box">
-                                                        <input type="password" name="password" id="password" title="Password" class="input-text required-entry validate-password" />
+                                                        <input type="password" name="data[password]" id="password" title="Password" class="input-text required-entry <?php echo ($user && $view->errorFor($user, "firstname")) ? ' validation-failed' : '' ?>" />
+                                                        <?php if ($user && $user->hasError('password')): ?>
+                                                            <div class="validation-advice" id="advice-required-entry-email" style=""><?php echo $view->errorFor($user, "password"); ?></div>
+                                                        <?php endif; ?>
                                                     </div>
                                                 </div>
                                                 <div class="field">
                                                     <label for="confirmation" class="required"><em>*</em>Confirm Password</label>
                                                     <div class="input-box">
-                                                        <input type="password" name="confirmation" title="Confirm Password" id="confirmation" class="input-text required-entry validate-cpassword" />
+                                                        <input type="password" name="data[password2]" title="Confirm Password" id="confirmation" class="input-text required-entry <?php echo ($user && $view->errorFor($user, "firstname")) ? ' validation-failed' : '' ?>" />
+                                                        <?php if ($user && $user->hasError('password2')): ?>
+                                                            <div class="validation-advice" id="advice-required-entry-email" style=""><?php echo $view->errorFor($user, "password2"); ?></div>
+                                                        <?php endif; ?>
                                                     </div>
                                                 </div>
                                             </li>
@@ -120,7 +141,7 @@
                                     </div>
                                     <div class="buttons-set">
                                         <p class="required">* Required Fields</p>
-                                        <p class="back-link"><a href="/login.html" class="back-link"><small>&laquo; </small>Back</a></p>
+                                        <p class="back-link"><a href="<?php echo isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : ''; ?>" class="back-link"><small>&laquo; </small>Back</a></p>
                                         <button type="submit" title="Submit" class="button"><span><span>Submit</span></span></button>
                                     </div>
                                 </form>

@@ -85,14 +85,14 @@
                                         <div class="clearer"></div>
                                     </form>
 
-                                </div>
+                                </div>+
 
                                 <div class="product-collateral">
                                     <div class="box-collateral box-description">
                                         <h2>Details</h2>
                                         <div class="std"><?php echo $product->getDescription(); ?></div>
                                     </div>
-                                    <p><a href="<?php echo $_SERVER['HTTP_REFERER']; ?>"><span>&laquo; Go Back</span></a></p>
+                                    <p><a href="<?php echo isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : ''; ?>"><span>&laquo; Go Back</span></a></p>
                                     
                                     <div class="box-collateral box-up-sell">
                                         <h2>You may also be interested in the following product(s)</h2>

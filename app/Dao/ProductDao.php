@@ -87,6 +87,20 @@ class ProductDao extends \Wee\Dao {
        return $this->getProducts($stmt);
    }
    
+   public function getFilterProducts2($filtering){
+       $sql = 'SELECT * FROM products WHERE title LIKE :title AND stock >= ' .$filtering->getStock(). 
+               ' AND price BETWEEN '.$filtering->getPrice_min().' AND '. $filtering->getPrice_max().  ' ORDER BY ' . $filtering->getSort(). 
+                ' ' . $filtering->getOrder();
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':title', '%' . $filtering->getTitle() . '%');
+        var_dump($stmt);
+        $stmt->execute();
+//        var_dump($this->getProducts($stmt));
+        var_dump($sql); 
+//        die();
+        return($this->getProducts($stmt));
+   }
+   
     public function getProductByTitle($product) {
         $sql = 'SELECT * FROM products WHERE title = :title';
         $stmt = $this->getConnection()->prepare($sql);

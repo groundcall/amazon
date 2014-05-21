@@ -136,8 +136,8 @@
                                     <tr>
                                         <th valign="top">Gender:</th>
                                         <td>
-                                            <input type="radio" name="data[gender]" value="M">M                                   
-                                            <input type="radio" name="data[gender]" value="F">F
+                                            <input type="radio" name="data[gender]" value="M" <?php echo ($user && $user->getGender()=='M')? 'checked' : ''; ?>>M                                   
+                                            <input type="radio" name="data[gender]" value="F" <?php echo ($user && $user->getGender()=='F')? 'checked' : ''; ?>>F
                                         </td>
                                         <td>
                                             <?php if ($user && $user->hasError('gender')): ?>
