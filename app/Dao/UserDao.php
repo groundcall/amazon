@@ -153,5 +153,21 @@ class UserDao extends \Wee\Dao {
         $result = $stmt->fetch();
         return $result[0];
     }
-
+    
+    public function getUserByEmailAddress($email) {
+        $sql = 'SELECT * FROM users WHERE email = :email';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':email', $email);
+        $stmt->execute();
+        return $this->getUser($stmt);
+    }
+    
+    public function getUserByEmailAndPassword($email, $password) {
+        $sql = 'SELECT * FROM users WHERE email = :email AND password = :password';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':email', $email);
+        $stmt->bindValue(':password', md5($password));
+        $stmt->execute();
+        return $this->getUser($stmt);
+    }
 }
