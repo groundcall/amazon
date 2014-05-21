@@ -13,5 +13,9 @@ class DefaultController extends \Wee\Controller {
     public function index() {
         $this->render('default/index');
     }
-
+    
+    public function logout() {
+        session_destroy();
+        $this->redirect('products/'); 
+    }
 }

@@ -11,10 +11,15 @@ class AdminProductsController extends \Wee\Controller {
      * The default action
      */
     public function index() {
-        if (isset($_GET['product_name']) || isset($_GET['category']) || isset($_GET['stock'])) {
-            $this->filterProducts();
-        } else {
-            $this->showAllProducts();
+        if (!empty($_SESSION) && $_SESSION['is_admin'] == 1) {
+            if (isset($_GET['product_name']) || isset($_GET['category']) || isset($_GET['stock'])) {
+                $this->filterProducts();
+            } else {
+                $this->showAllProducts();
+            }
+        }
+        else {
+            $this->redirect('products/');
         }
     }
 

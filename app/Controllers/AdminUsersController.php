@@ -11,21 +11,26 @@ class AdminUsersController extends \Wee\Controller {
      * The default action
      */
     public function index() {
-        $paginator = new \Models\Paginator();
-        $userDao = \Wee\DaoFactory::getDao('User');
-        $paginator->setCount($userDao->getUserCount());
-        $paginator->setPerpage();
-        if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
-            $paginator->setCurrent($_GET['page']);
+        if (!empty($_SESSION) && $_SESSION['is_admin'] == 1) {
+            $paginator = new \Models\Paginator();
+            $userDao = \Wee\DaoFactory::getDao('User');
+            $paginator->setCount($userDao->getUserCount());
+            $paginator->setPerpage();
+            if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
+                $paginator->setCurrent($_GET['page']);
+            }
+            else {
+                $paginator->setCurrent(1);
+            }
+            $paginator->setPages();
+            $start = ($paginator->getCurrent() - 1) * $paginator->getPerpage();
+            $limit = $paginator->getPerpage();
+            $users = $userDao->getAllUsers($start, $limit);
+            $this->render('admin/list_users', array('users' => $users, 'paginator' => $paginator));
         }
         else {
-            $paginator->setCurrent(1);
+            $this->redirect('products/');
         }
-        $paginator->setPages();
-        $start = ($paginator->getCurrent() - 1) * $paginator->getPerpage();
-        $limit = $paginator->getPerpage();
-        $users = $userDao->getAllUsers($start, $limit);
-        $this->render('admin/list_users', array('users' => $users, 'paginator' => $paginator));
     }
 
     public function showUserForm() {
