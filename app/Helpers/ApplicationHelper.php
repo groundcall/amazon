@@ -12,7 +12,7 @@ trait ApplicationHelper {
         }
         return '';
     }
-    
+
     public function getCategories() {
         $categoryDao = \Wee\DaoFactory::getDao('Category');
         $categories = $categoryDao->getAllCategories();
@@ -53,28 +53,35 @@ trait ApplicationHelper {
 //        return $numberOfPages;
 //    }
     
+
     public function getLastSixProducts() {
         $productDao = \Wee\DaoFactory::getDao('Product');
         $products = $productDao->getLastProducts(6);
         return $products;
     }
-    
-    public function getProductsByCategory($category){
+
+    public function getProductsByCategory($category) {
 //        var_dump($category->getId()); 
-        
-        
+
+
         $productDao = \Wee\DaoFactory::getDao('Product');
         $products = $productDao->getProductsByCategoryId($category->getId());
-        
+
         return $products;
-        
+
 //        $sql = 'SELECT * FROM products WHERE category_id = :categoy_id';
 //        $stmt = $this->getConnection()->prepare($sql);
 //        $stmt->bindValue(':category_id', $category->getId());
 //        $result=getProducts($stmt);
 //        
 //        return $result;
-        
+    }
+
+    public function getCategoryLabelById($category_id) {
+        $categoryDao = \Wee\DaoFactory::getDao('Category');
+        $category = $categoryDao->getCategoryById($category_id);
+
+        return $category->getLabel();
     }
     
     public function getEducations() {

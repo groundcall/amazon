@@ -10,6 +10,7 @@
 
         <div class="main-container col3-layout">
             <div class="main">
+                
                <?php echo $content; ?>
             </div>
         </div>

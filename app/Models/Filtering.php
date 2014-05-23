@@ -7,15 +7,14 @@ class Filtering extends \Wee\Model {
     protected $order;
     protected $sort;
     protected $stock;
-    protected $price_min;
-    protected $price_max;
     protected $title;
     protected $category_id;
+    protected $price;
+    protected $start;
+    protected $limit;
     
-    protected $pagination;
-
     public function __construct() {
-        $this->setAttrAccessible(array('order', 'sort', 'stock', 'price_min', 'price_max', 'title', 'category_id'));
+        $this->setAttrAccessible(array('order', 'sort', 'stock', 'title', 'category_id', 'price', 'start', 'limit'));
     }
 
     public function getOrder() {
@@ -28,14 +27,6 @@ class Filtering extends \Wee\Model {
 
     public function getStock() {
         return $this->stock;
-    }
-
-    public function getPrice_min() {
-        return $this->price_min;
-    }
-
-    public function getPrice_max() {
-        return $this->price_max;
     }
 
     public function getTitle() {
@@ -58,14 +49,6 @@ class Filtering extends \Wee\Model {
         $this->stock = $stock;
     }
 
-    public function setPrice_min($price_min) {
-        $this->price_min = $price_min;
-    }
-
-    public function setPrice_max($price_max) {
-        $this->price_max = $price_max;
-    }
-
     public function setTitle($title) {
         $this->title = $title;
     }
@@ -82,6 +65,30 @@ class Filtering extends \Wee\Model {
         $this->pagination = $pagination;
     }
     
+    public function getPrice() {
+        return $this->price;
+    }
+
+    public function setPrice($price) {
+        $this->price = $price;
+    }
+
+    public function getStart() {
+        return $this->start;
+    }
+
+    public function getLimit() {
+        return $this->limit;
+    }
+
+    public function setStart($start) {
+        $this->start = $start;
+    }
+
+    public function setLimit($limit) {
+        $this->limit = $limit;
+    }
+
 
 
 }

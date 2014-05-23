@@ -2,7 +2,7 @@
 
 namespace Models;
 
-define('ITEMS_PER_PAGE', 9);
+define('ITEMS_PER_PAGE', 6);
 
 class Paginator extends \Wee\Model {
     

@@ -1,7 +1,7 @@
 <div class="header-container">
     <div class="header">
         <div class="quick-access">
-            <form id="search_mini_form" action="<?php echo url('products/search'); ?>" method="get">
+            <form id="search_mini_form" action="<?php echo url('products/show_products'); ?>" method="get">
                 <div class="form-search">
                     <label for="search">Search:</label>
                     <input id="search" type="text" name="title" value="" class="input-text" maxlength="128" />
@@ -43,3 +43,4 @@
         <?php endforeach; ?>
     </ul>
 </div>
+

@@ -26,8 +26,10 @@ class UsersController extends \Wee\Controller {
                 $user->sendMailTo($title, $message);
                 $this->showUserForm();
             }
+            else{
+                $this->render('users/user_register', array('user' => $user));
+            }
         }
-        $this->render('users/user_register', array('user' => $user));
     }
     
     public function showUserForm() {
