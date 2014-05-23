@@ -8,8 +8,9 @@ class CartDao extends \Wee\Dao {
         $cart = new \Models\Cart();
         $cart->updateAttributes($row);
         $cart->setId($row['id']);
+        $cart->setCart_Item();
 
-        return $category;
+        return $cart;
     }
 
     private function getCarts($stmt) {

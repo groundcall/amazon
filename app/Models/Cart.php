@@ -62,8 +62,6 @@ class Cart extends \Wee\Model {
 
     public function setCart_item() {
         $cart_itemDao = \Wee\DaoFactory::getDao('CartItem');
-        $this->cart_item = $cart_itemDao->getCartItemsByCartId($this->id);
+        $this->cart_item = $cart_itemDao->getAllCartItemsByCartId($this->id);
     }
-
-
 }

@@ -31,7 +31,8 @@
                                         </ul>
                                     </li>
                                 </ul>
-                                <form action="" method="post">
+
+                                <form action="<?php echo url('cart/manage_cart'); ?>" method="post">
                                     <fieldset>
                                         <table id="shopping-cart-table" class="data-table cart-table">
                                             <colgroup>
@@ -57,76 +58,49 @@
                                                 <tr class="first last">
                                                     <td colspan="50" class="a-right last">
                                                         <button type="button" title="Continue Shopping" class="button btn-continue" ><span><span>Continue Shopping</span></span></button>
-                                                        <button type="submit" name="update_cart_action" value="update_qty" title="Update Shopping Cart" class="button btn-update"><span><span>Update Shopping Cart</span></span></button>
-                                                        <button type="submit" name="update_cart_action" value="empty_cart" title="Clear Shopping Cart" class="button btn-empty" id="empty_cart_button"><span><span>Clear Shopping Cart</span></span></button>
+                                                        <button type="submit" name="update_qty" title="Update Shopping Cart" class="button btn-update"><span><span>Update Shopping Cart</span></span></button>
+                                                        <button type="submit" name="empty_cart" title="Clear Shopping Cart" class="button btn-empty" id="empty_cart_button"><span><span>Clear Shopping Cart</span></span></button>
                                                     </td>
                                                 </tr>
                                             </tfoot>
                                             <tbody>
-                                                <tr class="first odd">
-                                                    <td>
-                                                        <a href="product_detail.html" title="Nine West Women's Lucero Pump" class="product-image">
-                                                            <img src="images/media/red_highheels_3.jpg" alt="Nine West Women's Lucero Pump" height="75" width="75" />
-                                                        </a>
-                                                    </td>
-                                                    <td>
-                                                        <h2 class="product-name">
-                                                            <a href="product_detail.html">Nine West Women's Lucero Pump</a>
-                                                        </h2>
-                                                        <dl class="item-options">
-                                                            <dt>Shoe Size</dt>
-                                                            <dd>3</dd>
-                                                        </dl>
-                                                    </td>
-                                                    <td class="a-right">
-                                                        <span class="cart-price">
-                                                            <span class="price">$89.99</span>
-                                                        </span>
-                                                    </td>
-                                                    <td class="a-center">
-                                                        <input name="cart[595763][qty]" value="1" size="4" title="Qty" class="input-text qty" maxlength="12" />
-                                                    </td>
-                                                    <td class="a-right">
-                                                        <span class="cart-price">
-                                                            <span class="price">$89.99</span>
-                                                        </span>
-                                                    </td>
-                                                    <td class="a-center last">
-                                                        <a href="#" title="Remove item" class="btn-remove btn-remove2">Remove item</a>
-                                                    </td>
-                                                </tr>
-                                                <tr class="last even">
-                                                    <td>
-                                                        <a href="product_detail.html" title="Coalesce: Functioning On Impatience T-Shirt" class="product-image">
-                                                            <img src="images/media/1_8.jpg" alt="Coalesce: Functioning On Impatience T-Shirt" height="75" width="75" />
-                                                        </a>
-                                                    </td>
-                                                    <td>
-                                                        <h2 class="product-name">
-                                                            <a href="product_detail.html">Coalesce: Functioning On Impatience T-Shirt</a>
-                                                        </h2>
-                                                        <dl class="item-options">
-                                                            <dt>Size</dt>
-                                                            <dd>Small</dd>
-                                                        </dl>
-                                                    </td>
-                                                    <td class="a-right">
-                                                        <span class="cart-price">
-                                                            <span class="price">$15.00</span>
-                                                        </span>
-                                                    </td>
-                                                    <td class="a-center">
-                                                        <input name="cart[595765][qty]" value="1" size="4" title="Qty" class="input-text qty" maxlength="12" />
-                                                    </td>
-                                                    <td class="a-right">
-                                                        <span class="cart-price">
-                                                            <span class="price">$15.00</span>
-                                                        </span>
-                                                    </td>
-                                                    <td class="a-center last">
-                                                        <a href="#" title="Remove item" class="btn-remove btn-remove2">Remove item</a>
-                                                    </td>
-                                                </tr>
+                                                <?php if (isset($cartItems)): ?>
+                                                    <?php for ($i = 0; $i < sizeof($cartItems); $i++): ?>
+                                                        <tr class="<?php echo ($i % 2 == 0) ? 'first odd' : 'last even'; ?>">
+                                                            <?php $products[$i] = $cartItems[$i]->getProduct(); ?>
+                                                            <td>
+                                                                <a href="<?php echo url('products/show_details', array('product_id' => $products[$i]->getId())); ?>" title="<?php echo $products[$i]->getTitle(); ?>" class="product-image">
+                                                                    <img src="<?php echo '../product_images' . $products[$i]->getImage(); ?>" alt="<?php echo $products[$i]->getTitle(); ?>" height="75" width="75" />
+                                                                </a>
+                                                            </td>
+                                                            <td>
+                                                                <h2 class="product-name">
+                                                                    <a href="<?php echo url('products/show_details', array('product_id' => $products[$i]->getId())); ?>"><?php echo $products[$i]->getTitle(); ?></a>
+                                                                </h2>
+                                                                <dl class="item-options">
+                                                                    <dt><?php echo $products[$i]->getShort_description(); ?></dt>
+                                                                    <!--<dd>3</dd>-->
+                                                                </dl>
+                                                            </td>
+                                                            <td class="a-right">
+                                                                <span class="cart-price">
+                                                                    <span class="price"><?php echo $products[$i]->getPrice(); ?></span>
+                                                                </span>
+                                                            </td>
+                                                            <td class="a-center">
+                                                                <input name="cart[595763][qty]" value="1" size="4" title="Qty" class="input-text qty" maxlength="12" />
+                                                            </td>
+                                                            <td class="a-right">
+                                                                <span class="cart-price">
+                                                                    <span class="price"><?php echo $cartItems[$i]->getPrice(); ?></span>
+                                                                </span>
+                                                            </td>
+                                                            <td class="a-center last">
+                                                                <a href="#" title="Remove item" class="btn-remove btn-remove2">Remove item</a>
+                                                            </td>
+                                                        </tr>
+                                                    <?php endfor; ?>
+                                                <?php endif; ?>
                                             </tbody>
                                         </table>
                                     </fieldset>

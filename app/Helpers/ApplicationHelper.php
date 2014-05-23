@@ -54,5 +54,4 @@ trait ApplicationHelper {
         
         return $result;
     }
-    
 }
