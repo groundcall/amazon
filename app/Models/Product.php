@@ -2,8 +2,6 @@
 
 namespace Models;
 
-
-
 class Product extends \Wee\Model {
     
     use \Validators\ProductValidator;

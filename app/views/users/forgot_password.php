@@ -28,7 +28,11 @@
                                                         <li>
                                                             <label for="email" class="required"><em>*</em>Email</label>
                                                             <div class="input-box">
-                                                                <input class="input-text required-entry" id="email" name="email" type="text" />
+                                                                <input type="text" name="email" value="<?php echo isset($resetPassword) ? $resetPassword->getEmail() : ''; ?>" id="email" class="input-text required-entry <?php echo (isset($resetPassword) && $view->errorFor($resetPassword, "email")) ? ' validation-failed' : '' ?>" title="Email Address" />
+                                                                <?php if (isset($resetPassword) && $resetPassword->hasError('email')): ?>
+                                                                    <?php $emailError = explode(",", $view->errorFor($resetPassword, "email")); ?> 
+                                                                    <div class="validation-advice" id="advice-required-entry-email" style=""><?php echo $emailError[0]; ?></div>
+                                                                <?php endif; ?>
                                                             </div>
                                                         </li>
                                                     </ul>
@@ -37,6 +41,7 @@
                                         </div>
                                         <div>
                                             <div class="buttons-set">
+                                                <p class="required">* Required Fields</p>
                                                 <button type="submit" class="button"><span><span>Reset password</span></span></button>
                                             </div>
                                         </div>

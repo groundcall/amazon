@@ -187,4 +187,22 @@ class UserDao extends \Wee\Dao {
         $stmt->bindValue(':new_activation_key', $new_activation_key, \PDO::PARAM_NULL);
         $stmt->execute();
     }
+    
+    public function updateActivationKey($user) {
+        $sql = "UPDATE users SET activation_key = :activation_key WHERE id = :id";
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':id', $user->getId());
+        $stmt->bindValue(':activation_key', $user->getActivation_key());
+        $stmt->execute();
+    }
+    
+    public function updatePassword($activation_key, $password) {
+        $sql = "UPDATE users SET password = :password, activation_key = :new_activation_key WHERE activation_key = :activation_key";
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':activation_key', $activation_key, \PDO::PARAM_STR);
+        $stmt->bindValue(':password', md5($password), \PDO::PARAM_STR);
+        $new_activation_key = NULL;
+        $stmt->bindValue(':new_activation_key', $new_activation_key, \PDO::PARAM_NULL);
+        $stmt->execute();
+    }
 }
