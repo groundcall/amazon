@@ -104,7 +104,7 @@ class UserDao extends \Wee\Dao {
     }
 
     public function addUser($user) {
-        $sql = "INSERT INTO users(username, firstname, lastname, email, password, phone, gender, created_at, education_id, activation_key)"
+        $sql = "INSERT INTO users (username, firstname, lastname, email, password, phone, gender, created_at, education_id, activation_key)"
                 . " VALUES (:username, :firstname, :lastname, :email, :password, :phone, :gender, :created_at, :education_id, :activation_key)";
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':username', $user->getUsername());

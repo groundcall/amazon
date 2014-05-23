@@ -115,7 +115,7 @@
                         </div>
 
                         <div class="actions">
-                            <form action="cart/addCartItemToCart" method="post">
+                            <form action="<?php echo url('cart/add_cart_item_to_cart', array('product_id' => $products[$k]->getId())); ?>" method="post">
                                 <input type="hidden" name="product_id" value="<?php echo $products[$k]->getId(); ?>" />
                                 <button type="submit" title="Add to Cart" class="button btn-cart" >
                                     <span><span>Add to Cart</span></span>
@@ -142,7 +142,7 @@
                             </div>
 
                             <div class="actions">
-                                <form action="show_products" method="post">
+                                <form action="<?php echo url('cart/add_cart_item_to_cart', array('product_id' => $products[$k + 1]->getId())); ?>" method="post">
                                     <input type="hidden" name="product_id" value="<?php echo $products[$k + 1]->getId(); ?>" />
                                     <button type="submit" title="Add to Cart" class="button btn-cart" >
                                         <span><span>Add to Cart</span></span>
@@ -170,7 +170,7 @@
                             </div>
 
                             <div class="actions">
-                                <form action="show_products" method="post">
+                                <form action="<?php echo url('cart/add_cart_item_to_cart', array('product_id' => $products[$k + 2]->getId())); ?>" method="post">
                                     <input type="hidden" name="product_id" value="<?php echo $products[$k + 2]->getId(); ?>" />
                                     <button type="submit" title="Add to Cart" class="button btn-cart" >
                                         <span><span>Add to Cart</span></span>
@@ -355,14 +355,39 @@
         <div class="block-title">
             <strong><span>My Cart</span></strong>
         </div>
-        <?php if ($cart->getTotal() == 0): ?>
+        <?php if (!$cart): ?>
             <div class="block-content">
                 <p class="empty">You have no items in your shopping cart.</p>
             </div>
         <?php else: ?>
             <div class="block-content">
-                <p class="empty">There are <?php echo $cart->getTotal(); ?> items in your cart</p>
+                <p class="empty">There are <a href="<?php echo url('cart/show_cart'); ?>"> <?php echo sizeof($cart->getCart_item()); ?> items  </a>in your cart</p>
             </div>
+        <div class="actions">
+            <button type="button" title="Checkout" class="button" ><span><span>Checkout</span></span></button>
+        </div>
+        
+        <p class="block-subtitle">Recently added item(s)</p>
+
+        <ol id="cart-sidebar" class="mini-products-list">
+            
+            <?php $cart_items = $cart->getCart_item() ?>
+            <?php  foreach ($cart_items as $cart_item): ?>
+            <?php $product = $cart_item->getProduct();?> 
+            <li class="item">
+                <a href="<?php echo url('products/show_details', array('product_id' => $product->getId())); ?>" title="<?php echo $product->getTitle(); ?>" class="product-image">
+                    <img src="<?php echo '../product_images' . $product->getImage(); ?>" width="50" height="50" alt="Ottoman" />
+                </a>
+                <div class="product-details">
+                    <a href="<?php echo url('cart/delete_cart_item_from_cart', array('cart_item_id' => $cart_item->getId()))?>" title="Remove This Item" class="btn-remove">Remove This Item</a>
+                    <a href="<?php echo url('cart/show_cart');?> " title="Edit item" class="btn-edit">Edit item</a>
+                    <p class="product-name"><a href="<?php echo url('products/show_details', array('product_id' => $product->getId())); ?>"><?php echo $product->getTitle(); ?></a></p>
+                    <strong>1</strong> x
+                    <span class="price"><?php echo $product->getPrice(); ?> US$</span>
+                </div>
+            </li>
+            <?php endforeach; ?>
+        </ol>
         <?php endif; ?>
     </div>
 </div>

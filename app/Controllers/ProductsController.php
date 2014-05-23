@@ -24,7 +24,9 @@ class ProductsController extends \Wee\Controller {
 
         $paginator = new \Models\Paginator();
         $filtering = new \Models\Filtering();
-        $cart = new \Models\Cart();
+        
+        $cartDao = \Wee\DaoFactory::getDao('Cart');
+        $cart = $cartDao->getCartByUserId($_SESSION['id']);
         
         
 
@@ -78,11 +80,4 @@ class ProductsController extends \Wee\Controller {
 //        $this->re('users/homepage');
     }
 
-    public function addCartItemToCart(){
-
-//        $this->redirect('products/show_products');
-//        var_dump($_POST);
-//     die();   
-    }
-    
 }

@@ -52,5 +52,5 @@ class CartDao extends \Wee\Dao {
         $stmt->execute();
         return $this->getCart($stmt);
     }
-
+    
 }
