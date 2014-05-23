@@ -52,7 +52,7 @@ trait ApplicationHelper {
 //        }
 //        return $numberOfPages;
 //    }
-    
+
 
     public function getLastSixProducts() {
         $productDao = \Wee\DaoFactory::getDao('Product');
@@ -83,10 +83,18 @@ trait ApplicationHelper {
 
         return $category->getLabel();
     }
-    
+
     public function getEducations() {
         $educationDao = \Wee\DaoFactory::getDao('Education');
         $education = $educationDao->getAllEducations();
         return $education;
+    }
+
+    function getNumberOfProductsInCategory($filtering, $category_id) {
+        $productDao = \Wee\DaoFactory::getDao('Product');
+        $filtering->setCategory_id($category_id);
+        $result = $productDao->getFilterProducts3($filtering, 'count');
+        
+        return $result;
     }
 }

@@ -229,9 +229,17 @@
                 <strong><span>Shop By</span></strong>
             </div>
             <div class="block-content">
-                <?php if (($filtering->getPrice() != null || $filtering->getStock() != null) || $filtering->getSort() != null || $filtering->getOrder() != null): ?>
+                <?php if (($filtering->getPrice() != null || $filtering->getStock() != null) || $filtering->getSort() != null || $filtering->getOrder() != null || ($filtering->getCategory_id() != null) && $filtering->getCategory_id() != 0): ?>
                     <div class="currently">
                         <p class="block-subtitle">Currently Shopping by:</p>
+                        <?php if ($filtering->getCategory_id() != null && $filtering->getCategory_id() != 0): ?>
+                            <ol>
+                                <li>
+                                    <span class="label">Category:</span> <span class="value"><?php echo $view->getCategoryLabelById(($filtering->getCategory_id()));?></span><a class="btn-remove" href="<?php echo url('products/show_products', array('sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'price' => $filtering->getPrice(), 'title' => $filtering->getTitle(), 'page' => 1)) ?>" title="Remove This Item">Remove This Item</a>
+                                </li>
+                            </ol>
+                        <?php endif; ?>
+
                         <?php if ($filtering->getPrice() != null): ?>
                             <?php if ($filtering->getPrice() == 1): $price_range = '0,00 US$ - 49,99 US$' ?>
                             <?php elseif ($filtering->getPrice() == 2): $price_range = '49,99 US$ - 99,99 US$' ?>
@@ -268,25 +276,40 @@
                             </ol>
                         <?php endif; ?>
                     </div>
-                    <div class="actions"><a href="<?php echo url('products/show_products', array('category' => $filtering->getCategory_id())) ?>">Clear All</a></div>
+                    <div class="actions"><a href="<?php echo url('products/show_products') ?>">Clear All</a></div>
                 <?php endif; ?>
                 <p class="block-subtitle">Shopping Options</p>
                 <dl id="narrow-by-list">
                     <dt>Price</dt>
                     <dd>
                         <ol>
-                            <li><a href="<?php echo url('products/show_products', array('price' => 1, 'category' => $filtering->getCategory_id(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'stock' => $filtering->getStock(), 'title' => $filtering->getTitle(),'page' => '1')) ?>"><span class="price">0,00 US$</span> - <span class="price">49,99 US$</span></a></li>
-                            <li><a href="<?php echo url('products/show_products', array('price' => 2, 'category' => $filtering->getCategory_id(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'stock' => $filtering->getStock(), 'title' => $filtering->getTitle(),'page' => '1')) ?>"><span class="price">50,00 US$</span> - <span class="price">99,99 US$</span></a></li>
-                            <li><a href="<?php echo url('products/show_products', array('price' => 3, 'category' => $filtering->getCategory_id(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'stock' => $filtering->getStock(), 'title' => $filtering->getTitle(),'page' => '1')) ?>"><span class="price">100,00 US$</span> and above</a></li>
+                            <li><a href="<?php echo url('products/show_products', array('price' => 1, 'category' => $filtering->getCategory_id(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'stock' => $filtering->getStock(), 'title' => $filtering->getTitle(), 'page' => '1')) ?>"><span class="price">0,00 US$</span> - <span class="price">49,99 US$</span></a></li>
+                            <li><a href="<?php echo url('products/show_products', array('price' => 2, 'category' => $filtering->getCategory_id(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'stock' => $filtering->getStock(), 'title' => $filtering->getTitle(), 'page' => '1')) ?>"><span class="price">50,00 US$</span> - <span class="price">99,99 US$</span></a></li>
+                            <li><a href="<?php echo url('products/show_products', array('price' => 3, 'category' => $filtering->getCategory_id(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'stock' => $filtering->getStock(), 'title' => $filtering->getTitle(), 'page' => '1')) ?>"><span class="price">100,00 US$</span> and above</a></li>
                         </ol>
                     </dd>
                     <dt>Stock</dt>
                     <dd>
                         <ol>
-                            <li><a href="<?php echo url('products/show_products', array('stock' => 1, 'category' => $filtering->getCategory_id(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'price' => $filtering->getPrice(), 'title' => $filtering->getTitle(),'page' => '1')) ?>">In Stock</a></li>
-                            <li><a href="<?php echo url('products/show_products', array('stock' => 0, 'category' => $filtering->getCategory_id(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'price' => $filtering->getPrice(), 'title' => $filtering->getTitle(),'page' => '1')) ?>">All Products</a></li>
+                            <li><a href="<?php echo url('products/show_products', array('stock' => 1, 'category' => $filtering->getCategory_id(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'price' => $filtering->getPrice(), 'title' => $filtering->getTitle(), 'page' => '1')) ?>">In Stock</a></li>
+                            <li><a href="<?php echo url('products/show_products', array('stock' => 0, 'category' => $filtering->getCategory_id(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'price' => $filtering->getPrice(), 'title' => $filtering->getTitle(), 'page' => '1')) ?>">All Products</a></li>
                         </ol>
                     </dd>
+                    <?php // if (!isset($_GET['category'])): ?>
+                        <dt>Categories</dt>
+                        <dd>
+                        <ol>
+                            <?php $categories = $view->getCategories(); ?>
+                            <?php foreach ($categories as $category): ?>
+                            <?php if (isset($_GET['category']) && ($category->getId() != $_GET['category'])):?>
+                                <li>
+                                    <a href="<?php echo url('products/show_products', array('category' => $category->getId(),'stock' => $filtering->getStock(),'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'price' => $filtering->getPrice(), 'title' => $filtering->getTitle(), 'page' => '1')) ?>" class="level-top" ><span><?php echo $category->getLabel(); ?> (<?php echo ($view->getNumberOfProductsInCategory($filtering, $category->getId())) ?>)</span></a>
+                                </li>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </ol>
+                        </dd>
+                    <?php // endif; ?>
                 </dl>
             </div>
         </div>

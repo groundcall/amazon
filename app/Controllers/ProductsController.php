@@ -21,7 +21,6 @@ class ProductsController extends \Wee\Controller {
     }
 
     public function showProducts() {
-        
 
         $paginator = new \Models\Paginator();
         $filtering = new \Models\Filtering();
@@ -32,10 +31,7 @@ class ProductsController extends \Wee\Controller {
             $paginator->setCurrent(1);
         }
 
-
         if (isset($_GET)) {
-
-
             if (isset($_GET['category'])) {
                 $categoryDao = \Wee\DaoFactory::getDao('Category');
                 if ($categoryDao->getCategoryById($_GET['category'])) {
@@ -59,9 +55,6 @@ class ProductsController extends \Wee\Controller {
             if (isset($_GET['title'])) {
                 $filtering->setTitle($_GET['title']);
             }
-//             if (isset($_GET['page'])) {
-//                $paginator->setCurrent($_GET['page']);
-//            }
 
             $productDao = \Wee\DaoFactory::getDao('Product');
             $numberOfProducts = $productDao->getFilterProducts3($filtering, 'count');

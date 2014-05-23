@@ -8,12 +8,11 @@
                     <button type="submit" title="Search" class="button"><span><span>Search</span></span></button>
                 </div>
             </form>
-
             <?php if (!empty($_SESSION['username'])): ?>
                 <?php if ($_SESSION['is_admin'] != 1): ?>
-                <p class="welcome-msg"><?php echo 'Welcome, ' . $_SESSION['username']; ?><br /></p>;
+                    <p class="welcome-msg"><?php echo 'Welcome, ' . $_SESSION['username']; ?><br /></p>;
                 <?php else: ?>
-                <a href="<?php echo url("admin_products"); ?>" class="welcome-msg"><?php echo 'Welcome, ' . $_SESSION['username']; ?><br /></a>
+                    <a href="<?php echo url("admin_products"); ?>" class="welcome-msg"><?php echo 'Welcome, ' . $_SESSION['username']; ?><br /></a>
                 <?php endif; ?>
             <?php endif; ?>
 
@@ -35,10 +34,13 @@
 
 <div class="nav-container">
     <ul id="nav">
+        <li >
+            <a href="<?php echo url('products/index'); ?>"><span>H</span></a>
+        </li>
         <?php $categories = $view->getCategories(); ?>
         <?php foreach ($categories as $category): ?>
             <li class="level0 nav-1 level-top first">
-                <a href="<?php echo url('products/show_products', array('category' => $category->getId()))?>" class="level-top" ><span><?php echo $category->getLabel(); ?></span></a>
+                <a href="<?php echo url('products/show_products', array('category' => $category->getId())) ?>" class="level-top" ><span><?php echo $category->getLabel(); ?></span></a>
             </li>
         <?php endforeach; ?>
     </ul>
