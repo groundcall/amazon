@@ -104,7 +104,8 @@ class UserDao extends \Wee\Dao {
     }
 
     public function addUser($user) {
-        $sql = "INSERT INTO users(username, firstname, lastname, email, password, phone, gender, created_at) VALUES (:username, :firstname, :lastname, :email, :password, :phone, :gender, :created_at)";
+        $sql = "INSERT INTO users(username, firstname, lastname, email, password, phone, gender, created_at, education_id, activation_key)"
+                . " VALUES (:username, :firstname, :lastname, :email, :password, :phone, :gender, :created_at, :education_id, :activation_key)";
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':username', $user->getUsername());
         $stmt->bindValue(':firstname', $user->getFirstname());
@@ -114,6 +115,11 @@ class UserDao extends \Wee\Dao {
         $stmt->bindValue(':password', md5($user->getPassword()));
         $stmt->bindValue(':gender', $user->getGender());
         $stmt->bindValue(':created_at', date('Y-m-d H:i:s'));
+        if ($user->getEducation_id() == null) {
+            $user->setEducation_id(0);
+        }
+        $stmt->bindValue(':education_id', $user->getEducation_id());
+        $stmt->bindValue(':activation_key', $user->getActivation_key());
         $stmt->execute();
     }
 
@@ -169,5 +175,16 @@ class UserDao extends \Wee\Dao {
         $stmt->bindValue(':password', md5($password));
         $stmt->execute();
         return $this->getUser($stmt);
+    }
+    
+    public function activateUserByActivationKey($activation_key) {
+        $sql = "UPDATE users SET activated = :activated, activation_key = :new_activation_key WHERE activation_key = :activation_key";
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':activation_key', $activation_key, \PDO::PARAM_STR);
+        $activated = 1;
+        $stmt->bindValue(':activated', $activated, \PDO::PARAM_INT);
+        $new_activation_key = NULL;
+        $stmt->bindValue(':new_activation_key', $new_activation_key, \PDO::PARAM_NULL);
+        $stmt->execute();
     }
 }

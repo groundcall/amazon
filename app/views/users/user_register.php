@@ -77,18 +77,17 @@
                                                         <?php endif; ?>
                                                     </div>
                                                 </div>
-                                                <!--                                                                                                <div class="field">
-                                                                                                                                                    <label for="education" class="required">Education</label>
-                                                                                                                                                    <div class="input-box">
-                                                                                                                                                        <select name="data[education]" title="Education" id="education" class="select">
-                                                                                                                                                            <option value="0"></option>
-                                                                                                                                                            <option value="1">Under graduate</option>
-                                                                                                                                                            <option value="2">Graduate</option>
-                                                                                                                                                            <option value="3">University</option>
-                                                                                                                                                            <option value="4">Post university</option>
-                                                                                                                                                        </select>
-                                                                                                                                                    </div>
-                                                                                                                                                </div>-->
+                                                <div class="field">
+                                                    <label for="education" class="required">Education</label>
+                                                    <div class="input-box">
+                                                        <select name="data[education]" title="Education" id="education" class="select">
+                                                        <?php $education = $view->getEducations(); ?>
+                                                        <?php foreach ($education as $edu): ?>
+                                                            <option value="<?php echo $edu->getId(); ?>" <?php echo ($user && $user->getEducation_id() == $edu->getId()) ? 'selected' : ''; ?>><?php echo $edu->getDescription(); ?></option>
+                                                        <?php endforeach; ?> 
+                                                        </select>
+                                                    </div>
+                                                </div>
                                             </li>
                                         </ul>
                                     </div>
@@ -141,7 +140,7 @@
                                     </div>
                                     <div class="buttons-set">
                                         <p class="required">* Required Fields</p>
-                                        <p class="back-link"><a href="<?php echo isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : ''; ?>" class="back-link"><small>&laquo; </small>Back</a></p>
+                                        <p class="back-link"><a href="<?php echo url('products/'); ?>" class="back-link"><small>&laquo; </small>Back</a></p>
                                         <button type="submit" title="Submit" class="button"><span><span>Submit</span></span></button>
                                     </div>
                                 </form>

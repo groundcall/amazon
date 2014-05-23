@@ -21,6 +21,7 @@ class User extends \Wee\Model {
     protected $billing_address_id;
     protected $shipping_address_id;
     protected $created_at;
+    protected $education_id;
 
     function __construct() {
         $this->setAttrAccessible(array('username', 'password', 'password2', 'firstname', 'lastname', 'email', 'phone', 'gender', 'activated', 'role_id', 'activation_key',
@@ -140,8 +141,8 @@ class User extends \Wee\Model {
         $this->activated = $activated;
     }
 
-    public function setActivation_key($activation_key) {
-        $this->activation_key = $activation_key;
+    public function setActivation_key() {
+        $this->activation_key = md5(uniqid(rand(), TRUE));
     }
 
     public function setBilling_address_id($billing_address_id) {
@@ -164,4 +165,22 @@ class User extends \Wee\Model {
         $this->password2 = $password2;
     }
 
+    public function getEducation_id() {
+        return $this->education_id;
+    }
+
+    public function setEducation_id($education_id) {
+        $this->education_id = $education_id;
+    }
+    
+    public function sendMailTo($title, $msg) {    
+        require_once '/home/adumitrache/Sites/bookstore/team-3/team-3/swift/lib/swift_required.php';
+        $transport = \Swift_SmtpTransport::newInstance('smtp.loki.pitechnologies.ro', 25);
+        $mailer = \Swift_Mailer::newInstance($transport);
+        $message = \Swift_Message::newInstance($title)
+            ->setFrom(array('adumitrache@pitechnologies.ro' => 'bookstore.com'))
+            ->setTo(array($this->getEmail() => $this->getFirstname() . $this->getLastname()))
+            ->setBody($msg);
+        $mailer->send($message);
+    }
 }

@@ -16,12 +16,11 @@
                     <div class="main">
                         <div class="col-main">
                             <div class="account-create">
-                                <form action="" method="post" id="newsletter-validate-detail">
+                                <form action="<?php echo url('users/reset_password'); ?>" method="post" id="newsletter-validate-detail">
                                     <div class="fieldset">
                                         <h2 class="legend">Forgot password</h2>
 
                                         <div>
-                                            <form id="login-form" action="" method="post">
                                                 <fieldset>
                                                     <h4>Forgot your password?</h4>
                                                     <p>Please enter your email below:</p>
@@ -35,11 +34,10 @@
                                                     </ul>
                                                     <input name="context" value="checkout" type="hidden" />
                                                 </fieldset>
-                                            </form>
                                         </div>
                                         <div>
                                             <div class="buttons-set">
-                                                <button type="submit" class="button" ><span><span>Reset password</span></span></button>
+                                                <button type="submit" class="button"><span><span>Reset password</span></span></button>
                                             </div>
                                         </div>
                                     </div>

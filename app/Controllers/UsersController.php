@@ -13,10 +13,17 @@ class UsersController extends \Wee\Controller {
         if (!empty($_POST['data'])) {
             $user = new \Models\User();
             $user->updateAttributes($_POST['data']);
-
+            $user->setEducation_id($_POST['data']['education']);
+            $user->setActivation_key();
             if ($user->isValid()) {
                 $userDao = \Wee\DaoFactory::getDao('User');
                 $userDao->addUser($user);
+                $title = 'Activate your account';
+                $message = "Hello, " . $_POST['data']['firstname'] . " " .  $_POST['data']['lastname'] . " !\n"
+                        . "To activate your account please access the following link: \n"
+                        . $_SERVER["SERVER_NAME"] . "/users/confirm_activation?activation_key=" . $user->getActivation_key() . "\n"
+                        . "This link is available for 24 hours and can be used only once.";
+                $user->sendMailTo($title, $message);
                 $this->showUserForm();
             }
         }
@@ -60,5 +67,14 @@ class UsersController extends \Wee\Controller {
     
     public function forgotPassword() {
         $this->render('users/forgot_password');
+    }
+    
+    public function confirmActivation() {
+        if (isset($_GET['activation_key'])) {
+            $activation_key = $_GET['activation_key'];
+            $userDao = \Wee\DaoFactory::getDao('User');
+            $userDao->activateUserByActivationKey($activation_key);
+        }
+        $this->redirect('users/show_login_form');
     }
 }
