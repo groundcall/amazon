@@ -177,23 +177,49 @@
                 <div class="toolbar">
                     <?php if (sizeof($products) > 0): ?>
                         <div class="pager">
-                            <p class="amount">
-                                <strong><?php echo (sizeof($products)); ?> Item(s)</strong>
-                            </p>
-
-                            <div class="pages">
-                                <strong>Page:</strong>
-                                <ol>
-                                    <li class="current">1</li>
-                                    <li><a href="#">2</a></li>
+                        <p class="amount">
+                            <strong><?php echo $paginator->getCount(); ?>  Item(s)</strong>
+                        </p>
+                        <?php if ($paginator->getCurrent() > $paginator->getPages()): ?>
+                            <?php $paginator->setCurrent($paginator->getPages()); ?>
+                        <?php endif; ?>    
+                        <div class="pages">
+                            <strong>Page:</strong>
+                            <ol>
+                                <?php if ($paginator->getCurrent() >= 1): ?>
+                                    <?php if ($paginator->getCurrent() > 1): ?>
+                                        <li>
+                                            <a class="next i-next" href="<?php echo url("products/show_products", array("page" => ($current = ($paginator->getCurrent() > 1) ? $paginator->getCurrent() - 1 : 1), 'category' => $filtering->getCategory_id(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'stock' => $filtering->getStock(), 'title' => $filtering->getTitle(), 'price' => $filtering->getPrice())); ?>" title="Previous" style="text-decoration: none;">
+                                                <<
+                                            </a>
+                                        </li>
+                                    <?php endif; ?>
                                     <li>
-                                        <a class="next i-next" href="#" title="Next">
-                                            <img src="../images/pager_arrow_right.gif" alt="Next" class="v-middle" />
+                                        <a href="<?php echo url("products/show_products", array("page" => ($current = ($paginator->getCurrent() > 1) ? $paginator->getCurrent() - 1 : 1), 'category' => $filtering->getCategory_id(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'stock' => $filtering->getStock(), 'title' => $filtering->getTitle(), 'price' => $filtering->getPrice())); ?>">
+                                            <?php echo ($paginator->getCurrent() > 1) ? $paginator->getCurrent() - 1 : ''; ?>
                                         </a>
                                     </li>
-                                </ol>
-                            </div>
+                                <?php endif; ?>
+
+                                <li class="current"><?php echo $paginator->getCurrent(); ?></li>
+
+                                <?php if ($paginator->getCurrent() <= $paginator->getPages()): ?>
+                                    <li>
+                                        <a href="<?php echo url("products/show_products", array("page" => ($current = ($paginator->getCurrent() < $paginator->getPages()) ? $paginator->getCurrent() + 1 : $paginator->getPages()), 'category' => $filtering->getCategory_id(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'stock' => $filtering->getStock(), 'title' => $filtering->getTitle(), 'price' => $filtering->getPrice())); ?>">
+                                            <?php echo ($paginator->getCurrent() < $paginator->getPages()) ? $paginator->getCurrent() + 1 : ''; ?>
+                                        </a>
+                                    </li>
+                                    <?php if ($paginator->getCurrent() < $paginator->getPages()): ?>
+                                        <li>
+                                            <a class="next i-next" href="<?php echo url("products/show_products", array("page" => ($current = ($paginator->getCurrent() < $paginator->getPages()) ? $paginator->getCurrent() + 1 : $paginator->getPages()), 'category' => $filtering->getCategory_id(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'stock' => $filtering->getStock(), 'title' => $filtering->getTitle(), 'price' => $filtering->getPrice())); ?>" title="Next" style="text-decoration: none;">
+                                                >>
+                                            </a>
+                                        </li>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            </ol>
                         </div>
+                    </div>
 
                         <div class="sorter">
                             <div class="sort-by">
@@ -295,13 +321,13 @@
                             <li><a href="<?php echo url('products/show_products', array('stock' => 0, 'category' => $filtering->getCategory_id(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'price' => $filtering->getPrice(), 'title' => $filtering->getTitle(), 'page' => '1')) ?>">All Products</a></li>
                         </ol>
                     </dd>
-                    <?php // if (!isset($_GET['category'])): ?>
                         <dt>Categories</dt>
                         <dd>
                         <ol>
                             <?php $categories = $view->getCategories(); ?>
+                            <?php (isset($_GET['category'])) ? $category_get = $_GET['category'] : $category_get= '' ?>
                             <?php foreach ($categories as $category): ?>
-                            <?php if (isset($_GET['category']) && ($category->getId() != $_GET['category'])):?>
+                            <?php if ($category->getId() != $category_get):?>
                                 <li>
                                     <a href="<?php echo url('products/show_products', array('category' => $category->getId(),'stock' => $filtering->getStock(),'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'price' => $filtering->getPrice(), 'title' => $filtering->getTitle(), 'page' => '1')) ?>" class="level-top" ><span><?php echo $category->getLabel(); ?> (<?php echo ($view->getNumberOfProductsInCategory($filtering, $category->getId())) ?>)</span></a>
                                 </li>
@@ -309,7 +335,6 @@
                             <?php endforeach; ?>
                         </ol>
                         </dd>
-                    <?php // endif; ?>
                 </dl>
             </div>
         </div>
@@ -320,9 +345,16 @@
         <div class="block-title">
             <strong><span>My Cart</span></strong>
         </div>
+        <?php if ($cart->getTotal() == 0): ?>
         <div class="block-content">
             <p class="empty">You have no items in your shopping cart.</p>
         </div>
+        <?php else: ?>
+        <div class="block-content">
+            <p class="empty"></p>
+        </div>
+        <?php endif; ?>
+        
     </div>
 
 </div>

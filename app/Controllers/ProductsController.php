@@ -24,6 +24,7 @@ class ProductsController extends \Wee\Controller {
 
         $paginator = new \Models\Paginator();
         $filtering = new \Models\Filtering();
+        $cart = new \Models\Cart();
 
         if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
             $paginator->setCurrent($_GET['page']);
@@ -70,26 +71,10 @@ class ProductsController extends \Wee\Controller {
             $paginator->setPages();
 
             $products = $productDao->getFilterProducts3($filtering, 'no count');
-            $this->render('users/show_products', array('products' => $products, 'filtering' => $filtering, 'paginator' => $paginator));
+            $this->render('users/show_products', array('products' => $products, 'filtering' => $filtering, 'paginator' => $paginator, 'cart' => $cart));
         }
-        $this->redirect('users/homepage');
+//        $this->re('users/homepage');
     }
 
-    public function search() {
-        $paginator = new \Models\Paginator();
-        $productDao = \Wee\DaoFactory::getDao('Product');
-        if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
-            $paginator->setCurrent($_GET['page']);
-        } else {
-            $paginator->setCurrent(1);
-        }
-        $paginator->setPerpage();
-        $start = ($paginator->getCurrent() - 1) * $paginator->getPerpage();
-        $limit = $paginator->getPerpage();
-        $paginator->setCount($productDao->searchProductTitleCount($_GET['title']));
-        $paginator->setPages();
-        $products = $productDao->searchProductTitle($_GET['title'], $start, $limit);
-        $this->render('users/search', array('title' => $_GET['title'], 'products' => $products, 'paginator' => $paginator));
-    }
-
+    
 }

@@ -93,6 +93,8 @@ trait ApplicationHelper {
     function getNumberOfProductsInCategory($filtering, $category_id) {
         $productDao = \Wee\DaoFactory::getDao('Product');
         $filtering->setCategory_id($category_id);
+        $filtering->setStart(null);
+        $filtering->setLimit(null);
         $result = $productDao->getFilterProducts3($filtering, 'count');
         
         return $result;
