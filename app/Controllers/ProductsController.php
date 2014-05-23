@@ -25,6 +25,8 @@ class ProductsController extends \Wee\Controller {
         $paginator = new \Models\Paginator();
         $filtering = new \Models\Filtering();
         $cart = new \Models\Cart();
+        
+        
 
         if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
             $paginator->setCurrent($_GET['page']);
@@ -76,5 +78,11 @@ class ProductsController extends \Wee\Controller {
 //        $this->re('users/homepage');
     }
 
+    public function addCartItemToCart(){
+
+//        $this->redirect('products/show_products');
+//        var_dump($_POST);
+//     die();   
+    }
     
 }

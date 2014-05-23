@@ -115,9 +115,12 @@
                         </div>
 
                         <div class="actions">
-                            <button type="button" title="Add to Cart" class="button btn-cart" >
-                                <span><span>Add to Cart</span></span>
-                            </button>
+                            <form action="cart/addCartItemToCart" method="post">
+                                <input type="hidden" name="product_id" value="<?php echo $products[$k]->getId(); ?>" />
+                                <button type="submit" title="Add to Cart" class="button btn-cart" >
+                                    <span><span>Add to Cart</span></span>
+                                </button>
+                            </form>
                         </div>
                     </li>
 
@@ -139,9 +142,12 @@
                             </div>
 
                             <div class="actions">
-                                <button type="button" title="Add to Cart" class="button btn-cart" >
-                                    <span><span>Add to Cart</span></span>
-                                </button>
+                                <form action="show_products" method="post">
+                                    <input type="hidden" name="product_id" value="<?php echo $products[$k + 1]->getId(); ?>" />
+                                    <button type="submit" title="Add to Cart" class="button btn-cart" >
+                                        <span><span>Add to Cart</span></span>
+                                    </button>
+                                </form>
                             </div>
                         <?php endif; ?>
                     </li>
@@ -164,9 +170,12 @@
                             </div>
 
                             <div class="actions">
-                                <button type="button" title="Add to Cart" class="button btn-cart" >
-                                    <span><span>Add to Cart</span></span>
-                                </button>
+                                <form action="show_products" method="post">
+                                    <input type="hidden" name="product_id" value="<?php echo $products[$k + 2]->getId(); ?>" />
+                                    <button type="submit" title="Add to Cart" class="button btn-cart" >
+                                        <span><span>Add to Cart</span></span>
+                                    </button>
+                                </form>
                             </div>
                         <?php endif; ?>
                     </li>
@@ -177,49 +186,49 @@
                 <div class="toolbar">
                     <?php if (sizeof($products) > 0): ?>
                         <div class="pager">
-                        <p class="amount">
-                            <strong><?php echo $paginator->getCount(); ?>  Item(s)</strong>
-                        </p>
-                        <?php if ($paginator->getCurrent() > $paginator->getPages()): ?>
-                            <?php $paginator->setCurrent($paginator->getPages()); ?>
-                        <?php endif; ?>    
-                        <div class="pages">
-                            <strong>Page:</strong>
-                            <ol>
-                                <?php if ($paginator->getCurrent() >= 1): ?>
-                                    <?php if ($paginator->getCurrent() > 1): ?>
+                            <p class="amount">
+                                <strong><?php echo $paginator->getCount(); ?>  Item(s)</strong>
+                            </p>
+                            <?php if ($paginator->getCurrent() > $paginator->getPages()): ?>
+                                <?php $paginator->setCurrent($paginator->getPages()); ?>
+                            <?php endif; ?>    
+                            <div class="pages">
+                                <strong>Page:</strong>
+                                <ol>
+                                    <?php if ($paginator->getCurrent() >= 1): ?>
+                                        <?php if ($paginator->getCurrent() > 1): ?>
+                                            <li>
+                                                <a class="next i-next" href="<?php echo url("products/show_products", array("page" => ($current = ($paginator->getCurrent() > 1) ? $paginator->getCurrent() - 1 : 1), 'category' => $filtering->getCategory_id(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'stock' => $filtering->getStock(), 'title' => $filtering->getTitle(), 'price' => $filtering->getPrice())); ?>" title="Previous" style="text-decoration: none;">
+                                                    <<
+                                                </a>
+                                            </li>
+                                        <?php endif; ?>
                                         <li>
-                                            <a class="next i-next" href="<?php echo url("products/show_products", array("page" => ($current = ($paginator->getCurrent() > 1) ? $paginator->getCurrent() - 1 : 1), 'category' => $filtering->getCategory_id(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'stock' => $filtering->getStock(), 'title' => $filtering->getTitle(), 'price' => $filtering->getPrice())); ?>" title="Previous" style="text-decoration: none;">
-                                                <<
+                                            <a href="<?php echo url("products/show_products", array("page" => ($current = ($paginator->getCurrent() > 1) ? $paginator->getCurrent() - 1 : 1), 'category' => $filtering->getCategory_id(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'stock' => $filtering->getStock(), 'title' => $filtering->getTitle(), 'price' => $filtering->getPrice())); ?>">
+                                                <?php echo ($paginator->getCurrent() > 1) ? $paginator->getCurrent() - 1 : ''; ?>
                                             </a>
                                         </li>
                                     <?php endif; ?>
-                                    <li>
-                                        <a href="<?php echo url("products/show_products", array("page" => ($current = ($paginator->getCurrent() > 1) ? $paginator->getCurrent() - 1 : 1), 'category' => $filtering->getCategory_id(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'stock' => $filtering->getStock(), 'title' => $filtering->getTitle(), 'price' => $filtering->getPrice())); ?>">
-                                            <?php echo ($paginator->getCurrent() > 1) ? $paginator->getCurrent() - 1 : ''; ?>
-                                        </a>
-                                    </li>
-                                <?php endif; ?>
 
-                                <li class="current"><?php echo $paginator->getCurrent(); ?></li>
+                                    <li class="current"><?php echo $paginator->getCurrent(); ?></li>
 
-                                <?php if ($paginator->getCurrent() <= $paginator->getPages()): ?>
-                                    <li>
-                                        <a href="<?php echo url("products/show_products", array("page" => ($current = ($paginator->getCurrent() < $paginator->getPages()) ? $paginator->getCurrent() + 1 : $paginator->getPages()), 'category' => $filtering->getCategory_id(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'stock' => $filtering->getStock(), 'title' => $filtering->getTitle(), 'price' => $filtering->getPrice())); ?>">
-                                            <?php echo ($paginator->getCurrent() < $paginator->getPages()) ? $paginator->getCurrent() + 1 : ''; ?>
-                                        </a>
-                                    </li>
-                                    <?php if ($paginator->getCurrent() < $paginator->getPages()): ?>
+                                    <?php if ($paginator->getCurrent() <= $paginator->getPages()): ?>
                                         <li>
-                                            <a class="next i-next" href="<?php echo url("products/show_products", array("page" => ($current = ($paginator->getCurrent() < $paginator->getPages()) ? $paginator->getCurrent() + 1 : $paginator->getPages()), 'category' => $filtering->getCategory_id(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'stock' => $filtering->getStock(), 'title' => $filtering->getTitle(), 'price' => $filtering->getPrice())); ?>" title="Next" style="text-decoration: none;">
-                                                >>
+                                            <a href="<?php echo url("products/show_products", array("page" => ($current = ($paginator->getCurrent() < $paginator->getPages()) ? $paginator->getCurrent() + 1 : $paginator->getPages()), 'category' => $filtering->getCategory_id(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'stock' => $filtering->getStock(), 'title' => $filtering->getTitle(), 'price' => $filtering->getPrice())); ?>">
+                                                <?php echo ($paginator->getCurrent() < $paginator->getPages()) ? $paginator->getCurrent() + 1 : ''; ?>
                                             </a>
                                         </li>
+                                        <?php if ($paginator->getCurrent() < $paginator->getPages()): ?>
+                                            <li>
+                                                <a class="next i-next" href="<?php echo url("products/show_products", array("page" => ($current = ($paginator->getCurrent() < $paginator->getPages()) ? $paginator->getCurrent() + 1 : $paginator->getPages()), 'category' => $filtering->getCategory_id(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'stock' => $filtering->getStock(), 'title' => $filtering->getTitle(), 'price' => $filtering->getPrice())); ?>" title="Next" style="text-decoration: none;">
+                                                    >>
+                                                </a>
+                                            </li>
+                                        <?php endif; ?>
                                     <?php endif; ?>
-                                <?php endif; ?>
-                            </ol>
+                                </ol>
+                            </div>
                         </div>
-                    </div>
 
                         <div class="sorter">
                             <div class="sort-by">
@@ -261,7 +270,7 @@
                         <?php if ($filtering->getCategory_id() != null && $filtering->getCategory_id() != 0): ?>
                             <ol>
                                 <li>
-                                    <span class="label">Category:</span> <span class="value"><?php echo $view->getCategoryLabelById(($filtering->getCategory_id()));?></span><a class="btn-remove" href="<?php echo url('products/show_products', array('sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'price' => $filtering->getPrice(), 'title' => $filtering->getTitle(), 'page' => 1)) ?>" title="Remove This Item">Remove This Item</a>
+                                    <span class="label">Category:</span> <span class="value"><?php echo $view->getCategoryLabelById(($filtering->getCategory_id())); ?></span><a class="btn-remove" href="<?php echo url('products/show_products', array('sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'price' => $filtering->getPrice(), 'title' => $filtering->getTitle(), 'page' => 1)) ?>" title="Remove This Item">Remove This Item</a>
                                 </li>
                             </ol>
                         <?php endif; ?>
@@ -321,40 +330,39 @@
                             <li><a href="<?php echo url('products/show_products', array('stock' => 0, 'category' => $filtering->getCategory_id(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'price' => $filtering->getPrice(), 'title' => $filtering->getTitle(), 'page' => '1')) ?>">All Products</a></li>
                         </ol>
                     </dd>
-                        <dt>Categories</dt>
-                        <dd>
+                    <dt>Categories</dt>
+                    <dd>
                         <ol>
                             <?php $categories = $view->getCategories(); ?>
-                            <?php (isset($_GET['category'])) ? $category_get = $_GET['category'] : $category_get= '' ?>
+                            <?php (isset($_GET['category'])) ? $category_get = $_GET['category'] : $category_get = '' ?>
                             <?php foreach ($categories as $category): ?>
-                            <?php if ($category->getId() != $category_get):?>
-                                <li>
-                                    <a href="<?php echo url('products/show_products', array('category' => $category->getId(),'stock' => $filtering->getStock(),'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'price' => $filtering->getPrice(), 'title' => $filtering->getTitle(), 'page' => '1')) ?>" class="level-top" ><span><?php echo $category->getLabel(); ?> (<?php echo ($view->getNumberOfProductsInCategory($filtering, $category->getId())) ?>)</span></a>
-                                </li>
+                                <?php if ($category->getId() != $category_get): ?>
+                                    <li>
+                                        <a href="<?php echo url('products/show_products', array('category' => $category->getId(), 'stock' => $filtering->getStock(), 'sort' => $filtering->getSort(), 'order' => $filtering->getOrder(), 'price' => $filtering->getPrice(), 'title' => $filtering->getTitle(), 'page' => '1')) ?>" class="level-top" ><span><?php echo $category->getLabel(); ?> (<?php echo ($view->getNumberOfProductsInCategory($filtering, $category->getId())) ?>)</span></a>
+                                    </li>
                                 <?php endif; ?>
                             <?php endforeach; ?>
                         </ol>
-                        </dd>
+                    </dd>
                 </dl>
             </div>
         </div>
     </div>
 </div>
+
 <div class="col-right sidebar">
     <div class="block block-cart">
         <div class="block-title">
             <strong><span>My Cart</span></strong>
         </div>
         <?php if ($cart->getTotal() == 0): ?>
-        <div class="block-content">
-            <p class="empty">You have no items in your shopping cart.</p>
-        </div>
+            <div class="block-content">
+                <p class="empty">You have no items in your shopping cart.</p>
+            </div>
         <?php else: ?>
-        <div class="block-content">
-            <p class="empty"></p>
-        </div>
+            <div class="block-content">
+                <p class="empty">There are <?php echo $cart->getTotal(); ?> items in your cart</p>
+            </div>
         <?php endif; ?>
-        
     </div>
-
 </div>
