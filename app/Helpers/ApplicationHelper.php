@@ -19,41 +19,6 @@ trait ApplicationHelper {
         return $categories;
     }
 
-//    public function numberOfProducts() {
-//        $productDao = \Wee\DaoFactory::getDao('Product');
-//        $numberOfProducts = $productDao->getProductCount();
-//        return $numberOfProducts;
-//    }
-//    
-//    public function numberOfProductPages() {
-//        $productPerPage = 10;
-//        if ($this->numberOfProducts() % $productPerPage == 0) {
-//            $numberOfPages = $this->numberOfProducts() / $productPerPage;
-//        }
-//        else {
-//            $numberOfPages = intval($this->numberOfProducts() / $productPerPage) + 1;
-//        }
-//        return $numberOfPages;
-//    }
-//    
-//    public function numberOfUsers() {
-//        $userDao = \Wee\DaoFactory::getDao('User');
-//        $numberOfUsers = $userDao->getUserCount();
-//        return $numberOfUsers;
-//    }
-//    
-//    public function numberOfUserPages() {
-//        $userPerPage = 2;
-//        if ($this->numberOfUsers() % $userPerPage == 0) {
-//            $numberOfPages = $this->numberOfUsers() / $userPerPage;
-//        }
-//        else {
-//            $numberOfPages = intval($numberOfPages = $this->numberOfUsers() / $userPerPage) + 1;
-//        }
-//        return $numberOfPages;
-//    }
-
-
     public function getLastSixProducts() {
         $productDao = \Wee\DaoFactory::getDao('Product');
         $products = $productDao->getLastProducts(6);
@@ -61,20 +26,10 @@ trait ApplicationHelper {
     }
 
     public function getProductsByCategory($category) {
-//        var_dump($category->getId()); 
-
-
         $productDao = \Wee\DaoFactory::getDao('Product');
         $products = $productDao->getProductsByCategoryId($category->getId());
 
         return $products;
-
-//        $sql = 'SELECT * FROM products WHERE category_id = :categoy_id';
-//        $stmt = $this->getConnection()->prepare($sql);
-//        $stmt->bindValue(':category_id', $category->getId());
-//        $result=getProducts($stmt);
-//        
-//        return $result;
     }
 
     public function getCategoryLabelById($category_id) {
@@ -99,4 +54,5 @@ trait ApplicationHelper {
         
         return $result;
     }
+    
 }

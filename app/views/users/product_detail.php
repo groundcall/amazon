@@ -64,15 +64,13 @@
                                             </div>
 
 
-                                            <?php if (!empty($_SESSION)): ?>
-                                                <div class="add-to-box">
-                                                    <div class="add-to-cart">
-                                                        <label for="qty">Quantity:</label>
-                                                        <input type="text" name="qty" id="qty" maxlength="12" value="1" title="Qty" class="input-text qty" />
-                                                        <button type="button" title="Add to Cart" class="button btn-cart" ><span><span>Add to Cart</span></span></button>
-                                                    </div>
+                                            <div class="add-to-box">
+                                                <div class="add-to-cart">
+                                                    <label for="qty">Quantity:</label>
+                                                    <input type="text" name="qty" id="qty" maxlength="12" value="1" title="Qty" class="input-text qty" />
+                                                    <button type="button" title="Add to Cart" class="button btn-cart" ><span><span>Add to Cart</span></span></button>
                                                 </div>
-                                            <?php endif; ?>
+                                            </div>
 
                                         </div>
 

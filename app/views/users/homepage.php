@@ -16,7 +16,7 @@
                                 </a>
                                 <div class="product-description">
                                     <p><a href="<?php echo url('products/show_details', array('product_id' => $products[$k]->getId())); ?>"><?php echo $products[$k]->getTitle(); ?></a></p>
-                                    <p>See all <a href="<?php echo url('products/category', array('category' => $products[$k]->getCategory_id())) ?>"><?php echo $products[$k]->getCategory(); ?></a></p>
+                                    <p>See all <a href="<?php echo url('products/show_products', array('category' => $products[$k]->getCategory_id())) ?>"><?php echo $products[$k]->getCategory(); ?></a></p>
                                 </div>
                             </td>
                             <td>
@@ -25,7 +25,7 @@
                                 </a>
                                 <div class="product-description">
                                     <p><a href="<?php echo url('products/show_details', array('product_id' => $products[$k + 1]->getId())); ?>"><?php echo $products[$k + 1]->getTitle(); ?></a></p>
-                                    <p>See all <a href="<?php echo url('products/category', array('category' => $products[$k + 1]->getCategory_id())) ?>"><?php echo $products[$k + 1]->getCategory(); ?></a></p>
+                                    <p>See all <a href="<?php echo url('products/show_products', array('category' => $products[$k + 1]->getCategory_id())) ?>"><?php echo $products[$k + 1]->getCategory(); ?></a></p>
                                 </div>
                             </td>
                         </tr>
@@ -38,16 +38,14 @@
     </div>
     <div class="col-left sidebar"></div>
 </div>
-<?php if (!empty($_SESSION)): ?>
-    <div class="col-right sidebar">
-        <div class="block block-cart">
-            <div class="block-title">
-                <strong><span>My Cart</span></strong>
-            </div>
-            <div class="block-content">
-                <p class="empty">You have no items in your shopping cart.</p>
-            </div>
+<div class="col-right sidebar">
+    <div class="block block-cart">
+        <div class="block-title">
+            <strong><span>My Cart</span></strong>
         </div>
-
+        <div class="block-content">
+            <p class="empty">You have no items in your shopping cart.</p>
+        </div>
     </div>
-<?php endif; ?>
+
+</div>
