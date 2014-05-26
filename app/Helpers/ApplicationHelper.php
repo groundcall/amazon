@@ -45,7 +45,7 @@ trait ApplicationHelper {
         return $education;
     }
 
-    function getNumberOfProductsInCategory($filtering, $category_id) {
+    public function getNumberOfProductsInCategory($filtering, $category_id) {
         $productDao = \Wee\DaoFactory::getDao('Product');
         $filtering->setCategory_id($category_id);
         $filtering->setStart(null);
@@ -53,5 +53,12 @@ trait ApplicationHelper {
         $result = $productDao->getFilterProducts3($filtering, 'count');
         
         return $result;
+    }
+    
+    public function calculateCartTotal($cart_id){
+        $cartDao = \Wee\DaoFactory::getDao('Cart');
+        $total = $cartDao->calculateCartTotal($cart_id);
+        
+        return $total;
     }
 }

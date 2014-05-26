@@ -364,7 +364,8 @@
                 <p class="empty">There are <a href="<?php echo url('cart/show_cart'); ?>"> <?php echo sizeof($cart->getCart_item()); ?> items  </a>in your cart</p>
             </div>
             <p class="subtotal">
-                <span class="label">Cart Subtotal:</span> <span class="price">299,98 US$</span>
+                <?php $total = $view->calculateCartTotal($cart->getId());?>
+                <span class="label">Cart Subtotal:</span> <span class="price"><?php echo $total; ?> US$</span>
             </p>
             <div class="actions">
                 <button type="button" title="Checkout" class="button" ><span><span>Checkout</span></span></button>

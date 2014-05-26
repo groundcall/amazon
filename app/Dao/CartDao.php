@@ -73,5 +73,6 @@ class CartDao extends \Wee\Dao {
         $stmt->bindValue(':total', $total);
         $stmt->bindValue(':cart_id', $cart_id);
         $stmt->execute();
+        return $total;
     }
 }
