@@ -11,13 +11,18 @@ class ProductsController extends \Wee\Controller {
     }
 
     public function showDetails() {
+        
         $productDao = \Wee\DaoFactory::getDao('Product');
+        
+        $cartDao = \Wee\DaoFactory::getDao('Cart');
+        $cart = $cartDao->getCartByUserId($_SESSION['id']);
+        
         if (!$productDao->getProductById($_GET['product_id'])) {
             $this->redirect('products/index');
         }
         $product = $productDao->getProductById($_GET['product_id']);
         $randomProducts = $productDao->getRandomProducts($_GET['product_id'], 4);
-        $this->render('users/product_detail', array('product' => $product, 'randomProducts' => $randomProducts));
+        $this->render('users/product_detail', array('product' => $product, 'randomProducts' => $randomProducts, 'cart' => $cart));
     }
 
     public function showProducts() {

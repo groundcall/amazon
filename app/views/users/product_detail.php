@@ -8,7 +8,7 @@
     <body>
         <div class="wrapper">
             <div class="page">
-                
+
                 <?php $view->render('users/user_navigation'); ?>
 
                 <div class="main-container col2-right-layout">
@@ -19,7 +19,7 @@
                                     <a href="<?php echo url('products/'); ?>" title="Go to Home Page">Home</a>
                                     <span>/ </span>
                                 </li>
-                                
+
                                 <li class="category10">
                                     <a href="<?php echo url('products/category', array('category' => $product->getCategory_id())); ?>" title=""><?php echo $product->getCategory(); ?></a>
                                     <span>/ </span>
@@ -35,7 +35,7 @@
                                 <ul class="messages">
                                     <li class="success-msg">
                                         <ul>
-                                            <li><span>Ottoman was added to your shopping cart.</span></li>
+                                            <li><span><?php echo $product->getTitle(); ?> was added to your shopping cart.</span></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -43,7 +43,7 @@
 
                             <div class="product-view">
                                 <div class="product-essential">
-                                    <form action="" method="post" id="product_addtocart_form">
+                                    <form action="<?php echo url('cart/add_cart_item_to_cart'); ?>" method="post" id="product_addtocart_form">
                                         <div class="product-shop">
                                             <div class="product-name">
                                                 <h1><?php echo $product->getTitle(); ?></h1>
@@ -67,10 +67,13 @@
                                             <div class="add-to-box">
                                                 <div class="add-to-cart">
                                                     <label for="qty">Quantity:</label>
-                                                    <input type="text" name="qty" id="qty" maxlength="12" value="1" title="Qty" class="input-text qty" />
-                                                    <button type="button" title="Add to Cart" class="button btn-cart" ><span><span>Add to Cart</span></span></button>
+                                                        <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>" />
+                                                        <input type="text" name="quantity" id="qty" maxlength="12" value="1" title="Quantity" class="input-text qty" />
+                                                        <button type="submit" title="Add to Cart" class="button btn-cart" ><span><span>Add to Cart</span></span></button>
                                                 </div>
                                             </div>
+
+                                           
 
                                         </div>
 
@@ -91,7 +94,7 @@
                                         <div class="std"><?php echo $product->getDescription(); ?></div>
                                     </div>
                                     <p><a href="<?php echo isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : ''; ?>"><span>&laquo; Go Back</span></a></p>
-                                    
+
                                     <div class="box-collateral box-up-sell">
                                         <h2>You may also be interested in the following product(s)</h2>
                                         <table class="products-grid" id="upsell-product-table">
@@ -119,21 +122,24 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <?php if (!empty($_SESSION)): ?>
                             <div class="col-right sidebar">
                                 <div class="block block-cart">
                                     <div class="block-title">
                                         <strong><span>My Cart</span></strong>
                                     </div>
-                                    <div class="block-content">
-                                        <div class="summary">
-                                            <p class="amount">There are <a href="cart.html">2 items</a> in your cart.</p>
-                                            <p class="subtotal">
-                                                <span class="label">Cart Subtotal:</span> <span class="price">299,98 US$</span>
-                                            </p>
+                                    <?php if (!$cart->getCart_item()): ?>
+                                        <div class="block-content">
+                                            <p class="empty">You have no items in your shopping cart.</p>
                                         </div>
-
+                                    <?php else: ?>
+                                        <div class="block-content">
+                                            <p class="empty">There are <a href="<?php echo url('cart/show_cart'); ?>"> <?php echo sizeof($cart->getCart_item()); ?> items  </a>in your cart</p>
+                                        </div>
+                                        <p class="subtotal">
+                                            <span class="label">Cart Subtotal:</span> <span class="price">299,98 US$</span>
+                                        </p>
                                         <div class="actions">
                                             <button type="button" title="Checkout" class="button" ><span><span>Checkout</span></span></button>
                                         </div>
@@ -142,45 +148,36 @@
 
                                         <ol id="cart-sidebar" class="mini-products-list">
 
-                                            <li class="item">
-                                                <a href="#" title="Ottoman" class="product-image">
-                                                    <img src="images/couchlarge_2.jpg" width="50" height="50" alt="Ottoman" />
-                                                </a>
-                                                <div class="product-details">
-                                                    <a href="#" title="Remove This Item" class="btn-remove">Remove This Item</a>
-                                                    <a href="#" title="Edit item" class="btn-edit">Edit item</a>
-                                                    <p class="product-name"><a href="#">Ottoman</a></p>
-                                                    <strong>1</strong> x
-                                                    <span class="price">199,99 US$</span>
-                                                </div>
-                                            </li>
-
-                                            <li class="item">
-                                                <a href="#" title="Chair" class="product-image">
-                                                    <img src="images/couchlarge_2.jpg" width="50" height="50" alt="Chair" />
-                                                </a>
-                                                <div class="product-details">
-                                                    <a href="#" title="Remove This Item" class="btn-remove">Remove This Item</a>
-                                                    <a href="#" title="Edit item" class="btn-edit">Edit item</a>
-                                                    <p class="product-name"><a href="#">Chair</a></p>
-                                                    <strong>1</strong> x
-                                                    <span class="price">99,99 US$</span>
-                                                </div>
-                                            </li>
+                                            <?php $cart_items = $cart->getCart_item() ?>
+                                            <?php foreach ($cart_items as $cart_item): ?>
+                                                <?php $product = $cart_item->getProduct(); ?> 
+                                                <li class="item">
+                                                    <a href="<?php echo url('products/show_details', array('product_id' => $product->getId())); ?>" title="<?php echo $product->getTitle(); ?>" class="product-image">
+                                                        <img src="<?php echo '../product_images' . $product->getImage(); ?>" width="50" height="50" alt="Ottoman" />
+                                                    </a>
+                                                    <div class="product-details">
+                                                        <a href="<?php echo url('cart/delete_cart_item_from_cart', array('cart_item_id' => $cart_item->getId())) ?>" title="Remove This Item" class="btn-remove">Remove This Item</a>
+                                                        <a href="<?php echo url('cart/show_cart'); ?> " title="Edit item" class="btn-edit">Edit item</a>
+                                                        <p class="product-name"><a href="<?php echo url('products/show_details', array('product_id' => $product->getId())); ?>"><?php echo $product->getTitle(); ?></a></p>
+                                                        <strong><?php echo $cart_item->getQuantity(); ?></strong> x
+                                                        <span class="price"><?php echo $product->getPrice(); ?> US$</span>
+                                                    </div>
+                                                </li>
+                                            <?php endforeach; ?>
                                         </ol>
-
-                                    </div>
+                                    <?php endif; ?>
                                 </div>
-                            <?php endif; ?>
-                                
-                        </div>
+                            </div>
+
+                        <?php endif; ?>
+
                     </div>
                 </div>
                 <div class="footer-container">
                     <?php $view->render('users/user_footer'); ?>
                 </div>
-                </div>
             </div>
+        </div>
         </div>
     </body>
 </html>

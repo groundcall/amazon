@@ -68,12 +68,29 @@ class CartController extends \Wee\Controller {
     }
 
     public function addCartItemToCart() {
-        $product_id = $_POST['product_id'];
+
+        if (isset($_POST['quantity'])) {
+            $quantity = $_POST['quantity'];
+        } else {
+            $quantity = 1;
+        }
+
+        $productDao = \Wee\DaoFactory::getDao('Product');
+        $product = $productDao->getProductById($_POST['product_id']);
+
         $cartDao = \Wee\DaoFactory::getDao('Cart');
         $cart = $cartDao->getCartByUserId($_SESSION['id']);
 
+
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
-        $cartItemDao->addCartItemToCart($product_id, $cart->getId());
+
+        if ($cartItemDao->getCartItemById($_POST['product_id'])) {
+            ///////////////////////////////
+           ////////// FUNCTIA DE UPDATE CART   
+            die('am ajuns aci');
+        } else {
+            $cartItemDao->addCartItemToCart($product, $cart->getId(), $quantity);
+        }
 
         header('Location: ' . $_SERVER['HTTP_REFERER']);
     }
