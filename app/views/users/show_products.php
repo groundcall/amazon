@@ -19,6 +19,30 @@
 
 <div class="col-wrapper">
     <div class="col-main">
+        <?php if ($_SESSION['add_status']): ?>
+            <?php if ($_SESSION['add_status'] == 'ok'): ?>
+                <div id="messages_product_view">
+                    <ul class="messages">
+                        <li class="success-msg">
+                            <ul>
+                                <li><span>The item was added to your shopping cart.</span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            <?php else: ?>
+                <div id="messages_product_view">
+                    <ul class="error-msg">
+                        <li class="error">
+                            <ul>
+                                <li><span><?php echo $_SESSION['add_status'][0]; ?></span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            <?php endif; ?>
+            <?php $_SESSION['add_status'] = null; ?>
+        <?php endif; ?>
         <?php if (sizeof($products) == 0): ?>
             <div class="page-title category-title">
                 <h1>No Products Match Your Search Criteria</h1>
@@ -361,10 +385,10 @@
             </div>
         <?php else: ?>
             <div class="block-content">
-                <p class="empty">There are <a href="<?php echo url('cart/show_cart'); ?>"> <?php echo sizeof($cart->getCart_item()); ?> items  </a>in your cart</p>
+                <p class="empty">There are <a href="<?php echo url('cart/show_cart'); ?>"> <?php echo $view->getNumberOfItemsInCart($cart->getId()); ?> items  </a>in your cart</p>
             </div>
             <p class="subtotal">
-                <?php $total = $view->calculateCartTotal($cart->getId());?>
+                <?php $total = $view->calculateCartTotal($cart->getId()); ?>
                 <span class="label">Cart Subtotal:</span> <span class="price"><?php echo $total; ?> US$</span>
             </p>
             <div class="actions">

@@ -74,9 +74,10 @@ class CartController extends \Wee\Controller {
     }
 
     public function addCartItemToCart() {
+        
         $cartItem = new \Models\CartItem();
         isset($_POST['quantity']) ? $quantity = $_POST['quantity'] : $quantity = 1;
-        
+
         $cartItem->setQuantity($quantity);
         $cartItem->setProduct($_POST['product_id']);
 
@@ -86,16 +87,25 @@ class CartController extends \Wee\Controller {
 
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
         $item = $cartItemDao->getCartItemByProductId($cartItem->getProduct_id());
-        
+
         if ($item) {
+
             $cartItem->setQuantity($item->getQuantity() + $quantity);
             $cartItem->setId($item->getId());
             if ($cartItem->isValid()) {
                 $cartItemDao->updateCartItem($cartItem);
+                $_SESSION['add_status'] = 'ok';
+            } else {
+
+                $_SESSION['add_status'] = $cartItem->getError('quantity');
             }
         } else {
+
             if ($cartItem->isValid()) {
                 $cartItemDao->addCartItemToCart($cartItem);
+                $_SESSION['add_status'] = 'ok';
+            } else {
+                $_SESSION['add_status'] = $cartItem->getError('quantity');
             }
         }
         $cartDao->calculateCartTotal($cart->getId());

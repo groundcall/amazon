@@ -3,11 +3,11 @@
 namespace Controllers;
 
 class UsersController extends \Wee\Controller {
- 
+
     public function index() {
         $this->render('users/user_register', array('user' => null));
     }
-    
+
     public function addUser() {
         $user = null;
         if (!empty($_POST['data'])) {
@@ -19,30 +19,28 @@ class UsersController extends \Wee\Controller {
                 $userDao = \Wee\DaoFactory::getDao('User');
                 $userDao->addUser($user);
                 $title = 'Activate your account';
-                $message = "Hello, " . $_POST['data']['firstname'] . " " .  $_POST['data']['lastname'] . " !\n"
+                $message = "Hello, " . $_POST['data']['firstname'] . " " . $_POST['data']['lastname'] . " !\n"
                         . "To activate your account please access the following link: \n"
                         . 'http://' . $_SERVER["SERVER_NAME"] . "/users/confirm_activation?activation_key=" . $user->getActivation_key() . "\n"
                         . "This link is available for 24 hours and can be used only once.";
                 $user->sendMailTo($title, $message);
                 $this->showUserForm();
-            }
-            else {
+            } else {
                 $this->render('users/user_register', array('user' => $user));
             }
-        }
-        else {
+        } else {
             $this->render('users/user_register', array('user' => $user));
         }
     }
-    
+
     public function showUserForm() {
         $this->render('users/user_register', array('user' => null));
     }
-    
+
     public function showLoginForm() {
         $this->render('users/user_login', array('user' => null));
     }
-    
+
     public function login() {
         $userDao = \Wee\DaoFactory::getDao('User');
         $userLogin = new \Models\UserLogin();
@@ -55,25 +53,25 @@ class UsersController extends \Wee\Controller {
             $_SESSION['is_admin'] = $user->getRole_id();
             if ($user->getRole_id() == 1) {
                 $this->redirect('admin_products/');
-            }
-            else {
+            } else {
                 $this->redirect('products/');
             }
-        }
-        else {
+        } else {
             $this->render('users/user_login', array('userLogin' => $userLogin));
         }
     }
-    
+
     public function logout() {
-        session_destroy();
+        $_SESSION['id'] = null;
+        $_SESSION['username'] = null;
+//        session_destroy();
         $this->redirect('products/');
     }
-    
+
     public function forgotPassword() {
         $this->render('users/forgot_password');
     }
-    
+
     public function confirmActivation() {
         if (isset($_GET['activation_key'])) {
             $activation_key = $_GET['activation_key'];
@@ -82,7 +80,7 @@ class UsersController extends \Wee\Controller {
         }
         $this->redirect('users/show_login_form');
     }
-    
+
     public function resetPassword() {
         $resetPasswod = new \Models\ResetPassword();
         $resetPasswod->setEmail($_POST['email']);
@@ -95,7 +93,7 @@ class UsersController extends \Wee\Controller {
             $user->setActivation_key();
             $userDao->updateActivationKey($user);
             $title = 'Bookshop.com – Reset password';
-            $message = "Hello, " . $user->getFirstname() . " " .  $user->getLastname() . " !\n"
+            $message = "Hello, " . $user->getFirstname() . " " . $user->getLastname() . " !\n"
                     . "To reset your password please access the following link: \n"
                     . 'http://' . $_SERVER["SERVER_NAME"] . "/users/change_password?activation_key=" . $user->getActivation_key() . "\n"
                     . "This link is available for 24 hours and can be used only once.";
@@ -103,9 +101,7 @@ class UsersController extends \Wee\Controller {
         }
         $this->render('users/forgot_password', array('resetPassword' => $resetPasswod));
     }
-    
-    
-    
+
     public function changePassword() {
         if (!empty($_GET['activation_key'])) {
             $_SESSION['activation_key'] = $_GET['activation_key'];
@@ -123,10 +119,10 @@ class UsersController extends \Wee\Controller {
                 $userDao->updatePassword($_SESSION['activation_key'], $resetPassword->getPassword());
                 unset($_SESSION['activation_key']);
                 $this->render('users/user_login');
-            }
-            else {
+            } else {
                 $this->render('users/reset_password', array('resetPassword' => $resetPassword));
             }
         }
     }
+
 }

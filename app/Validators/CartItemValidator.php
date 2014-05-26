@@ -6,8 +6,16 @@ trait CartItemValidator {
 
     public function validateQuantity() {
         $this->registerValidator(function($cartItem) {
-            if ($cartItem->getQuantity() <= 0 || !is_numeric($cartItem->getQuantity()) || $cartItem->getQuantity() > $cartItem->getProduct()->getStock()) {
-                $cartItem->addError("quantity", "Incorrect quantity.");
+            if ($cartItem->getQuantity() <= 0 || !is_numeric($cartItem->getQuantity())) {
+                $cartItem->addError("quantity", "Invalid quantity!");
+            }
+        });
+    }
+    
+    public function validateQuantityInStock() {
+        $this->registerValidator(function($cartItem) {
+            if ($cartItem->getQuantity() > $cartItem->getProduct()->getStock()) {
+                $cartItem->addError("quantity", "Selected quantity exceeds stock!");
             }
         });
     }

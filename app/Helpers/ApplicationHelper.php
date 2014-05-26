@@ -61,4 +61,10 @@ trait ApplicationHelper {
         
         return $total;
     }
+    
+    public function getNumberOfItemsInCart($cart_id){
+        $cartDao = \Wee\DaoFactory::getDao('Cart');
+        $total = $cartDao->getNumberOfItemsInCart($cart_id);
+        return $total;
+    }
 }

@@ -20,6 +20,7 @@ class CartItem extends \Wee\Model {
         $this->setAttrAccessible(array('title', 'quantity', 'price'));
 
         $this->validateQuantity();
+        $this->validateQuantityInStock();
     }
     
     public function getId() {

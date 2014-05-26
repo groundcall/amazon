@@ -30,15 +30,30 @@
                             </ul>
                         </div>
                         <div class="col-main">
-                             <div id="messages_product_view">
-                                <ul class="messages">
-                                    <li class="success-msg">
-                                        <ul>
-                                            <li><span><?php echo $product->getTitle(); ?> was added to your shopping cart.</span></li>
+                            <?php if ($_SESSION['add_status']): ?>
+                                <?php if ($_SESSION['add_status'] == 'ok'): ?>
+                                    <div id="messages_product_view">
+                                        <ul class="messages">
+                                            <li class="success-msg">
+                                                <ul>
+                                                    <li><span><?php echo $product->getTitle(); ?> was added to your shopping cart.</span></li>
+                                                </ul>
+                                            </li>
                                         </ul>
-                                    </li>
-                                </ul>
-                            </div>
+                                    </div>
+                                <?php else: ?>
+                                    <div id="messages_product_view">
+                                        <ul class="error-msg">
+                                            <li class="error">
+                                                <ul>
+                                                    <li><span><?php echo $_SESSION['add_status'][0]; ?></span></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                <?php endif; ?>
+                            <?php $_SESSION['add_status'] = null; ?>
+                            <?php endif; ?>
 
                             <div class="product-view">
                                 <div class="product-essential">
@@ -66,9 +81,9 @@
                                             <div class="add-to-box">
                                                 <div class="add-to-cart">
                                                     <label for="qty">Quantity:</label>
-                                                        <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>" />
-                                                        <input type="text" name="quantity" id="qty" maxlength="12" value="1" title="Quantity" class="input-text qty" />
-                                                        <button type="submit" title="Add to Cart" class="button btn-cart" ><span><span>Add to Cart</span></span></button>
+                                                    <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>" />
+                                                    <input type="text" name="quantity" id="qty" maxlength="12" value="1" title="Quantity" class="input-text qty" />
+                                                    <button type="submit" title="Add to Cart" class="button btn-cart" ><span><span>Add to Cart</span></span></button>
                                                 </div>
                                             </div>
 
@@ -132,10 +147,10 @@
                                         </div>
                                     <?php else: ?>
                                         <div class="block-content">
-                                            <p class="empty">There are <a href="<?php echo url('cart/show_cart'); ?>"> <?php echo sizeof($cart->getCart_item()); ?> items  </a>in your cart</p>
+                                            <p class="empty">There are <a href="<?php echo url('cart/show_cart'); ?>"> <?php echo $view->getNumberOfItemsInCart($cart->getId()); ?> items  </a>in your cart</p>
                                         </div>
                                         <p class="subtotal">
-                                            <?php $total = $view->calculateCartTotal($cart->getId());?>
+                                            <?php $total = $view->calculateCartTotal($cart->getId()); ?>
                                             <span class="label">Cart Subtotal:</span> <span class="price"><?php echo $total; ?> US$</span>
                                         </p>
                                         <div class="actions">

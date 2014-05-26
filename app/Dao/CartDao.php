@@ -75,4 +75,15 @@ class CartDao extends \Wee\Dao {
         $stmt->execute();
         return $total;
     }
+    
+    public function getNumberOfItemsInCart($cart_id){
+        $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
+        $cartItems = $cartItemDao->getAllCartItemsByCartId($cart_id);
+        $total = 0;
+        foreach ($cartItems as $cartItem) {
+            $total = $total + $cartItem->getQuantity();
+        }
+        
+        return $total;
+    }
 }
