@@ -5,17 +5,21 @@ namespace Controllers;
 class ProductsController extends \Wee\Controller {
 
     public function index() {
+        $this->createCartIfNoCart();
         $productDao = \Wee\DaoFactory::getDao('Product');
         $products = $productDao->getLastProducts(6);
         $this->render('users/homepage', array('products' => $products));
     }
 
     public function showDetails() {
+        $this->createCartIfNoCart();
+        $message = null;
 
         $productDao = \Wee\DaoFactory::getDao('Product');
 
         $cartDao = \Wee\DaoFactory::getDao('Cart');
-        $cart = $cartDao->getCartByUserId($_SESSION['id']);
+//        $cart = $cartDao->getCartByUserId($_SESSION['id']);
+        $cart = $cartDao->getCartById($_SESSION['cart_id']);
 
         if (!$productDao->getProductById($_GET['product_id'])) {
             $this->redirect('products/index');
@@ -27,11 +31,13 @@ class ProductsController extends \Wee\Controller {
 
     public function showProducts() {
 
+        $this->createCartIfNoCart();
         $paginator = new \Models\Paginator();
         $filtering = new \Models\Filtering();
 
         $cartDao = \Wee\DaoFactory::getDao('Cart');
-        $cart = $cartDao->getCartByUserId($_SESSION['id']);
+//        $cart = $cartDao->getCartByUserId($_SESSION['id']);
+         $cart = $cartDao->getCartById($_SESSION['cart_id']);
 
 
 
@@ -82,7 +88,20 @@ class ProductsController extends \Wee\Controller {
             $products = $productDao->getFilterProducts3($filtering, 'no count');
             $this->render('users/show_products', array('products' => $products, 'filtering' => $filtering, 'paginator' => $paginator, 'cart' => $cart));
         }
-//        $this->re('users/homepage');
+    }
+
+    public function createCartIfNoCart() {
+//        var_dump($_SESSION);
+        $cartDao = \Wee\DaoFactory::getDao('Cart');
+        if (!isset($_SESSION['cart_id'])) {
+            $cart = new \Models\Cart();
+            if (isset($_SESSION['user_id'])) {
+                $cartDao->addCart($_SESSION['id']);
+            } else {
+                $cartDao->addCart(0);
+            }
+           $_SESSION['cart_id'] = $cartDao->getLastInsertedCart();
+        }
     }
 
 }

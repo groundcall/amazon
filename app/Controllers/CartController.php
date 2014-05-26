@@ -5,17 +5,20 @@ namespace Controllers;
 class CartController extends \Wee\Controller {
 
     public function index() {
+        $this->createCartIfNoCart();
         $this->render('users/cart');
     }
 
-    private function getCartByUserId() {
+    private function getCartById() {
         $cartDao = \Wee\DaoFactory::getDao('Cart');
-        $cart = $cartDao->getCartByUserId($_SESSION['id']);
+        $cart = $cartDao->getCartById($_SESSION['cart_id']);
         return $cart;
     }
 
     public function showCart() {
-        $cart = $this->getCartByUserId();
+
+        $this->createCartIfNoCart();
+        $cart = $this->getCartById();
         $cartItems = $cart->getCart_item();
         $this->render('users/cart', array('cartItems' => $cartItems));
     }
@@ -33,7 +36,7 @@ class CartController extends \Wee\Controller {
     }
 
     private function clearCart() {
-        $cart = $this->getCartByUserId();
+        $cart = $this->getCartById();
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
         $cartItemDao->removeAllCartItemsByCartId($cart->getId());
         $cartDao = $cartItemDao = \Wee\DaoFactory::getDao('Cart');
@@ -43,7 +46,7 @@ class CartController extends \Wee\Controller {
     }
 
     private function removeCartItem() {
-        $cart = $this->getCartByUserId();
+        $cart = $this->getCartById();
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
         $cartItemDao->removeCartItemById($_POST['cart_item_id'], $cart->getId());
         $cartDao = $cartItemDao = \Wee\DaoFactory::getDao('Cart');
@@ -55,7 +58,7 @@ class CartController extends \Wee\Controller {
     private function updateCart() {
         $items = array();
         $_SESSION['updated_qty'] = 0;
-        $cart = $this->getCartByUserId();
+        $cart = $this->getCartById();
         $cartDao = $cartItemDao = \Wee\DaoFactory::getDao('Cart');
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
         $cartItems = $cartItemDao->getAllCartItemsByCartId($cart->getId());
@@ -74,7 +77,7 @@ class CartController extends \Wee\Controller {
     }
 
     public function addCartItemToCart() {
-        
+
         $cartItem = new \Models\CartItem();
         isset($_POST['quantity']) ? $quantity = $_POST['quantity'] : $quantity = 1;
 
@@ -82,7 +85,8 @@ class CartController extends \Wee\Controller {
         $cartItem->setProduct($_POST['product_id']);
 
         $cartDao = \Wee\DaoFactory::getDao('Cart');
-        $cart = $cartDao->getCartByUserId($_SESSION['id']);
+        $cart = $cartDao->getCartById($_SESSION['id']);
+        $cart = $cartDao->getCartById($_SESSION['cart_id']);
         $cartItem->setCart($cart->getId());
 
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
@@ -115,12 +119,25 @@ class CartController extends \Wee\Controller {
     public function deleteCartItemFromCart() {
         $cart_item_id = $_GET['cart_item_id'];
         $cartDao = \Wee\DaoFactory::getDao('Cart');
-        $cart = $cartDao->getCartByUserId($_SESSION['id']);
+        $cart = $cartDao->getCartById($_SESSION['id']);
 
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
         $cartItemDao->deleteCartItemFromCart($cart_item_id);
 
         header('Location: ' . $_SERVER['HTTP_REFERER']);
+    }
+
+    public function createCartIfNoCart() {
+        $cartDao = \Wee\DaoFactory::getDao('Cart');
+        if ($_SESSION['cart_id'] == null) {
+            $cart = new \Models\Cart();
+            if (isset($_SESSION['user_id'])) {
+                $query_id = $cartDao->addCart($_SESSION['id']);
+            } else {
+                $query_id = $cartDao->addCart(0);
+            }
+            $_SESSION['cart_id'] = $cartDao->getLastInsertedCart();
+        }
     }
 
 }

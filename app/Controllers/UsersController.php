@@ -51,6 +51,18 @@ class UsersController extends \Wee\Controller {
             $_SESSION['id'] = $user->getId();
             $_SESSION['username'] = $user->getUsername();
             $_SESSION['is_admin'] = $user->getRole_id();
+            
+             $cartDao = \Wee\DaoFactory::getDao('Cart');
+             $cartDao->deactivateCartByUserId($user->getId());
+
+//             if (!$cartDao->getCartByUserId($user->getId())){
+             $cartDao->assignCartToUser();
+//             }
+//             else{
+//                 $cartDao->deleteCartById($_SESSION['cart_id']);
+//             }
+             
+             
             if ($user->getRole_id() == 1) {
                 $this->redirect('admin_products/');
             } else {
@@ -64,6 +76,7 @@ class UsersController extends \Wee\Controller {
     public function logout() {
         $_SESSION['id'] = null;
         $_SESSION['username'] = null;
+        $_SESSION['cart_id'] = null;
 //        session_destroy();
         $this->redirect('products/');
     }
