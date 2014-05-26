@@ -25,8 +25,9 @@ class CartItemDao extends \Wee\Dao {
 
     private function getCartItem($stmt) {
         $row = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        if ($row == null)
+        if ($row == null) {
             return null;
+        }
         $result = $this->readRow($row[0]);
 
         return $result;

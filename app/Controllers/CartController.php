@@ -87,7 +87,6 @@ class CartController extends \Wee\Controller {
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
         $item = $cartItemDao->getCartItemByProductId($cartItem->getProduct_id());
         
-        $_SESSION['added'][$_POST['product_id']] = 0;
         if ($item) {
             $cartItem->setQuantity($cartItem->getQuantity() + $quantity);
             $cartItem->setId($item->getId());
