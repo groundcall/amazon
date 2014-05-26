@@ -67,4 +67,10 @@ trait ApplicationHelper {
         $total = $cartDao->getNumberOfItemsInCart($cart_id);
         return $total;
     }
+    
+    public function getCountries() {
+        $countryDao = \Wee\DaoFactory::getDao('Country');
+        $countries = $countryDao->getAllCountries();
+        return $countries;
+    }
 }

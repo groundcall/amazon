@@ -154,7 +154,7 @@
                                             <span class="label">Cart Subtotal:</span> <span class="price"><?php echo $total; ?> US$</span>
                                         </p>
                                         <div class="actions">
-                                            <button type="button" title="Checkout" class="button" ><span><span>Checkout</span></span></button>
+                                            <button type="button" title="Checkout" class="button" onclick='window.location="<?php echo url('checkout/'); ?>"'><span><span>Checkout</span></span></button>
                                         </div>
 
                                         <p class="block-subtitle">Recently added item(s)</p>

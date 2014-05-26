@@ -20,11 +20,11 @@
                                     <h1>Shopping Cart</h1>
                                     <ul class="checkout-types">
                                         <li>
-                                            <button type="button" title="Proceed to Checkout" class="button btn-proceed-checkout btn-checkout" ><span><span>Proceed to Checkout</span></span></button>
+                                            <button type="button" title="Proceed to Checkout" class="button btn-proceed-checkout btn-checkout" onclick='window.location="<?php echo url('checkout/'); ?>"'><span><span>Proceed to Checkout</span></span></button>
                                         </li>
                                     </ul>
                                 </div>
-                                <?php if ($_SESSION['updated_qty'] == 1): ?>
+                                <?php if (isset($_SESSION['updated_qty']) && $_SESSION['updated_qty'] == 1): ?>
                                     <ul class="messages">
                                         <li class="success-msg">
                                             <ul>
@@ -137,7 +137,7 @@
                                         </table>
                                         <ul class="checkout-types">
                                             <li>
-                                                <button type="button" title="Proceed to Checkout" class="button btn-proceed-checkout btn-checkout" ><span><span>Proceed to Checkout</span></span></button>
+                                                <button type="button" title="Proceed to Checkout" class="button btn-proceed-checkout btn-checkout" onclick="window.location='<?php echo url('checkout/'); ?>'"><span><span>Proceed to Checkout</span></span></button>
                                             </li>
                                         </ul>
                                     </div>
