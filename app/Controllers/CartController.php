@@ -88,7 +88,7 @@ class CartController extends \Wee\Controller {
         $item = $cartItemDao->getCartItemByProductId($cartItem->getProduct_id());
         
         if ($item) {
-            $cartItem->setQuantity($cartItem->getQuantity() + $quantity);
+            $cartItem->setQuantity($item->getQuantity() + $quantity);
             $cartItem->setId($item->getId());
             if ($cartItem->isValid()) {
                 $cartItemDao->updateCartItem($cartItem);
