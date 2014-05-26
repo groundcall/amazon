@@ -30,8 +30,7 @@
                             </ul>
                         </div>
                         <div class="col-main">
-
-                            <div id="messages_product_view">
+                             <div id="messages_product_view">
                                 <ul class="messages">
                                     <li class="success-msg">
                                         <ul>
@@ -73,8 +72,6 @@
                                                 </div>
                                             </div>
 
-                                           
-
                                         </div>
 
                                         <div class="product-img-box">
@@ -86,7 +83,7 @@
                                         <div class="clearer"></div>
                                     </form>
 
-                                </div>+
+                                </div>
 
                                 <div class="product-collateral">
                                     <div class="box-collateral box-description">

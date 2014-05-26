@@ -20,8 +20,6 @@ class CartItem extends \Wee\Model {
         $this->setAttrAccessible(array('title', 'quantity', 'price'));
 
         $this->validateQuantity();
-        $this->validatePrice();
-        $this->validateProductQuantity();
     }
     
     public function getId() {
@@ -52,8 +50,8 @@ class CartItem extends \Wee\Model {
         $this->id = $id;
     }
 
-    public function setCart_id($cart_id) {
-        $this->cart_id = $cart_id;
+    public function setCart_id() {
+        $this->cart_id = $this->cart->getId();
     }
 
     public function setProduct_id($product_id) {
@@ -80,14 +78,18 @@ class CartItem extends \Wee\Model {
         return $this->product;
     }
 
-    public function setCart($cart) {
+    public function setCart($cart_id) {
+        $cartDao = \Wee\DaoFactory::getDao('Cart');
+        $cart = $cartDao->getCartById($cart_id);
         $this->cart = $cart;
+        $this->cart_id = $cart_id;
     }
 
     public function setProduct($product_id) {
         $productDao = \Wee\DaoFactory::getDao('Product');
         $product = $productDao->getProductById($product_id);
         $this->product = $product;
+        $this->product_id = $product_id;
     }
 }
 

@@ -24,13 +24,15 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <ul class="messages">
-                                    <li class="success-msg">
-                                        <ul>
-                                            <li><span>Coalesce: Functioning On Impatience T-Shirt was added to your shopping cart.</span></li>
-                                        </ul>
-                                    </li>
-                                </ul>
+                                <?php if ($_SESSION['updated_qty'] == 1): ?>
+                                    <ul class="messages">
+                                        <li class="success-msg">
+                                            <ul>
+                                                <li><span>Your cart was updated.</span></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                <?php endif; ?>
 
                                 <form action="<?php echo url('cart/manage_cart'); ?>" method="post">
                                     <fieldset>

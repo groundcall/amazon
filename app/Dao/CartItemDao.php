@@ -46,22 +46,18 @@ class CartItemDao extends \Wee\Dao {
         $stmt->bindValue(':cart_id', $cart_id);
         $stmt->execute();
     }
-
-
-
     
-     public function addCartItemToCart($product, $cart_id, $quantity){
-
+    public function addCartItemToCart($cart_item){
         $sql = "INSERT INTO cart_items (cart_id, product_id, title, quantity, price)"
                 . "VALUES (:cart_id, :product_id, :title, :quantity, :price)";
         $stmt = $this->getConnection()->prepare($sql);
-        $stmt->bindValue(':cart_id', $cart_id);
+        $stmt->bindValue(':cart_id', $cart_item->getCart_id());
 
-        $stmt->bindValue(':product_id', $product->getId());
-        $stmt->bindValue(':title', $product->getTitle());
-        $stmt->bindValue(':quantity', $quantity);
-        $stmt->bindValue(':price', $product->getPrice());
-        
+        $stmt->bindValue(':product_id', $cart_item->getProduct()->getId());
+        $stmt->bindValue(':title', $cart_item->getProduct()->getTitle());
+        $stmt->bindValue(':quantity', $cart_item->getQuantity());
+        $price = $cart_item->getQuantity() * $cart_item->getProduct()->getPrice();
+        $stmt->bindValue(':price', $price);
         $stmt->execute();
     }
 
@@ -84,6 +80,14 @@ class CartItemDao extends \Wee\Dao {
         $sql = 'SELECT * FROM cart_items WHERE id = :cart_item_id';
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':cart_item_id', $cart_item_id);
+        $stmt->execute();
+        return $this->getCartItem($stmt);
+    }
+    
+    public function getCartItemByProductId($product_id) {
+        $sql = 'SELECT * FROM cart_items WHERE product_id = :product_id';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':product_id', $product_id);
         $stmt->execute();
         return $this->getCartItem($stmt);
     }

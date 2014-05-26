@@ -36,7 +36,9 @@ class CartController extends \Wee\Controller {
         $cart = $this->getCartByUserId();
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
         $cartItemDao->removeAllCartItemsByCartId($cart->getId());
+        $cartDao = $cartItemDao = \Wee\DaoFactory::getDao('Cart');
         $cartDao->setCartTotalByCartId($cart->getId(), 0);
+        $_SESSION['updated_qty'] = 1;
         $this->render('users/cart');
     }
 
@@ -44,12 +46,15 @@ class CartController extends \Wee\Controller {
         $cart = $this->getCartByUserId();
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
         $cartItemDao->removeCartItemById($_POST['cart_item_id'], $cart->getId());
+        $cartDao = $cartItemDao = \Wee\DaoFactory::getDao('Cart');
         $cartDao->calculateCartTotal($cart->getId());
+        $_SESSION['updated_qty'] = 1;
         $this->showCart();
     }
 
     private function updateCart() {
         $items = array();
+        $_SESSION['updated_qty'] = 0;
         $cart = $this->getCartByUserId();
         $cartDao = $cartItemDao = \Wee\DaoFactory::getDao('Cart');
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
@@ -59,6 +64,7 @@ class CartController extends \Wee\Controller {
             if ($cartItem->isValid()) {
                 $cartItemDao->updateCartItem($cartItem);
                 $items[] = $cartItemDao->getCartItemById($cartItem->getId());
+                $_SESSION['updated_qty'] = 1;
             } else {
                 $items[] = $cartItem;
             }
@@ -68,30 +74,32 @@ class CartController extends \Wee\Controller {
     }
 
     public function addCartItemToCart() {
-
-        if (isset($_POST['quantity'])) {
-            $quantity = $_POST['quantity'];
-        } else {
-            $quantity = 1;
-        }
-
-        $productDao = \Wee\DaoFactory::getDao('Product');
-        $product = $productDao->getProductById($_POST['product_id']);
+        $cartItem = new \Models\CartItem();
+        isset($_POST['quantity']) ? $quantity = $_POST['quantity'] : $quantity = 1;
+        
+        $cartItem->setQuantity($quantity);
+        $cartItem->setProduct($_POST['product_id']);
 
         $cartDao = \Wee\DaoFactory::getDao('Cart');
         $cart = $cartDao->getCartByUserId($_SESSION['id']);
-
+        $cartItem->setCart($cart->getId());
 
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
-
-        if ($cartItemDao->getCartItemById($_POST['product_id'])) {
-            ///////////////////////////////
-           ////////// FUNCTIA DE UPDATE CART   
-            die('am ajuns aci');
+        $item = $cartItemDao->getCartItemByProductId($cartItem->getProduct_id());
+        
+        $_SESSION['added'][$_POST['product_id']] = 0;
+        if ($item) {
+            $cartItem->setQuantity($cartItem->getQuantity() + $quantity);
+            $cartItem->setId($item->getId());
+            if ($cartItem->isValid()) {
+                $cartItemDao->updateCartItem($cartItem);
+            }
         } else {
-            $cartItemDao->addCartItemToCart($product, $cart->getId(), $quantity);
+            if ($cartItem->isValid()) {
+                $cartItemDao->addCartItemToCart($cartItem);
+            }
         }
-
+        $cartDao->calculateCartTotal($cart->getId());
         header('Location: ' . $_SERVER['HTTP_REFERER']);
     }
 
