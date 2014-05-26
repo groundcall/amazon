@@ -30,7 +30,7 @@ trait AddressValidator {
     
     public function validateAddress() {
         $this->registerValidator(function($address) {
-            if (strlen($address->getAddress()) < 5) {
+            if (strlen(trim($address->getAddress())) < 5) {
                 $address->addError("address", "Address must contain at least 5 characters.");
             }
         });
@@ -38,8 +38,8 @@ trait AddressValidator {
     
     public function validateCity() {
         $this->registerValidator(function($address) {
-            if (strlen($address->getCity()) == '') {
-                $address->addError("city", "Incorrect city.");
+            if (strlen(trim($address->getCity())) <= 0 || is_numeric($address->getCity())) {
+                $address->addError("city", "Incorrect city name.");
             }
         });
     }

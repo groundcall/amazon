@@ -18,7 +18,6 @@ class ProductsController extends \Wee\Controller {
         $productDao = \Wee\DaoFactory::getDao('Product');
 
         $cartDao = \Wee\DaoFactory::getDao('Cart');
-//        $cart = $cartDao->getCartByUserId($_SESSION['id']);
         $cart = $cartDao->getCartById($_SESSION['cart_id']);
 
         if (!$productDao->getProductById($_GET['product_id'])) {
@@ -26,7 +25,7 @@ class ProductsController extends \Wee\Controller {
         }
         $product = $productDao->getProductById($_GET['product_id']);
         $randomProducts = $productDao->getRandomProducts($_GET['product_id'], 4);
-        $this->render('users/product_detail', array('product' => $product, 'randomProducts' => $randomProducts, 'cart' => $cart, 'message' => $message));
+        $this->render('users/product_detail', array('product' => $product, 'randomProducts' => $randomProducts, 'cart' => $cart));
     }
 
     public function showProducts() {

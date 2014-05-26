@@ -30,7 +30,7 @@
                             </ul>
                         </div>
                         <div class="col-main">
-                            <?php if ($_SESSION['add_status']): ?>
+                            <?php if (isset($_SESSION['add_status'])): ?>
                                 <?php if ($_SESSION['add_status'] == 'ok'): ?>
                                     <div id="messages_product_view">
                                         <ul class="messages">

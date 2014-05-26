@@ -205,4 +205,20 @@ class UserDao extends \Wee\Dao {
         $stmt->bindValue(':new_activation_key', $new_activation_key, \PDO::PARAM_NULL);
         $stmt->execute();
     }
+    
+    public function updateBillingAddress($user_id, $address_id) {
+        $sql = "UPDATE users SET billing_address_id = :billing_address_id WHERE id = :id";
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':billing_address_id', $address_id);
+        $stmt->bindValue(':id', $user_id);
+        $stmt->execute();
+    }
+    
+    public function updateShippingAddress($user_id, $address_id) {
+        $sql = "UPDATE users SET shipping_address_id = :shipping_address_id WHERE id = :id";
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':shipping_address_id', $address_id);
+        $stmt->bindValue(':id', $user_id);
+        $stmt->execute();
+    }
 }
