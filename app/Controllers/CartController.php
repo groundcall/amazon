@@ -8,9 +8,14 @@ class CartController extends \Wee\Controller {
         $this->render('users/cart');
     }
 
-    public function showCart() {
+    private function getCartByUserId() {
         $cartDao = \Wee\DaoFactory::getDao('Cart');
         $cart = $cartDao->getCartByUserId($_SESSION['id']);
+        return $cart;
+    }
+
+    public function showCart() {
+        $cart = $this->getCartByUserId();
         $cartItems = $cart->getCart_item();
         $this->render('users/cart', array('cartItems' => $cartItems));
     }
@@ -19,14 +24,47 @@ class CartController extends \Wee\Controller {
         if (isset($_POST['empty_cart'])) {
             $this->clearCart();
         }
+        if (isset($_POST['remove'])) {
+            $this->removeCartItem();
+        }
+        if (isset($_POST['update_qty'])) {
+            $this->updateCart();
+        }
     }
 
     private function clearCart() {
-        $cartDao = \Wee\DaoFactory::getDao('Cart');
-        $cart = $cartDao->getCartByUserId($_SESSION['id']);
+        $cart = $this->getCartByUserId();
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
         $cartItemDao->removeAllCartItemsByCartId($cart->getId());
+        $cartDao->setCartTotalByCartId($cart->getId(), 0);
         $this->render('users/cart');
+    }
+
+    private function removeCartItem() {
+        $cart = $this->getCartByUserId();
+        $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
+        $cartItemDao->removeCartItemById($_POST['cart_item_id'], $cart->getId());
+        $cartDao->calculateCartTotal($cart->getId());
+        $this->showCart();
+    }
+
+    private function updateCart() {
+        $items = array();
+        $cart = $this->getCartByUserId();
+        $cartDao = $cartItemDao = \Wee\DaoFactory::getDao('Cart');
+        $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
+        $cartItems = $cartItemDao->getAllCartItemsByCartId($cart->getId());
+        foreach ($cartItems as $cartItem) {
+            $cartItem->setQuantity($_POST['cart'][$cartItem->getId()]);
+            if ($cartItem->isValid()) {
+                $cartItemDao->updateCartItem($cartItem);
+                $items[] = $cartItemDao->getCartItemById($cartItem->getId());
+            } else {
+                $items[] = $cartItem;
+            }
+        }
+        $cartDao->calculateCartTotal($cart->getId());
+        $this->render('users/cart', array('cartItems' => $items));
     }
 
     public function addCartItemToCart() {

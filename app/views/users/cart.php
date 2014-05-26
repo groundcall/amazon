@@ -49,7 +49,7 @@
                                                     <th rowspan="1">&nbsp;</th>
                                                     <th rowspan="1"><span class="nobr">Product Name</span></th>
                                                     <th class="a-center" colspan="1"><span class="nobr">Unit Price</span></th>
-                                                    <th rowspan="1" class="a-center">Qty</th>
+                                                    <th rowspan="1" class="a-center">Quantity</th>
                                                     <th class="a-center" colspan="1">Subtotal</th>
                                                     <th rowspan="1" class="a-center">&nbsp;</th>
                                                 </tr>
@@ -57,7 +57,7 @@
                                             <tfoot>
                                                 <tr class="first last">
                                                     <td colspan="50" class="a-right last">
-                                                        <button type="button" title="Continue Shopping" class="button btn-continue" ><span><span>Continue Shopping</span></span></button>
+                                                        <button type="button" title="Continue Shopping" class="button btn-continue" onclick='window.location="<?php echo url('products'); ?>"'><span><span>Continue Shopping</span></span></button>
                                                         <button type="submit" name="update_qty" title="Update Shopping Cart" class="button btn-update"><span><span>Update Shopping Cart</span></span></button>
                                                         <button type="submit" name="empty_cart" title="Clear Shopping Cart" class="button btn-empty" id="empty_cart_button"><span><span>Clear Shopping Cart</span></span></button>
                                                     </td>
@@ -79,7 +79,6 @@
                                                                 </h2>
                                                                 <dl class="item-options">
                                                                     <dt><?php echo $products[$i]->getShort_description(); ?></dt>
-                                                                    <!--<dd>3</dd>-->
                                                                 </dl>
                                                             </td>
                                                             <td class="a-right">
@@ -88,7 +87,10 @@
                                                                 </span>
                                                             </td>
                                                             <td class="a-center">
-                                                                <input name="cart[595763][qty]" value="1" size="4" title="Qty" class="input-text qty" maxlength="12" />
+                                                                <input name="cart[<?php echo $cartItems[$i]->getId(); ?>]" size="4" title="Quantity" maxlength="12" class="input-text qty <?php echo ($view->errorFor($cartItems[$i], "quantity")) ? 'validation-failed' : '' ?>" value="<?php echo $cartItems[$i]->getQuantity(); ?>" />
+                                                                <?php if ($cartItems[$i]->hasError('quantity')): ?>
+                                                                    <div class="validation-advice" id="advice-required-entry-email" style=""><?php echo $view->errorFor($cartItems[$i], "quantity"); ?></div>
+                                                                <?php endif; ?>
                                                             </td>
                                                             <td class="a-right">
                                                                 <span class="cart-price">
@@ -96,7 +98,8 @@
                                                                 </span>
                                                             </td>
                                                             <td class="a-center last">
-                                                                <a href="#" title="Remove item" class="btn-remove btn-remove2">Remove item</a>
+                                                                <input type="hidden" name="cart_item_id" value="<?php echo $cartItems[$i]->getId(); ?>" />
+                                                                <button type="submit" class="btn-remove btn-remove2" style="width: 20px; height: 20px; border-style: none;" name="remove" title="Remove item"><span><span>Remove item</span></span></button>
                                                             </td>
                                                         </tr>
                                                     <?php endfor; ?>

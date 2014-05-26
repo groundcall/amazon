@@ -21,6 +21,7 @@ class CartItem extends \Wee\Model {
 
         $this->validateQuantity();
         $this->validatePrice();
+        $this->validateProductQuantity();
     }
     
     public function getId() {

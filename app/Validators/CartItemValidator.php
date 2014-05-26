@@ -19,4 +19,12 @@ trait CartItemValidator {
             }
         });
     }
+    
+    public function validateProductQuantity() {
+        $this->registerValidator(function($cartItem) {
+            if ($cartItem->getQuantity() > $cartItem->getProduct()->getStock()) {
+                $cartItem->addError("quantity", "Quantity too large.");
+            }
+        });
+    }
 }

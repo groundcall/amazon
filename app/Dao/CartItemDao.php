@@ -23,7 +23,7 @@ class CartItemDao extends \Wee\Dao {
         return $result;
     }
 
-    private function getCartitem($stmt) {
+    private function getCartItem($stmt) {
         $row = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($row == null)
             return null;
@@ -31,7 +31,7 @@ class CartItemDao extends \Wee\Dao {
 
         return $result;
     }
-    
+
     public function getAllCartItemsByCartId($cart_id) {
         $sql = 'SELECT * FROM cart_items WHERE cart_id = :cart_id';
         $stmt = $this->getConnection()->prepare($sql);
@@ -39,33 +39,58 @@ class CartItemDao extends \Wee\Dao {
         $stmt->execute();
         return $this->getCartItems($stmt);
     }
-    
+
     public function removeAllCartItemsByCartId($cart_id) {
         $sql = 'DELETE FROM cart_items WHERE cart_id = :cart_id';
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':cart_id', $cart_id);
         $stmt->execute();
     }
-    
-     public function addCartItemToCart($product_id, $cart_id){
+
+    public function addCartItemToCart($product_id, $cart_id) {
         $sql = "INSERT INTO cart_items (cart_id, product_id, title, quantity, price)"
-              .  "VALUES (:cart_id, :product_id, :title, :quantity, :price)";
+                . "VALUES (:cart_id, :product_id, :title, :quantity, :price)";
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':cart_id', $cart_id);
         $stmt->bindValue(':product_id', $product_id);
         $stmt->bindValue(':title', "titlu de test");
         $stmt->bindValue(':quantity', 1);
         $stmt->bindValue(':price', 100);
-        
+
         $stmt->execute();
     }
-    
+
     public function deleteCartItemFromCart($cart_item_id) {
         $sql = 'DELETE FROM cart_items WHERE id = :cart_item_id';
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':cart_item_id', $cart_item_id);
         $stmt->execute();
     }
-}
 
-    
+    public function removeCartItemById($cart_item_id, $cart_id) {
+        $sql = 'DELETE FROM cart_items WHERE id = :id AND cart_id = :cart_id';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':id', $cart_item_id);
+        $stmt->bindValue(':cart_id', $cart_id);
+        $stmt->execute();
+    }
+
+    public function getCartItemById($cart_item_id) {
+        $sql = 'SELECT * FROM cart_items WHERE id = :cart_item_id';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':cart_item_id', $cart_item_id);
+        $stmt->execute();
+        return $this->getCartItem($stmt);
+    }
+
+    public function updateCartItem($cart_item) {
+        $sql = 'UPDATE cart_items SET quantity = :quantity, price = :price WHERE id = :cart_item_id';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':quantity', $cart_item->getQuantity());
+        $price = $cart_item->getProduct()->getPrice() * $cart_item->getQuantity();
+        $stmt->bindValue(':price', $price);
+        $stmt->bindValue(':cart_item_id', $cart_item->getId());
+        $stmt->execute();
+    }
+
+}

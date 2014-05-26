@@ -53,4 +53,25 @@ class CartDao extends \Wee\Dao {
         return $this->getCart($stmt);
     }
     
+    public function setCartTotalByCartId($cart_id, $total) {
+        $sql = 'UPDATE carts SET total = :total WHERE id = :cart_id';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':total', $total);
+        $stmt->bindValue(':cart_id', $cart_id);
+        $stmt->execute();
+    }
+    
+    public function calculateCartTotal($cart_id) {
+        $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
+        $cartItems = $cartItemDao->getAllCartItemsByCartId($cart_id);
+        $total = 0;
+        foreach ($cartItems as $cartItem) {
+            $total = $total + $cartItem->getPrice();
+        }
+        $sql = 'UPDATE carts SET total = :total WHERE id = :cart_id';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':total', $total);
+        $stmt->bindValue(':cart_id', $cart_id);
+        $stmt->execute();
+    }
 }
