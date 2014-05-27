@@ -6,16 +6,15 @@ class ResetPassword extends \Wee\Model {
     
     use \Validators\ResetPasswordValidator;
     
-    protected $email;
     protected $password;
     protected $password2;
             
     function __construct() {
-        $this->setAttrAccessible(array('email', 'password', 'password2'));
-    }
+        $this->setAttrAccessible(array('password', 'password2'));
     
-    public function getEmail() {
-        return $this->email;
+        $this->valiatePasswordFormat();
+        $this->valiateConfirmPasswordFormat();
+        $this->validatePasswordsMatch();
     }
 
     public function getPassword() {
@@ -24,10 +23,6 @@ class ResetPassword extends \Wee\Model {
 
     public function getPassword2() {
         return $this->password2;
-    }
-
-    public function setEmail($email) {
-        $this->email = $email;
     }
 
     public function setPassword($password) {

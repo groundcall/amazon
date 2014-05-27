@@ -92,11 +92,8 @@ class UsersController extends \Wee\Controller {
     }
 
     public function resetPassword() {
-        $resetPasswod = new \Models\ResetPassword();
+        $resetPasswod = new \Models\ResetPasswordEmail();
         $resetPasswod->setEmail($_POST['email']);
-        $resetPasswod->validateEmailFormat();
-        $resetPasswod->valiateEmailExists();
-        $resetPasswod->validateUserStatus();
         if ($resetPasswod->isValid()) {
             $userDao = \Wee\DaoFactory::getDao('User');
             $user = $userDao->getUserByEmailAddress($_POST['email']);
@@ -119,9 +116,6 @@ class UsersController extends \Wee\Controller {
         if (!empty($_POST['password'])) {
             $resetPassword->setPassword($_POST['password']);
             $resetPassword->setPassword2($_POST['password2']);
-            $resetPassword->valiatePasswordFormat();
-            $resetPassword->valiateConfirmPasswordFormat();
-            $resetPassword->validatePasswordsMatch();
             if ($resetPassword->isValid()) {
                 $userDao = \Wee\DaoFactory::getDao('User');
                 $userDao->updatePassword($_SESSION['activation_key'], $_SESSION['user_id'], $resetPassword->getPassword());
