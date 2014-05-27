@@ -14,6 +14,8 @@ trait CartItemValidator {
     
     public function validateQuantityInStock() {
         $this->registerValidator(function($cartItem) {
+//            var_dump($cartItem->getQuantity());
+//            var_dump($cartItem->getProduct()->getStock()); die();
             if ($cartItem->getQuantity() > $cartItem->getProduct()->getStock()) {
                 $cartItem->addError("quantity", "Selected quantity exceeds stock!");
             }

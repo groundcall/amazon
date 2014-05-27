@@ -103,4 +103,12 @@ class CartItemDao extends \Wee\Dao {
         $stmt->execute();
     }
 
+    public function getCartItemByProductIdAndCartId($product_id, $cart_id) {
+        $sql = 'SELECT * FROM cart_items WHERE product_id = :product_id AND cart_id = :cart_id';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':product_id', $product_id);
+        $stmt->bindValue(':cart_id', $cart_id);
+        $stmt->execute();
+        return $this->getCartItem($stmt);
+    }
 }
