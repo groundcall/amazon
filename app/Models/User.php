@@ -172,15 +172,4 @@ class User extends \Wee\Model {
     public function setEducation_id($education_id) {
         $this->education_id = $education_id;
     }
-    
-    public function sendMailTo($title, $msg) {    
-        require_once '/home/abutnar/Sites/team-3/wee/swift/lib/swift_required.php';
-        $transport = \Swift_SmtpTransport::newInstance('smtp.loki.pitechnologies.ro', 25);
-        $mailer = \Swift_Mailer::newInstance($transport);
-        $message = \Swift_Message::newInstance($title)
-            ->setFrom(array('abutnar@pitechnologies.ro' => 'bookstore.com'))
-            ->setTo(array($this->getEmail() => $this->getFirstname() . $this->getLastname()))
-            ->setBody($msg);
-        $mailer->send($message);
-    }
 }

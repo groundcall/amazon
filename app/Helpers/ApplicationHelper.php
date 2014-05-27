@@ -73,4 +73,16 @@ trait ApplicationHelper {
         $countries = $countryDao->getAllCountries();
         return $countries;
     }
+    
+    public function getShippingMethods() {
+        $shippingMethodDao = \Wee\DaoFactory::getDao('ShippingMethod');
+        $shippingMethods = $shippingMethodDao->getAllShippingMethods();
+        return $shippingMethods;
+    }
+    
+    public function getPaymentMethods() {
+        $paymentMethodDao = \Wee\DaoFactory::getDao('PaymentMethod');
+        $paymentMethods = $paymentMethodDao->getAllPaymentMethods();
+        return $paymentMethods;
+    }
 }

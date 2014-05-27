@@ -11,25 +11,24 @@
             <a href="#">Edit</a>
         </div>
         <div id="checkout-step-shipping_method" class="step a-item">
-            <form id="co-shipping-method-form" action="">
+            <form id="co-shipping-method-form" action="<?php echo url('checkout/select_shipping_method'); ?>" method="post">
                 <fieldset>
                     <dl class="sp-methods" id="checkout-payment-method-load">
-                        <dt>
-                        <input autocomplete="off" id="p_method_checkmo" value="checkmo" name="payment[method]" title="Check / Money order" class="radio" type="radio">
-                        <label for="p_method_checkmo">Shipping method 1</label>
-                        </dt>
-                        <dt>
-                        <input autocomplete="off" id="p_method_checkmo" value="checkmo" name="payment[method]" title="Check / Money order" class="radio" type="radio">
-                        <label for="p_method_checkmo">Shipping method 2</label>
-                        </dt>
+                        <?php $shippingMethods = $view->getShippingMethods(); ?>
+                        <?php for ($i = 0; $i < sizeof($shippingMethods); $i++): ?>
+                            <dt>
+                            <input <?php echo ($i == 0) ? 'checked' : ''; ?> id="p_method_checkmo" value="<?php echo $shippingMethods[$i]->getId(); ?>" name="shipping" title="Check / Money order" class="radio" type="radio" />
+                            <label for="p_method_checkmo"><?php echo $shippingMethods[$i]->getName(), ': ', $shippingMethods[$i]->getPrice(), ' US $'; ?></label>
+                            </dt>
+                        <?php endfor; ?>
                     </dl>
                 </fieldset>
+                <div class="buttons-set" id="payment-buttons-container">
+                    <p class="required">* Required Fields</p>
+                    <p class="back-link"><a href="<?php echo url('checkout/'); ?>" ><small>« </small>Back</a></p>
+                    <button type="submit" class="button"><span><span>Continue</span></span></button>
+                </div>
             </form>
-            <div class="buttons-set" id="payment-buttons-container">
-                <p class="required">* Required Fields</p>
-                <p class="back-link"><a href="javascript: window.location = '/checkout_shipping.html';" ><small>« </small>Back</a></p>
-                <button type="button" class="button" onclick="window.location = '/checkout_payment.html'"><span><span>Continue</span></span></button>
-            </div>
         </div>
     </li>
 </ol>

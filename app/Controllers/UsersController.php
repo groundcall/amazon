@@ -9,21 +9,17 @@ class UsersController extends \Wee\Controller {
     }
 
     public function addUser() {
-        $user = null;
+        $user = new \Models\User();
         if (!empty($_POST['data'])) {
-            $user = new \Models\User();
             $user->updateAttributes($_POST['data']);
             $user->setEducation_id($_POST['data']['education']);
             $user->setActivation_key();
             if ($user->isValid()) {
                 $userDao = \Wee\DaoFactory::getDao('User');
                 $userDao->addUser($user);
-                $title = 'Activate your account';
-                $message = "Hello, " . $_POST['data']['firstname'] . " " . $_POST['data']['lastname'] . " !\n"
-                        . "To activate your account please access the following link: \n"
-                        . 'http://' . $_SERVER["SERVER_NAME"] . "/users/confirm_activation?activation_key=" . $user->getActivation_key() . "\n"
-                        . "This link is available for 24 hours and can be used only once.";
-                $user->sendMailTo($title, $message);
+                $user->setId($userDao->getLastInsertedUserId());
+                $mail = new \Models\Email();
+                $mail->sendActivationEmail($user);
                 $this->showUserForm();
             } else {
                 $this->render('users/user_register', array('user' => $user));
@@ -47,7 +43,7 @@ class UsersController extends \Wee\Controller {
         $userLogin->setEmail($_POST['email']);
         $userLogin->setPassword($_POST['password']);
         if ($userLogin->isValid()) {
-            $user = $userDao->getUserByEmailAndPassword($userLogin->getEmail(), $userLogin->getPassword());
+            $user = $userDao->getUserForLogin($userLogin);
             $_SESSION['id'] = $user->getId();
             $_SESSION['username'] = $user->getUsername();
             $_SESSION['is_admin'] = $user->getRole_id();
@@ -86,10 +82,11 @@ class UsersController extends \Wee\Controller {
     }
 
     public function confirmActivation() {
-        if (isset($_GET['activation_key'])) {
+        if (isset($_GET['activation_key']) && isset($_GET['user_id'])) {
             $activation_key = $_GET['activation_key'];
+            $user_id = $_GET['user_id'];
             $userDao = \Wee\DaoFactory::getDao('User');
-            $userDao->activateUserByActivationKey($activation_key);
+            $userDao->activateUserByActivationKey($activation_key, $user_id);
         }
         $this->redirect('users/show_login_form');
     }
@@ -105,19 +102,17 @@ class UsersController extends \Wee\Controller {
             $user = $userDao->getUserByEmailAddress($_POST['email']);
             $user->setActivation_key();
             $userDao->updateActivationKey($user);
-            $title = 'Bookshop.com – Reset password';
-            $message = "Hello, " . $user->getFirstname() . " " . $user->getLastname() . " !\n"
-                    . "To reset your password please access the following link: \n"
-                    . 'http://' . $_SERVER["SERVER_NAME"] . "/users/change_password?activation_key=" . $user->getActivation_key() . "\n"
-                    . "This link is available for 24 hours and can be used only once.";
-            $user->sendMailTo($title, $message);
+            $mail = new \Models\Email();
+            $mail->sendResetPasswordEmail($user);
+            
         }
         $this->render('users/forgot_password', array('resetPassword' => $resetPasswod));
     }
 
     public function changePassword() {
-        if (!empty($_GET['activation_key'])) {
+        if (!empty($_GET['activation_key']) && !empty($_GET['user_id'])) {
             $_SESSION['activation_key'] = $_GET['activation_key'];
+            $_SESSION['user_id'] = $_GET['user_id'];
             $this->render('users/reset_password');
         }
         $resetPassword = new \Models\ResetPassword();
@@ -129,7 +124,7 @@ class UsersController extends \Wee\Controller {
             $resetPassword->validatePasswordsMatch();
             if ($resetPassword->isValid()) {
                 $userDao = \Wee\DaoFactory::getDao('User');
-                $userDao->updatePassword($_SESSION['activation_key'], $resetPassword->getPassword());
+                $userDao->updatePassword($_SESSION['activation_key'], $_SESSION['user_id'], $resetPassword->getPassword());
                 unset($_SESSION['activation_key']);
                 $this->render('users/user_login');
             } else {

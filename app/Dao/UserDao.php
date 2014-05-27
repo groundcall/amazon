@@ -122,6 +122,14 @@ class UserDao extends \Wee\Dao {
         $stmt->bindValue(':activation_key', $user->getActivation_key());
         $stmt->execute();
     }
+    
+    public function getLastInsertedUserId() {
+        $sql = "SELECT * FROM users WHERE id = LAST_INSERT_ID()";
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->execute();
+        $user = $this->getUser($stmt);
+        return $user->getId();
+    }
 
     public function deleteUser($user_id) {
         $sql = "DELETE FROM users WHERE id= :id";
@@ -177,10 +185,11 @@ class UserDao extends \Wee\Dao {
         return $this->getUser($stmt);
     }
     
-    public function activateUserByActivationKey($activation_key) {
-        $sql = "UPDATE users SET activated = :activated, activation_key = :new_activation_key WHERE activation_key = :activation_key";
+    public function activateUserByActivationKey($activation_key, $user_id) {
+        $sql = "UPDATE users SET activated = :activated, activation_key = :new_activation_key WHERE id = :user_id AND activation_key = :activation_key";
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':activation_key', $activation_key, \PDO::PARAM_STR);
+        $stmt->bindValue(':user_id', $user_id);
         $activated = 1;
         $stmt->bindValue(':activated', $activated, \PDO::PARAM_INT);
         $new_activation_key = NULL;
@@ -196,10 +205,11 @@ class UserDao extends \Wee\Dao {
         $stmt->execute();
     }
     
-    public function updatePassword($activation_key, $password) {
-        $sql = "UPDATE users SET password = :password, activation_key = :new_activation_key WHERE activation_key = :activation_key";
+    public function updatePassword($activation_key, $user_id, $password) {
+        $sql = "UPDATE users SET password = :password, activation_key = :new_activation_key WHERE id = :user_id AND activation_key = :activation_key";
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':activation_key', $activation_key, \PDO::PARAM_STR);
+        $stmt->bindValue(':user_id', $user_id);
         $stmt->bindValue(':password', md5($password), \PDO::PARAM_STR);
         $new_activation_key = NULL;
         $stmt->bindValue(':new_activation_key', $new_activation_key, \PDO::PARAM_NULL);
@@ -220,5 +230,14 @@ class UserDao extends \Wee\Dao {
         $stmt->bindValue(':shipping_address_id', $address_id);
         $stmt->bindValue(':id', $user_id);
         $stmt->execute();
+    }
+    
+    public function getUserForLogin($user) {
+        $sql = 'SELECT * FROM users WHERE email = :email AND password = :password';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':email', $user->getEmail());
+        $stmt->bindValue(':password', md5($user->getPassword()));
+        $stmt->execute();
+        return $this->getUser($stmt);
     }
 }
