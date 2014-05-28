@@ -3,7 +3,7 @@
 namespace Models;
 
 class User extends \Wee\Model {
-    
+
     use \Validators\UserValidator;
 
     protected $id;
@@ -22,26 +22,24 @@ class User extends \Wee\Model {
     protected $shipping_address_id;
     protected $created_at;
     protected $education_id;
-    
     protected $billing_address;
     protected $shipping_address;
 
     function __construct() {
         $this->setAttrAccessible(array('username', 'password', 'password2', 'firstname', 'lastname', 'email', 'phone', 'gender', 'activated', 'role_id', 'activation_key',
             'billing_address_id', 'shipping_address_id', 'created_at'));
-        
+
         $this->validateUserFirstname();
         $this->validateUserLastname();
         $this->validateUserUsername();
         $this->validateUserEmail();
         $this->validateUserPhone();
         $this->validateUserGender();
-        
+
         $this->usernameNotExists();
         $this->emailNotExists();
         $this->verifyPassword();
         $this->verifyPasswordsMatch();
-
     }
 
     public function __destruct() {
@@ -175,7 +173,7 @@ class User extends \Wee\Model {
     public function setEducation_id($education_id) {
         $this->education_id = $education_id;
     }
-    
+
     public function getBilling_address() {
         return $this->billing_address;
     }
@@ -197,4 +195,5 @@ class User extends \Wee\Model {
         $address = $addressDao->getAddressyById($shipping_address_id);
         $this->shiping_address = $address;
     }
+
 }

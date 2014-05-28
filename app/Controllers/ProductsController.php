@@ -3,16 +3,14 @@
 namespace Controllers;
 
 class ProductsController extends \Wee\Controller {
-
+    
     public function index() {
-        $this->createCartIfNoCart();
         $productDao = \Wee\DaoFactory::getDao('Product');
         $products = $productDao->getLastProducts(6);
         $this->render('users/homepage', array('products' => $products));
     }
 
     public function showDetails() {
-        $this->createCartIfNoCart();
         $message = null;
 
         $productDao = \Wee\DaoFactory::getDao('Product');
@@ -30,7 +28,6 @@ class ProductsController extends \Wee\Controller {
 
     public function showProducts() {
 
-        $this->createCartIfNoCart();
         $paginator = new \Models\Paginator();
         $filtering = new \Models\Filtering();
 
@@ -89,18 +86,5 @@ class ProductsController extends \Wee\Controller {
         }
     }
 
-    public function createCartIfNoCart() {
-//        var_dump($_SESSION);
-        $cartDao = \Wee\DaoFactory::getDao('Cart');
-        if (!isset($_SESSION['cart_id'])) {
-            $cart = new \Models\Cart();
-            if (isset($_SESSION['user_id'])) {
-                $cartDao->addCart($_SESSION['id']);
-            } else {
-                $cartDao->addCart(0);
-            }
-           $_SESSION['cart_id'] = $cartDao->getLastInsertedCart();
-        }
-    }
 
 }

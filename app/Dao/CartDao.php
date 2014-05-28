@@ -70,7 +70,7 @@ class CartDao extends \Wee\Dao {
         }
         $sql = 'UPDATE carts SET total = :total WHERE id = :cart_id';
         $stmt = $this->getConnection()->prepare($sql);
-        $stmt->bindValue(':total', $total);
+        $stmt->bindValue(':total', $total, \PDO::PARAM_INT);
         $stmt->bindValue(':cart_id', $cart_id);
         $stmt->execute();
         return $total;

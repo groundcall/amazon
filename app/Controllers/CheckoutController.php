@@ -78,11 +78,13 @@ class CheckoutController extends \Wee\Controller {
     }
     
     public function selectShippingMethod() {
+
         $shipping_method = $_POST['shipping'];
         $this->render('users/checkout_payment_method');
     }
     
     public function selectPaymentMethod() {
+
         $payment_method = $_POST['payment'];
         $this->render('users/checkout_payment_method');
     }
