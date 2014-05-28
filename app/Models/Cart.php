@@ -3,19 +3,18 @@
 namespace Models;
 
 class Cart extends \Wee\Model {
-    
+
     protected $id;
     protected $user_id;
     protected $date;
     protected $active;
     protected $total;
-    
     protected $cart_item;
-    
-     public function __construct() {
+
+    public function __construct() {
         $this->setAttrAccessible(array('user_id', 'date', 'active', 'total'));
     }
-    
+
     public function getId() {
         return $this->id;
     }
@@ -64,4 +63,34 @@ class Cart extends \Wee\Model {
         $cart_itemDao = \Wee\DaoFactory::getDao('CartItem');
         $this->cart_item = $cart_itemDao->getAllCartItemsByCartId($this->id);
     }
+
+    public function setCart_items($cart_items) {
+        $this->cart_item = $cart_items;
+    }
+
+    public function calculateTotal() {
+        $cartDao = \Wee\DaoFactory::getDao('Cart');
+        $this->setTotal($cartDao->calculateCartTotal($this->getId()));
+    }
+
+    public function updateQuantities($cartItems, $quantities) {
+        $_SESSION['updated_qty'] = 1;
+        $items = array();
+        $quantities = array_values($quantities);
+        $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
+
+        for ($i = 0; $i <= sizeof($cartItems)-1; $i++) {
+            $cartItems[$i]->setQuantity($quantities[$i]);
+            if ($cartItems[$i]->isValid()) {
+                $cartItemDao->updateCartItem($cartItems[$i]);
+                $items[] = $cartItemDao->getCartItemById($cartItems[$i]->getId());
+            } else {
+                $items[] = $cartItems[$i];
+                $_SESSION['updated_qty'] = 0;
+            }
+        }
+        
+        return $items;
+    }
+
 }

@@ -13,7 +13,7 @@ class CartItem extends \Wee\Model {
     protected $quantity;
     protected $price;
     
-    protected $cart;
+//    protected $cart;
     protected $product;
 
     public function __construct() {
@@ -21,6 +21,7 @@ class CartItem extends \Wee\Model {
 
         $this->validateQuantity();
         $this->validateQuantityInStock();
+        $this->validateQuantityIsNumeric();
     }
     
     public function getId() {
