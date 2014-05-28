@@ -5,7 +5,7 @@ namespace Dao;
 class PaymentMethodDao extends \Wee\Dao {
 
     private function readRow($row) {
-        $paymentMethod = new \Models\Payment();
+        $paymentMethod = new \Models\PaymentMethod();
         $paymentMethod->updateAttributes($row);
         $paymentMethod->setId($row['id']);
 

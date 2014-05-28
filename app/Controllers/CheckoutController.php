@@ -4,24 +4,25 @@ namespace Controllers;
 
 class CheckoutController extends \Wee\Controller {
     
+    public function initialize() {
+        $orderDao = \Wee\DaoFactory::getDao('Order');
+        if (isset($_SESSION['order_id'])) {
+            $order = $orderDao->getOrderById($_SESSION['order_id']);
+        }
+        else {
+            $order = new \Models\Order();
+            $order->setUser($_SESSION['id']);
+            $_SESSION['order_id'] = $orderDao->getLastInsertedOrderId();
+        }
+    }
+    
     public function index() {
         $this->redirect('checkout/show_billing_address');
     }
     
     public function showBillingAddress() {
-        $address = new \Models\Address();
-        $userDao = \Wee\DaoFactory::getDao('User');
-        $user = $userDao->getUserById($_SESSION['id']);
-        $address->setFirstname($user->getFirstname());
-        $address->setLastname($user->getLastname());
-        $address->setEmail($user->getEmail());
-        var_dump($user); die();
-        if ($user->getBilling_address() != null) {
-            $address->setAddress($user->getBilling_address()->getAddress());
-            $address->setCity($user->getBilling_address()->getCity());
-            $address->setCountry($user->getBilling_address()->getCountry_id());
-        }
-        $this->render('users/checkout_billing', array('address' => $address));
+        $order->setBilling_address();
+        $this->render('users/checkout_billing', array('order' => $order));
     }
 
     public function addBillingAddress() {
@@ -30,26 +31,25 @@ class CheckoutController extends \Wee\Controller {
         $address->updateAttributes($_POST['billing']);
         $address->setCountry($_POST['billing']['country_id']);
         $address->setAddress($addr);
-        
-        
-        var_dump($address); die();
+        var_dump($order); die();
         if ($address->isValid()) {
-            $addressDao = \Wee\DaoFactory::getDao('Address');
-            $addressDao->addAddress($address);
-            $address_id = $addressDao->getLastInsertedAddressId();
-            $address->setId($address_id);
-            $userDao = \Wee\DaoFactory::getDao('User');
-            $userDao->updateBillingAddress($_SESSION['id'], $address_id);
-            if ($_POST['billing']['use_for_shipping'] == 1) {
-                $userDao->updateShippingAddress($_SESSION['id'], $address_id);
-                $this->render('users/checkout_shipping_method');
-            }
-            else {
-                $this->render('users/checkout_shipping', array('address' => $address));
-            }
+//            $addressDao = \Wee\DaoFactory::getDao('Address');
+//            $addressDao->addAddress($address);
+//            $address_id = $addressDao->getLastInsertedAddressId();
+//            $address->setId($address_id);
+//            $userDao = \Wee\DaoFactory::getDao('User');
+//            $userDao->updateBillingAddress($_SESSION['id'], $address_id);
+//            if ($_POST['billing']['use_for_shipping'] == 1) {
+//                $userDao->updateShippingAddress($_SESSION['id'], $address_id);
+//                $this->render('users/checkout_shipping_method');
+//            }
+//            else {
+//                $this->render('users/checkout_shipping', array('address' => $address));
+//            }
+            //$order->updateBillingAddress($address);
         } 
         else {
-            $this->render('users/checkout_billing', array('address' => $address));
+            $this->render('users/checkout_billing', array('order' => $order));
         }
     }
     

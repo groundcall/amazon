@@ -133,16 +133,22 @@ class Order extends \Wee\Model {
     public function setState_id($state_id) {
         $this->state_id = $state_id;
         $stateDao = \Wee\DaoFactory::getDao('State');
-        $state = $stateDao->getCountryById($state_id);
+        $state = $stateDao->getStateById($state_id);
         $this->state = $state;
     }
 
     public function setShipping_method_id($shipping_method_id) {
+        $shippingMethodDao = \Wee\DaoFactory::getDao('ShippingMethod');
+        $shippingMethod = $shippingMethodDao->getShippingMethodById($shipping_method_id);
         $this->shipping_method_id = $shipping_method_id;
+        $this->shipping_method = $shippingMethod;
     }
 
     public function setPayment_method_id($payment_method_id) {
+        $paymentMethodDao = \Wee\DaoFactory::getDao('PaymentMethod');
+        $paymentMethod = $paymentMethodDao->getPaymentMethodById($payment_method_id);
         $this->payment_method_id = $payment_method_id;
+        $this->payment_method = $paymentMethod;
     }
 
     public function setUser($user_id) {
@@ -150,10 +156,30 @@ class Order extends \Wee\Model {
         $userDao = \Wee\DaoFactory::getDao('User');
         $user = $userDao->getUserById($user_id);
         $this->user = $user;
+        $this->setState_id(0);
+        $this->setShipping_method_id(1);
+        $this->setPayment_method_id(1);
+        $orderDao = \Wee\DaoFactory::getDao('Order');
+        $orderDao->addOrder($this);
     }
 
-    public function setBilling_address($billing_address_id) {
-        $this->billing_address_id = $billing_address_id;
+    public function setBilling_address() {
+        $this->billing_address = new \Models\Address();
+        if ($this->user->getBilling_address_id() != null) {
+            $addressDao = \Wee\DaoFactory::getDao('Address');
+            $address = $addressDao->getAddressById($this->user->getBilling_address_id());
+            $this->billing_address = $address;
+            $this->billing_address_id = $address->getId();
+        }
+        else {
+            $this->billing_address->setFirstname($this->user->getFirstname());
+            $this->billing_address->setLastname($this->user->getLastname());
+            $this->billing_address->setEmail($this->user->getEmail());
+        }
+    }
+    
+    public function updateBillingAddress($billing_address) {
+        $this->billing_address = $billing_address;
     }
 
     public function setShipping_address($shipping_address) {
@@ -170,16 +196,22 @@ class Order extends \Wee\Model {
     public function setState($state_id) {
         $this->state_id = $state_id;
         $stateDao = \Wee\DaoFactory::getDao('State');
-        $state = $stateDao->getCountryById($state_id);
+        $state = $stateDao->getStateById($state_id);
         $this->state = $state;
     }
 
-    public function setShipping_method($shipping_method) {
-        $this->shipping_method = $shipping_method;
+    public function setShipping_method($shipping_method_id) {
+        $shippingMethodDao = \Wee\DaoFactory::getDao('ShippingMethod');
+        $shippingMethod = $shippingMethodDao->getShippingMethodById($shipping_method_id);
+        $this->shipping_method_id = $shipping_method_id;
+        $this->shipping_method = $shippingMethod;
     }
 
-    public function setPayment_method($payment_method) {
-        $this->payment_method = $payment_method;
+    public function setPayment_method($payment_method_id) {
+        $paymentMethodDao = \Wee\DaoFactory::getDao('PaymentMethod');
+        $paymentMethod = $paymentMethodDao->getPaymentMethodById($payment_method_id);
+        $this->payment_method_id = $payment_method_id;
+        $this->payment_method = $paymentMethod;
     }
 
 }
