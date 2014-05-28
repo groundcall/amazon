@@ -61,4 +61,18 @@ class AddressDao extends \Wee\Dao {
         $stmt->execute();
         return $this->getAddress($stmt);
     }
+    
+    public function updateAddress($id, $address) {
+        $sql = 'UPDATE addresses SET address = :address, city = :city, country_id = :country_id, firstname = :firstname,'
+                . ' lastname = :lastname, email = :email WHERE id = :id';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':address', $address->getAddress());
+        $stmt->bindValue(':city', $address->getCity());
+        $stmt->bindValue(':country_id', $address->getCountry_id());
+        $stmt->bindValue(':firstname', $address->getFirstname());
+        $stmt->bindValue(':lastname', $address->getLastname());
+        $stmt->bindValue(':email', $address->getEmail());
+        $stmt->execute();   
+    }
 }

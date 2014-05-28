@@ -115,15 +115,20 @@ class Order extends \Wee\Model {
         $this->shipping_address_id = $shipping_address_id;
     }
 
-    public function setCart_id() {
+    public function setCart_id($cart_id) {
         $cartDao = \Wee\DaoFactory::getDao('Cart');
-        $cart = $cartDao->getCartByUserId($this->user_id);
+        $cart = $cartDao->getCartById($cart_id);
         $this->cart_id = $cart->getId();
         $this->cart = $cart;
     }
 
-    public function setTotal($total) {
-        $this->total = $total;
+    public function setTotal() {
+        if ($this->cart != null && $this->shipping_method != null) {
+            $this->total = $this->cart->getTotal() + $this->getShipping_method()->getPrice();
+        }
+        else {
+            $this->total = 0;
+        }
     }
 
     public function setDate($date) {
@@ -156,14 +161,9 @@ class Order extends \Wee\Model {
         $userDao = \Wee\DaoFactory::getDao('User');
         $user = $userDao->getUserById($user_id);
         $this->user = $user;
-        $this->setState_id(0);
-        $this->setShipping_method_id(1);
-        $this->setPayment_method_id(1);
-        $orderDao = \Wee\DaoFactory::getDao('Order');
-        $orderDao->addOrder($this);
     }
 
-    public function setBilling_address() {
+    public function createBilling_address() {
         $this->billing_address = new \Models\Address();
         if ($this->user->getBilling_address_id() != null) {
             $addressDao = \Wee\DaoFactory::getDao('Address');
@@ -179,17 +179,56 @@ class Order extends \Wee\Model {
     }
     
     public function updateBillingAddress($billing_address) {
-        $this->billing_address = $billing_address;
+        $addressDao = \Wee\DaoFactory::getDao('Address');
+        $userDao = \Wee\DaoFactory::getDao('User');
+        if ($this->user->getBilling_address_id() != null) {
+            $addressDao->updateAddress($this->user->getBilling_address_id(), $billing_address);
+            $this->billing_address_id = $this->user->getBilling_address_id();
+        }
+        else {
+            $addressDao->addAddress($billing_address);
+            $this->billing_address_id = $addressDao->getLastInsertedAddressId();
+            $userDao->updateBillingAddress($this->user_id, $this->billing_address_id);
+        }
+        $orderDao = \Wee\DaoFactory::getDao('Order');
+        $orderDao->updateBillingAddress($this);
     }
 
-    public function setShipping_address($shipping_address) {
-        $this->shipping_address = $shipping_address;
+    public function createShipping_address() {
+        $this->shipping_address = new \Models\Address();
+        if ($this->user->getShipping_address_id() != null) {
+            $addressDao = \Wee\DaoFactory::getDao('Address');
+            $address = $addressDao->getAddressById($this->user->getShipping_address_id());
+            $this->shipping_address = $address;
+            $this->shipping_address_id = $address->getId();
+        }
+        else {
+            $this->shipping_address->setFirstname($this->user->getFirstname());
+            $this->shipping_address->setLastname($this->user->getLastname());
+            $this->shipping_address->setEmail($this->user->getEmail());
+        }
+    }
+    
+    public function updateShippingAddress($shipping_address) {
+        $addressDao = \Wee\DaoFactory::getDao('Address');
+        $userDao = \Wee\DaoFactory::getDao('User');
+        if ($this->user->getShipping_address_id() != null) {
+            $addressDao->updateAddress($this->user->getShipping_address_id(), $shipping_address);
+            $this->shipping_address_id = $this->user->getShipping_address_id();
+        }
+        else {
+            $addressDao->addAddress($shipping_address);
+            $this->shipping_address_id = $addressDao->getLastInsertedAddressId();
+            $userDao->updateShippingAddress($this->user_id, $this->shipping_address_id);
+        }
+        $orderDao = \Wee\DaoFactory::getDao('Order');
+        $orderDao->updateShippingAddress($this);
     }
 
-    public function setCart() {
+    public function setCart($cart_id) {
+        $this->cart_id = $cart_id;
         $cartDao = \Wee\DaoFactory::getDao('Cart');
-        $cart = $cartDao->getCartByUserId($this->user_id);
-        $this->cart_id = $cart->getId();
+        $cart = $cartDao->getCartById($cart_id);
         $this->cart = $cart;
     }
 
@@ -200,18 +239,33 @@ class Order extends \Wee\Model {
         $this->state = $state;
     }
 
-    public function setShipping_method($shipping_method_id) {
+    public function createShipping_method() {
         $shippingMethodDao = \Wee\DaoFactory::getDao('ShippingMethod');
-        $shippingMethod = $shippingMethodDao->getShippingMethodById($shipping_method_id);
-        $this->shipping_method_id = $shipping_method_id;
+        $shippingMethod = $shippingMethodDao->getShippingMethodById($this->shipping_method_id);
         $this->shipping_method = $shippingMethod;
     }
+    
+    public function updateShippingMethod($shipping_method_id) {
+        $this->shipping_method_id = $shipping_method_id;
+        $orderDao = \Wee\DaoFactory::getDao('Order');
+        $orderDao->updateShippingMethod($this);
+    }
 
-    public function setPayment_method($payment_method_id) {
+    public function createPayment_method() {
         $paymentMethodDao = \Wee\DaoFactory::getDao('PaymentMethod');
-        $paymentMethod = $paymentMethodDao->getPaymentMethodById($payment_method_id);
-        $this->payment_method_id = $payment_method_id;
+        $paymentMethod = $paymentMethodDao->getPaymentMethodById($this->payment_method_id);
         $this->payment_method = $paymentMethod;
     }
 
+    public function updatePaymentMethod($payment_method_id) {
+        $this->payment_method_id = $payment_method_id;
+        $orderDao = \Wee\DaoFactory::getDao('Order');
+        $orderDao->updatePaymentMethod($this);
+    }
+    
+    public function updateTotal() {
+        $this->setTotal();
+        $orderDao = \Wee\DaoFactory::getDao('Order');
+        $orderDao->updateTotal($this);
+    }
 }

@@ -18,8 +18,6 @@
                             <ul class="form-list">
                                 <li id="billing-new-address-form">
                                     <fieldset>
-                                        <?php if (isset($order)): $address = $order->getBilling_Address(); endif; ?>
-                                        <!--<input name="billing[address_id]" value="" id="billing:address_id" type="hidden">-->
                                         <ul>
                                             <li class="fields">
                                                 <div class="customer-name">
@@ -84,7 +82,7 @@
                                                         <select name="billing[country_id]" title="Country" id="billing:country_id" class="select">
                                                             <?php $countries = $view->getCountries(); ?>
                                                             <?php foreach ($countries as $country): ?>
-                                                                <option value="<?php echo $country->getId(); ?>"><?php echo $country->getName(); ?></option>
+                                                                <option value="<?php echo $country->getId(); ?>" <?php echo ($address && $address->getCountry_id() == $country->getId()) ? 'selected' : ''; ?>><?php echo $country->getName(); ?></option>
                                                             <?php endforeach; ?> 
                                                         </select>
                                                     </div>

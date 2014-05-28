@@ -17,17 +17,17 @@
                         <fieldset>
                             <dl class="sp-methods" id="checkout-payment-method-load">
                                 <?php $shippingMethods = $view->getShippingMethods(); ?>
-                                <?php for ($i = 0; $i < sizeof($shippingMethods); $i++): ?>
+                                <?php foreach ($shippingMethods as $shippingMethod): ?>
                                     <dt>
-                                    <input <?php echo ($i == 0) ? 'checked' : ''; ?> id="p_method_checkmo" value="<?php echo $shippingMethods[$i]->getId(); ?>" name="shipping" title="Check / Money order" class="radio" type="radio" />
-                                    <label for="p_method_checkmo"><?php echo $shippingMethods[$i]->getName(), ': ', $shippingMethods[$i]->getPrice(), ' US $'; ?></label>
+                                    <input <?php echo ($shipping->getId() == $shippingMethod->getId()) ? 'checked' : ''; ?> id="p_method_checkmo" value="<?php echo $shippingMethod->getId(); ?>" name="shipping" title="Check / Money order" class="radio" type="radio" />
+                                    <label for="p_method_checkmo"><?php echo $shippingMethod->getName(), ': ', $shippingMethod->getPrice(), ' US $'; ?></label>
                                     </dt>
-                                <?php endfor; ?>
+                                <?php endforeach; ?>
                             </dl>
                         </fieldset>
                         <div class="buttons-set" id="payment-buttons-container">
                             <p class="required">* Required Fields</p>
-                            <p class="back-link"><a href="<?php echo url('checkout/'); ?>" ><small>« </small>Back</a></p>
+                            <p class="back-link"><a href="<?php echo url('checkout/show_shipping_address'); ?>" ><small>« </small>Back</a></p>
                             <button type="submit" class="button"><span><span>Continue</span></span></button>
                         </div>
                     </form>

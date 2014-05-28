@@ -8,6 +8,12 @@ class OrderDao extends \Wee\Dao {
         $order = new \Models\Order();
         $order->updateAttributes($row);
         $order->setId($row['id']);
+        $order->setUser($row['user_id']);
+        $order->setCart($row['cart_id']);
+        $order->createBilling_address();
+        $order->createShipping_address();
+        $order->createShipping_method();
+        $order->createPayment_method();
         return $order;
     }
 
@@ -37,13 +43,19 @@ class OrderDao extends \Wee\Dao {
         return $this->getOrder($stmt);
     }
     
-    public function addOrder($order){
-        $sql = "INSERT INTO orders (user_id, shipping_method_id, payment_method_id)"
-                . "VALUES (:user_id, :shipping_method_id, :payment_method_id)";
+    public function addOrder($order) {
+        $sql = "INSERT INTO orders (user_id, cart_id, state_id, shipping_method_id, payment_method_id, date)"
+                . "VALUES (:user_id, :cart_id, :state_id, :shipping_method_id, :payment_method_id, :date)";
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':user_id', $order->getUser_id());
-        $stmt->bindValue(':shipping_method_id', $order->getShipping_method_id());
-        $stmt->bindValue(':payment_method_id', $order->getPayment_method_id());
+        $stmt->bindValue(':cart_id', $order->getCart_id());
+        $state_id = 0;
+        $stmt->bindValue(':state_id', $state_id);
+        $method = 1;
+        $stmt->bindValue(':shipping_method_id', $method);
+        $stmt->bindValue(':payment_method_id', $method);
+        $stmt->bindValue(':date', date('Y-m-d H:i:s'));
+        //$stmt->bindValue(':total', $order->getTotal());
         $stmt->execute();
     }
     
@@ -55,4 +67,43 @@ class OrderDao extends \Wee\Dao {
         return $result->getId();     
     }
     
+    public function updateBillingAddress($order) {
+        $sql = "UPDATE orders SET billing_address_id = :billing_address_id WHERE id = :id";
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':id', $order->getId());
+        $stmt->bindValue(':billing_address_id', $order->getBilling_address_id());
+        $stmt->execute();
+    }
+    
+    public function updateShippingAddress($order) {
+        $sql = "UPDATE orders SET shipping_address_id = :shipping_address_id WHERE id = :id";
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':id', $order->getId());
+        $stmt->bindValue(':shipping_address_id', $order->getShipping_address_id());
+        $stmt->execute();
+    }
+    
+    public function updateShippingMethod($order) {
+        $sql = "UPDATE orders SET shipping_method_id = :shipping_method_id WHERE id = :id";
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':id', $order->getId());
+        $stmt->bindValue(':shipping_method_id', $order->getShipping_method_id());
+        $stmt->execute();
+    }
+    
+    public function updatePaymentMethod($order) {
+        $sql = "UPDATE orders SET payment_method_id = :payment_method_id WHERE id = :id";
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':id', $order->getId());
+        $stmt->bindValue(':payment_method_id', $order->getPayment_method_id());
+        $stmt->execute();
+    }
+    
+    public function updateTotal($order) {
+        $sql = "UPDATE orders SET total = :total WHERE id = :id";
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':id', $order->getId());
+        $stmt->bindValue(':total', $order->getTotal());
+        $stmt->execute();
+    }
 }

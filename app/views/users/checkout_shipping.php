@@ -16,7 +16,6 @@
                         <ul class="form-list">
                             <li id="shipping-new-address-form">
                                 <fieldset>
-                                    <input name="shipping[address_id]" value="<?php echo (isset($address)) ? $address->getId() : ''; ?>" id="shipping:address_id" type="hidden" />
                                     <ul>
                                         <li class="fields">
                                             <div class="customer-name">
@@ -101,7 +100,7 @@
                         </ul>
                         <div class="buttons-set" id="shipping-buttons-container">
                             <p class="required">* Required Fields</p>
-                            <p class="back-link"><a href="<?php echo url('checkout/index'); ?>" ><small>« </small>Back</a></p>
+                            <p class="back-link"><a href="<?php echo url('checkout/show_billing_address'); ?>" ><small>« </small>Back</a></p>
                             <button type="submit" class="button" title="Continue"><span><span>Continue</span></span></button>
                         </div>
                     </form>

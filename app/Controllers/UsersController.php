@@ -73,6 +73,7 @@ class UsersController extends \Wee\Controller {
         $_SESSION['id'] = null;
         $_SESSION['username'] = null;
         $_SESSION['cart_id'] = null;
+        unset($_SESSION['order_id']);
 //        session_destroy();
         $this->redirect('products/');
     }
