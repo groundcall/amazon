@@ -18,7 +18,7 @@
 
             <ul class="links">
                 <?php if (!empty($_SESSION['id'])): ?>
-                    <li class="first" ><a href="dashboard.html" title="My Account" >My Account</a></li>
+                    <li class="first" ><a href="<?php echo url('dashboard'); ?>" title="My Account" >My Dashboard</a></li>
                     <li ><a href="<?php echo url('cart/show_cart'); ?>" title="My Cart" class="top-link-cart">My Cart</a></li>
                     <li class="last" ><a href="<?php echo url('checkout/'); ?>" title="Checkout" class="top-link-checkout">Checkout</a></li>
                     <li ><a href="<?php echo url('users/logout'); ?>" title="Log Out" class="top-link-cart">Log Out</a></li>

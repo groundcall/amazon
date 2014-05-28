@@ -1,4 +1,4 @@
-<?php $view->extend('masterpages/products'); ?>
+<?php $view->extend('masterpages/front_masterpage'); ?>
 
     <div class="account-create">
         <div class="page-title">

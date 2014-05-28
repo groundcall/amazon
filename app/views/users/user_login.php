@@ -1,5 +1,7 @@
-<?php $view->extend('masterpages/products'); ?>
+<?php $view->extend('masterpages/front_masterpage'); ?>
 
+<div class="main-container col1-layout">
+                <div class="main">
 <div class="account-login">
     <div class="page-title">
         <h1>Login or Create an Account</h1>
@@ -58,4 +60,6 @@
             </div>
         </div>
     </form>
+</div>
+                </div>
 </div>

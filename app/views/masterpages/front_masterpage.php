@@ -6,18 +6,16 @@
     </head>
 
     <body>
-        <?php $view->render('users/user_navigation'); ?>
+        <div class="wrapper">
+            <div class="page">
+                <?php $view->render('users/user_navigation'); ?>
 
-        <div class="main-container col3-layout">
-            <div class="main">
-                
-               <?php echo $content; ?>
+                <?php echo $content; ?>
+
+                <div class="footer-container">
+                    <?php $view->render('users/user_footer'); ?>
+                </div>
             </div>
-        </div>
-        <div class="footer-container">
-            <?php $view->render('users/user_footer'); ?>
-        </div>
-        </div>
         </div>
     </body>
 </html>
