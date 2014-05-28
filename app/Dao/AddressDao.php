@@ -22,7 +22,7 @@ class AddressDao extends \Wee\Dao {
 //
 //        return $result;
 //    }
-//
+
     private function getAddress($stmt) {
         $row = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($row == null) {
@@ -52,5 +52,13 @@ class AddressDao extends \Wee\Dao {
         $stmt->execute();
         $result = $this->getAddress($stmt);
         return $result->getId();     
+    }
+    
+    public function getAddressById($id) {
+        $sql = 'SELECT * FROM addresses WHERE id = :id';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
+        return $this->getAddress($stmt);
     }
 }

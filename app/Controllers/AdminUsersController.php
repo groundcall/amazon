@@ -11,7 +11,7 @@ class AdminUsersController extends \Wee\Controller {
      * The default action
      */
     public function index() {
-        if (!empty($_SESSION) && $_SESSION['is_admin'] == 1) {
+        if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1) {
             $paginator = new \Models\Paginator();
             $userDao = \Wee\DaoFactory::getDao('User');
             $paginator->setCount($userDao->getUserCount());
@@ -34,12 +34,17 @@ class AdminUsersController extends \Wee\Controller {
     }
 
     public function showUserForm() {
-        $this->render('admin/add_user', array('user' => null));
+        if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1) {
+            $this->render('admin/add_user', array('user' => null));
+        }
+        else {
+            $this->redirect('products/');
+        }
     }
 
     public function addUser() {
         $user = null;
-        if (!empty($_POST['data'])) {
+        if (!empty($_POST['data']) && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1) {
             $user = new \Models\User();
             $user->updateAttributes($_POST['data']);
             $user->setActivation_key();
@@ -52,28 +57,43 @@ class AdminUsersController extends \Wee\Controller {
                 $mail->sendActivationEmail($user);
                 $this->showUserForm();
             }
+            else {
+                $this->render('admin/add_user', array('user' => $user));
+            }
         }
-        $this->render('admin/add_user', array('user' => $user));
+        else {
+            $this->redirect('products/');
+        }
     }
 
     public function deleteUser() {
-        $userDao = \Wee\DaoFactory::getDao('User');
-        $userDao->deleteUser($_POST['user_id']);
-        $this->redirect('admin_users');
+        if (!empty($_POST['user_id']) && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1) {
+            $userDao = \Wee\DaoFactory::getDao('User');
+            $userDao->deleteUser($_POST['user_id']);
+            $this->redirect('admin_users');
+        }
+        else {
+            $this->redirect('products/');
+        }
     }
 
     public function showEditUser() {
-        $userDao = \Wee\DaoFactory::getDao('User');
-        if (!$userDao->getUserById($_GET['user_id'])){
-          $this->redirect('admin_users/index');
+        if (!empty($_GET['user_id']) && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1) {
+            $userDao = \Wee\DaoFactory::getDao('User');
+            if (!$userDao->getUserById($_GET['user_id'])) {
+                $this->redirect('admin_users/index');
+            }
+            $user = $userDao->getUserById($_GET['user_id']);
+            $this->render('admin/edit_user', array('user' => $user));
         }
-        $user = $userDao->getUserById($_GET['user_id']);
-        $this->render('admin/edit_user', array('user' => $user));
+        else {
+            $this->redirect('products/');
+        }
     }
 
     public function editUser() {
         $user = null;
-        if (!empty($_POST['data'])) {
+        if (!empty($_POST['data']) && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1) {
             $userDao = \Wee\DaoFactory::getDao('User');
 
             
@@ -85,20 +105,35 @@ class AdminUsersController extends \Wee\Controller {
                 $userDao->updateUser($user);
                 $this->redirect('admin_users');
             }
+            else {
+                $this->render('admin/edit_user', array('user' => $user));
+            }
         }
-        $this->render('admin/edit_user', array('user' => $user));
+        else {
+            $this->redirect('products/');
+        }
     }
     
     public function activateUser() {
-        $userDao = \Wee\DaoFactory::getDao('User');
-        $userDao->setUserActivity($_POST['user_id'], 1);
-        $this->redirect('admin_users');
+        if (!empty($_POST['user_id']) && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1) {
+            $userDao = \Wee\DaoFactory::getDao('User');
+            $userDao->setUserActivity($_POST['user_id'], 1);
+            $this->redirect('admin_users');
+        }
+        else {
+            $this->redirect('products/');
+        }
     }
     
     public function deactivateUser() {
-        $userDao = \Wee\DaoFactory::getDao('User');
-        $userDao->setUserActivity($_POST['user_id'], 0);
-        $this->redirect('admin_users');
+        if (!empty($_POST['user_id']) && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1) {
+            $userDao = \Wee\DaoFactory::getDao('User');
+            $userDao->setUserActivity($_POST['user_id'], 0);
+            $this->redirect('admin_users');
+        }
+        else {
+            $this->redirect('products/');
+        }
     }
     
     public function confirmActivation() {

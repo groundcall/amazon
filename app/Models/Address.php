@@ -17,7 +17,7 @@ class Address extends \Wee\Model {
     protected $country;
     
     public function __construct() {
-        $this->setAttrAccessible(array('address', 'city', 'firstname', 'lastname', 'email'));
+        $this->setAttrAccessible(array('address', 'city', 'firstname', 'lastname', 'email', 'country_id'));
         
         $this->validateAddress();
         $this->validateCity();

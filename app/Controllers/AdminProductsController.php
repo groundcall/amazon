@@ -24,84 +24,119 @@ class AdminProductsController extends \Wee\Controller {
     }
 
     public function showAllProducts() {
-        $paginator = new \Models\Paginator();
-        $productDao = \Wee\DaoFactory::getDao('Product');
-        $paginator->setCount($productDao->getProductCount());
-        $paginator->setPerpage();
-        
-        if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
-            $paginator->setCurrent($_GET['page']);
-        } else {
-            $paginator->setCurrent(1);
+        if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1) {
+            $paginator = new \Models\Paginator();
+            $productDao = \Wee\DaoFactory::getDao('Product');
+            $paginator->setCount($productDao->getProductCount());
+            $paginator->setPerpage();
+
+            if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
+                $paginator->setCurrent($_GET['page']);
+            } else {
+                $paginator->setCurrent(1);
+            }
+            $paginator->setPages();
+            $start = ($paginator->getCurrent() - 1) * $paginator->getPerpage();
+            $limit = $paginator->getPerpage();
+            $products = $productDao->getAllProducts($start, $limit);
+            $this->render('admin/list_products', array('products' => $products, 'paginator' => $paginator));
         }
-        $paginator->setPages();
-        $start = ($paginator->getCurrent() - 1) * $paginator->getPerpage();
-        $limit = $paginator->getPerpage();
-        $products = $productDao->getAllProducts($start, $limit);
-        $this->render('admin/list_products', array('products' => $products, 'paginator' => $paginator));
+        else {
+            $this->redirect('products/');
+        }
     }
 
     public function filterProducts() {
-        $paginator = new \Models\Paginator();
-        if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
-            $paginator->setCurrent($_GET['page']);
-        } else {
-            $paginator->setCurrent(1);
+        if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1) {
+            $paginator = new \Models\Paginator();
+            if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
+                $paginator->setCurrent($_GET['page']);
+            } else {
+                $paginator->setCurrent(1);
+            }
+            $paginator->setPerpage();
+            if (!isset($_GET['stock']) || $_GET['stock'] == 0) {
+                $stock = 0;
+            } 
+            else {
+                $stock = 1;
+            }
+            $start = ($paginator->getCurrent() - 1) * $paginator->getPerpage();
+            $limit = $paginator->getPerpage();
+            $productDao = \Wee\DaoFactory::getDao('Product');
+            $paginator->setCount($productDao->getFilteredProductCount($_GET['product_name'], $_GET['category'], $stock));
+            $paginator->setPages();
+            $products = $productDao->getFilterProducts($_GET['product_name'], $_GET['category'], $stock, $start, $limit);
+            $this->render('admin/list_products', array('products' => $products, 'paginator' => $paginator));
         }
-        $paginator->setPerpage();
-        if (!isset($_GET['stock']) || $_GET['stock'] == 0) {
-            $stock = 0;
-        } 
         else {
-            $stock = 1;
+            $this->redirect('products/');
         }
-        $start = ($paginator->getCurrent() - 1) * $paginator->getPerpage();
-        $limit = $paginator->getPerpage();
-        $productDao = \Wee\DaoFactory::getDao('Product');
-        $paginator->setCount($productDao->getFilteredProductCount($_GET['product_name'], $_GET['category'], $stock));
-        $paginator->setPages();
-        $products = $productDao->getFilterProducts($_GET['product_name'], $_GET['category'], $stock, $start, $limit);
-        $this->render('admin/list_products', array('products' => $products, 'paginator' => $paginator));
     }
 
     public function deleteProduct() {
-        $productDao = \Wee\DaoFactory::getDao('Product');
-        $productDao->deleteProduct($_POST['product_id']);
-        $imageDao = \Wee\DaoFactory::getDao('Image');
-        $image = $imageDao->getImageByProductId($_POST['product_id']);
-        $image->deleteImage();
-        $imageDao->deleteImage($_POST['product_id']);
-        $this->redirect('admin_products');
+        if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1) {
+            $productDao = \Wee\DaoFactory::getDao('Product');
+            $productDao->deleteProduct($_POST['product_id']);
+            $imageDao = \Wee\DaoFactory::getDao('Image');
+            $image = $imageDao->getImageByProductId($_POST['product_id']);
+            $image->deleteImage();
+            $imageDao->deleteImage($_POST['product_id']);
+            $this->redirect('admin_products');
+        }
+        else {
+            $this->redirect('products/');
+        }
     }
 
     public function showEditProduct() {
-        $productDao = \Wee\DaoFactory::getDao('Product');
-        if (!$productDao->getProductById($_GET['product_id'])){
-          $this->redirect('admin_products/index');
+        if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1) {
+            $productDao = \Wee\DaoFactory::getDao('Product');
+            if (!$productDao->getProductById($_GET['product_id'])){
+              $this->redirect('admin_products/index');
+            }
+            $product = $productDao->getProductById($_GET['product_id']);
+            $this->render('admin/edit_product', array('product' => $product));
         }
-        $product = $productDao->getProductById($_GET['product_id']);
-        $this->render('admin/edit_product', array('product' => $product));
+        else {
+            $this->redirect('products/');
+        }
     }
 
     public function activateProduct() {
-        $productDao = \Wee\DaoFactory::getDao('Product');
-        $productDao->setProductActivity($_POST['product_id'], 1);
-        $this->redirect('admin_products');
+        if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1) {
+            $productDao = \Wee\DaoFactory::getDao('Product');
+            $productDao->setProductActivity($_POST['product_id'], 1);
+            $this->redirect('admin_products');
+        }
+        else {
+            $this->redirect('products/');
+        }
     }
     
     public function deactivateProduct() {
-        $productDao = \Wee\DaoFactory::getDao('Product');
-        $productDao->setProductActivity($_POST['product_id'], 0);
-        $this->redirect('admin_products');
+        if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1) {
+            $productDao = \Wee\DaoFactory::getDao('Product');
+            $productDao->setProductActivity($_POST['product_id'], 0);
+            $this->redirect('admin_products');
+        }
+        else {
+            $this->redirect('products/');
+        }
     }
 
     public function showProductForm() {
-        $this->render('admin/add_product', array('product' => null));
+        if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1) {
+            $this->render('admin/add_product', array('product' => null));
+        }
+        else {
+            $this->redirect('products/');
+        }
     }
 
     public function addProduct() {
         $product = null;
-        if (!empty($_POST['data'])) {
+        if (!empty($_POST['data']) && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1) {
             $product = new \Models\Product();
             $product->updateAttributes($_POST['data']);
             
@@ -117,11 +152,14 @@ class AdminProductsController extends \Wee\Controller {
                 $this->render('admin/add_product', array('product' => $product));
             }
         }
+        else {
+            $this->redirect('products/');
+        }
     }
 
     public function editProduct() {
         $product = null;
-        if (!empty($_POST['data'])) {
+        if (!empty($_POST['data']) && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1) {
             $productDao = \Wee\DaoFactory::getDao('Product');
             $product = $productDao->getProductById($_POST['data']['id']);
             $imageDao = \Wee\DaoFactory::getDao('Image');
@@ -131,7 +169,7 @@ class AdminProductsController extends \Wee\Controller {
             
             if (!empty($_FILES['image']['name'])) {
                 $product->createImage($_FILES['image']['tmp_name'], $_FILES['image']['name'], $_FILES['image']['type'], $_FILES['image']['tmp_name']);
-                }
+            }
 
             if ($product->isValid()) {
                 $productDao = \Wee\DaoFactory::getDao('Product');
@@ -144,6 +182,8 @@ class AdminProductsController extends \Wee\Controller {
                 $this->redirect('admin_products');
             }
         }
-        $this->render('admin/edit_product', array('product' => $product));
+        else {
+            $this->redirect('products/');
+        }
     }
 }
