@@ -33,8 +33,10 @@ class UserDao extends \Wee\Dao {
     }
 
     public function getAllUsers($start, $limit) {
-        $sql = 'SELECT * FROM users ORDER BY id DESC LIMIT :start, :limit';
+        $sql = 'SELECT * FROM users WHERE role_id = :role_id ORDER BY id DESC LIMIT :start, :limit';
         $stmt = $this->getConnection()->prepare($sql);
+        $role_id = 2;
+        $stmt->bindParam(':role_id', $role_id, \PDO::PARAM_INT);
         $stmt->bindParam(':start', $start, \PDO::PARAM_INT);
         $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
         $stmt->execute();
@@ -104,8 +106,8 @@ class UserDao extends \Wee\Dao {
     }
 
     public function addUser($user) {
-        $sql = "INSERT INTO users (username, firstname, lastname, email, password, phone, gender, created_at, education_id, activation_key)"
-                . " VALUES (:username, :firstname, :lastname, :email, :password, :phone, :gender, :created_at, :education_id, :activation_key)";
+        $sql = "INSERT INTO users (username, firstname, lastname, email, password, phone, gender, created_at, education_id, activation_key, role_id)"
+                . " VALUES (:username, :firstname, :lastname, :email, :password, :phone, :gender, :created_at, :education_id, :activation_key, :role_id)";
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':username', $user->getUsername());
         $stmt->bindValue(':firstname', $user->getFirstname());
@@ -118,6 +120,8 @@ class UserDao extends \Wee\Dao {
         if ($user->getEducation_id() == null) {
             $user->setEducation_id(0);
         }
+        $role_id = 2;
+        $stmt->bindValue(':role_id', $role_id);
         $stmt->bindValue(':education_id', $user->getEducation_id());
         $stmt->bindValue(':activation_key', $user->getActivation_key());
         $stmt->execute();

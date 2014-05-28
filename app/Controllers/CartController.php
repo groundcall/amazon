@@ -77,7 +77,6 @@ class CartController extends \Wee\Controller {
     }
 
     public function addItem() {
-
         $cartItem = new \Models\CartItem();
         isset($_POST['quantity']) ? $quantity = $_POST['quantity'] : $quantity = 1;
 
