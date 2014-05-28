@@ -79,7 +79,7 @@ class Cart extends \Wee\Model {
         $quantities = array_values($quantities);
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
 
-        for ($i = 0; $i <= sizeof($cartItems)-1; $i++) {
+        for ($i = 0; $i <= sizeof($cartItems) - 1; $i++) {
             $cartItems[$i]->setQuantity($quantities[$i]);
             if ($cartItems[$i]->isValid()) {
                 $cartItemDao->updateCartItem($cartItems[$i]);
@@ -89,8 +89,39 @@ class Cart extends \Wee\Model {
                 $_SESSION['updated_qty'] = 0;
             }
         }
-        
+
         return $items;
+    }
+
+    public function addCartItem($product_id, $quantity) {
+        
+
+        $cartItem = new \Models\CartItem();
+
+        $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
+        $oldCartItem = $cartItemDao->getCartItemByProductIdAndCartId($product_id, $this->getId());
+        $cartItem->setProduct($product_id);
+        $cartItem->setCart_id($this->getId());
+        $cartItem->setQuantity($quantity);
+
+        if ($oldCartItem) {
+            $cartItem->setQuantity($oldCartItem->getQuantity() + $quantity);
+            $cartItem->setId($oldCartItem->getId());
+            if ($cartItem->isValid()) {
+                $cartItemDao->updateCartItem($cartItem);
+                $_SESSION['add_status'] = 'ok';
+            } else {
+                $_SESSION['add_status'] = $cartItem->getError('quantity');
+            }
+        } else {
+            if ($cartItem->isValid()) {
+                $cartItemDao->addCartItemToCart($cartItem);
+                $_SESSION['add_status'] = 'ok';
+            } else {
+                $_SESSION['add_status'] = $cartItem->getError('quantity');
+            }
+        }
+        $this->calculateTotal();
     }
 
 }

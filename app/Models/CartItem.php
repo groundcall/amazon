@@ -17,7 +17,7 @@ class CartItem extends \Wee\Model {
     protected $product;
 
     public function __construct() {
-        $this->setAttrAccessible(array('title', 'quantity', 'price'));
+        $this->setAttrAccessible(array('title', 'quantity', 'price', 'cart_id'));
 
         $this->validateQuantity();
         $this->validateQuantityInStock();
@@ -52,8 +52,8 @@ class CartItem extends \Wee\Model {
         $this->id = $id;
     }
 
-    public function setCart_id() {
-        $this->cart_id = $this->cart->getId();
+    public function setCart_id($cart_id) {
+        $this->cart_id = $cart_id;
     }
 
     public function setProduct_id($product_id) {
@@ -72,26 +72,33 @@ class CartItem extends \Wee\Model {
         $this->price = $price;
     }
     
-    public function getCart() {
-        return $this->cart;
-    }
+//    public function getCart() {
+//        return $this->cart;
+//    }
+    
+    
 
     public function getProduct() {
         return $this->product;
     }
 
-    public function setCart($cart_id) {
-        $cartDao = \Wee\DaoFactory::getDao('Cart');
-        $cart = $cartDao->getCartById($cart_id);
-        $this->cart = $cart;
-        $this->cart_id = $cart_id;
-    }
+//    public function setCart($cart_id) {
+//        $cartDao = \Wee\DaoFactory::getDao('Cart');
+//        $cart = $cartDao->getCartById($cart_id);
+//        $this->cart = $cart;
+//        $this->cart_id = $cart_id;
+//    }
 
     public function setProduct($product_id) {
         $productDao = \Wee\DaoFactory::getDao('Product');
         $product = $productDao->getProductById($product_id);
         $this->product = $product;
         $this->product_id = $product_id;
+    }
+    
+    public function addCartItem($product_id, $quantity=1) {
+        $cartItem = new \Models\CartItem();
+        
     }
 }
 

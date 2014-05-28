@@ -5,6 +5,9 @@ namespace Controllers;
 class CartController extends \Wee\Controller {
 
     public function initialize() {
+
+        $this->cart = $this->getCartById($_SESSION['cart_id']);
+
         $cartDao = \Wee\DaoFactory::getDao('Cart');
         if (empty($_SESSION['cart_id'])) {
             $cart = new \Models\Cart();
@@ -18,10 +21,12 @@ class CartController extends \Wee\Controller {
     }
 
     public function index() {
+        
         $this->render('users/cart');
     }
 
     private function getCartById($cart_id) {
+        
         $cartDao = \Wee\DaoFactory::getDao('Cart');
         $cart = $cartDao->getCartById($cart_id);
         return $cart;
@@ -34,6 +39,7 @@ class CartController extends \Wee\Controller {
     }
 
     public function manageCart() {
+        
         if (isset($_POST['empty_cart'])) {
             $this->clearCart();
         }
@@ -46,84 +52,45 @@ class CartController extends \Wee\Controller {
     }
 
     private function clearCart() {
-        $cart = $this->getCartById($_SESSION['cart_id']);
+        
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
-        $cartItemDao->removeAllCartItemsByCartId($cart->getId());
-        $cart->calculateTotal();
+        $cartItemDao->removeAllCartItemsByCartId($this->cart->getId());
+        $this->cart->calculateTotal();
         $_SESSION['updated_qty'] = 1;
         $this->redirect('cart/show_cart');
     }
 
     private function removeCartItem() {
-        $cart = $this->getCartById($_SESSION['cart_id']);
+        
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
         $cartItemDao->removeCartItemById($_POST['remove'], $cart->getId());
-        $cart->calculateTotal();
+        $this->cart->calculateTotal();
         $_SESSION['updated_qty'] = 1;
         $this->showCart();
     }
 
     private function updateCart() {
-        
-        $cart = $this->getCartById($_SESSION['cart_id']);
-        $cartItems = $cart->getCart_item();
+
+        $cartItems = $this->cart->getCart_item();
         $quantities = $_POST['cart'];
-        
-        $items = $cart->updateQuantities($cartItems, $quantities);
-        
-        $cart->calculateTotal();
-        $cart->setCart_items($items);
-        $this->render('users/cart', array('cart' => $cart));
+        $items = $this->cart->updateQuantities($cartItems, $quantities);
+        $this->cart->calculateTotal();
+        $this->cart->setCart_items($items);
+        $this->render('users/cart', array('cart' => $this->cart));
     }
 
     public function addItem() {
-        $cartItem = new \Models\CartItem();
-        isset($_POST['quantity']) ? $quantity = $_POST['quantity'] : $quantity = 1;
 
-        $cartItem->setQuantity($quantity);
-        $cartItem->setProduct($_POST['product_id']);
-
-        $cartDao = \Wee\DaoFactory::getDao('Cart');
-        $cart = $cartDao->getCartById($_SESSION['cart_id']);
-        $cartItem->setCart($cart->getId());
-
-        $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
-        $item = $cartItemDao->getCartItemByProductIdAndCartId($cartItem->getProduct_id(), $_SESSION['cart_id']);
-
-        if ($item) {
-            $cartItem->setQuantity($item->getQuantity() + $quantity );
-//            ($quantity) ? $cartItem->setQuantity($quantity) : $cartItem->setQuantity($item->getQuantity() + $quantity );
-            $cartItem->setId($item->getId());
-            if ($cartItem->isValid()) {
-                $cartItemDao->updateCartItem($cartItem);
-                $_SESSION['add_status'] = 'ok';
-            } else {
-
-                $_SESSION['add_status'] = $cartItem->getError('quantity');
-            }
-        } else {
-
-            if ($cartItem->isValid()) {
-                $cartItemDao->addCartItemToCart($cartItem);
-                $_SESSION['add_status'] = 'ok';
-            } else {
-                $_SESSION['add_status'] = $cartItem->getError('quantity');
-            }
-        }
-        $cart->calculateTotal();
-        //header('Location: ' . $_SERVER['HTTP_REFERER']);
+        $quantity = isset($_POST['quantity']) ? $_POST['quantity'] : 1;
+        $this->cart->addCartItem($_POST['product_id'], $quantity);
         $this->redirectToUrl($_SERVER['HTTP_REFERER']);
     }
 
     public function deleteCartItemFromCart() {
+        
         $cart_item_id = $_GET['cart_item_id'];
-        $cartDao = \Wee\DaoFactory::getDao('Cart');
-        $cart = $cartDao->getCartById($_SESSION['cart_id']);
-
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
-        $cartItemDao->deleteCartItemFromCart($cart_item_id);
-
-        //header('Location: ' . $_SERVER['HTTP_REFERER']);
+        $cartItemDao->deleteCartItemFromCart($cart_item_id, $this->cart->getId());
         $this->redirectToUrl($_SERVER['HTTP_REFERER']);
     }
 
