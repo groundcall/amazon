@@ -81,10 +81,10 @@
                                     <div class="col-1">
                                         <h4>Billing Address</h4>
                                         <address>
-                                            John Doe<br />
-                                            asd<br />
-                                            asd,  Alaska, asd<br />
-                                            United States<br />
+                                            <?php echo $user->getBilling_address()->getFirstname();?> <?php echo $user->getBilling_address()->getLastname();?><br />
+                                            <?php echo $user->getBilling_address()->getAddress();?><br />
+                                            <?php echo $user->getBilling_address()->getCity();?><br />
+                                            <?php echo $user->getBilling_address()->getCountry()->getName();?><br />
                                             T: 123123
                                             <br />
                                             <a href="#">Edit Address</a>
@@ -93,11 +93,11 @@
                                     <div class="col-2">
                                         <h4>Shipping Address</h4>
                                         <address>
-                                            John Doe<br />
-                                            asd<br />
-                                            asd,  Alaska, asd<br />
-                                            United States<br />
-                                            T: 321312
+                                            <?php echo $user->getShipping_address()->getFirstname();?> <?php echo $user->getShipping_address()->getLastname();?><br />
+                                            <?php echo $user->getShipping_address()->getAddress();?><br />
+                                            <?php echo $user->getShipping_address()->getCity();?><br />
+                                            <?php echo $user->getShipping_address()->getCountry()->getName();?><br />
+                                            T: 123123
                                             <br />
                                             <a href="#">Edit Address</a>
                                         </address>

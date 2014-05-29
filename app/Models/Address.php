@@ -3,9 +3,9 @@
 namespace Models;
 
 class Address extends \Wee\Model {
-        
+
     use \Validators\AddressValidator;
-    
+
     protected $id;
     protected $address;
     protected $city;
@@ -13,19 +13,18 @@ class Address extends \Wee\Model {
     protected $firstname;
     protected $lastname;
     protected $email;
-    
     protected $country;
-    
+
     public function __construct() {
         $this->setAttrAccessible(array('address', 'city', 'firstname', 'lastname', 'email', 'country_id'));
-        
+
         $this->validateAddress();
         $this->validateCity();
         $this->validateFirstname();
         $this->validateLastname();
         $this->validateEmail();
     }
-    
+
     public function getId() {
         return $this->id;
     }
@@ -88,4 +87,5 @@ class Address extends \Wee\Model {
         $country = $countryDao->getCountryById($country_id);
         $this->country = $country;
     }
+
 }

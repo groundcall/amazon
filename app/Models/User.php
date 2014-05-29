@@ -24,6 +24,7 @@ class User extends \Wee\Model {
     protected $education_id;
     protected $billing_address;
     protected $shipping_address;
+    protected $cart;
 
     function __construct() {
         $this->setAttrAccessible(array('username', 'password', 'password2', 'firstname', 'lastname', 'email', 'phone', 'gender', 'activated', 'role_id', 'activation_key',
@@ -185,15 +186,22 @@ class User extends \Wee\Model {
     public function setBilling_address($billing_address_id) {
         $this->billing_address_id = $billing_address_id;
         $addressDao = \Wee\DaoFactory::getDao('Address');
-        $address = $addressDao->getAddressyById($billing_address_id);
+        $address = $addressDao->getAddressById($billing_address_id);
         $this->billing_address = $address;
     }
 
     public function setShipping_address($shipping_address_id) {
         $this->shipping_address_id = $shipping_address_id;
         $addressDao = \Wee\DaoFactory::getDao('Address');
-        $address = $addressDao->getAddressyById($shipping_address_id);
-        $this->shiping_address = $address;
+        $address = $addressDao->getAddressById($shipping_address_id);
+        $this->shipping_address = $address;
+    }
+    
+    public function getCart() {
+        return $this->cart;
     }
 
+    public function setCart($cart) {
+        $this->cart = $cart;
+    }
 }
