@@ -5,12 +5,9 @@ namespace Controllers;
 class CartController extends \Wee\Controller {
 
     public function initialize() {
-
-        $this->cart = $this->getCartById($_SESSION['cart_id']);
-
         $cartDao = \Wee\DaoFactory::getDao('Cart');
         if (empty($_SESSION['cart_id'])) {
-            $cart = new \Models\Cart();
+            $this->cart = new \Models\Cart();
             if (isset($_SESSION['id'])) {
                 $cartDao->addCart($_SESSION['id']);
             } else {
@@ -18,6 +15,7 @@ class CartController extends \Wee\Controller {
             }
             $_SESSION['cart_id'] = $cartDao->getLastInsertedCart();
         }
+        $this->cart = $this->getCartById($_SESSION['cart_id']);
     }
 
     public function index() {

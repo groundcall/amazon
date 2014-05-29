@@ -72,5 +72,20 @@ class Email extends \Wee\Model {
                     ->setBody($this->message);
         $mailer->send($message);
     }
+    
+    public function sendOrderConfirmationEmail($order) {
+        $mailer = $this->setEmail();
+        $this->title = 'Book Shop – Order confirmation';
+        $this->message = "Hello, " . $order->getUser()->getFirstname() . " " . $order->getUser()->getLastname() . " !\n"
+                . "Your order has been successfully placed. The order number is " . $order->getId() . ".\n"
+                . "To track your order progress please access the following link: \n"
+                . "http://" . $_SERVER["SERVER_NAME"] . "/checkout/order_confirmation?order_id=" . $order->getId()
+                . "&confirmation_key=" . $order->getConfirmation_key() . "\n";
+        $message = \Swift_Message::newInstance($this->title)
+                    ->setFrom(array('adumitrache@pitechnologies.ro' => 'bookstore.com'))
+                    ->setTo(array($order->getUser()->getEmail() => $order->getUser()->getFirstname() . ' ' . $order->getUser()->getLastname()))
+                    ->setBody($this->message);
+        $mailer->send($message);
+    }
 }
 

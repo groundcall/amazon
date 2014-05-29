@@ -14,6 +14,7 @@ class Order extends \Wee\Model {
     protected $state_id;
     protected $shipping_method_id;
     protected $payment_method_id;
+    protected $confirmation_key;
     
     protected $user;
     protected $billing_address;
@@ -25,7 +26,7 @@ class Order extends \Wee\Model {
     
     public function __construct() {
         $this->setAttrAccessible(array('user_id', 'billing_address_id', 'shipping_address_id',
-            'cart_id', 'total', 'date', 'state_id', 'shipping_method_id', 'payment_method_id'));
+            'cart_id', 'total', 'date', 'state_id', 'shipping_method_id', 'payment_method_id', 'confirmation_key'));
     }
     
     public function getId() {
@@ -140,6 +141,8 @@ class Order extends \Wee\Model {
         $stateDao = \Wee\DaoFactory::getDao('State');
         $state = $stateDao->getStateById($state_id);
         $this->state = $state;
+        $orderDao = \Wee\DaoFactory::getDao('Order');
+        $orderDao->updateOrderState($this);
     }
 
     public function setShipping_method_id($shipping_method_id) {
@@ -267,5 +270,13 @@ class Order extends \Wee\Model {
         $this->setTotal();
         $orderDao = \Wee\DaoFactory::getDao('Order');
         $orderDao->updateTotal($this);
+    }
+    
+    public function getConfirmation_key() {
+        return $this->confirmation_key;
+    }
+
+    public function setConfirmation_key() {
+        $this->confirmation_key = md5(uniqid(rand(), TRUE));
     }
 }
