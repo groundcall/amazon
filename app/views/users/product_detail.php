@@ -19,34 +19,34 @@
             </ul>
         </div>
         <div class="col-main">
-            <?php if (isset($_SESSION['add_status'])): ?>
-                <?php if ($_SESSION['add_status'] == 'ok'): ?>
-                    <div id="messages_product_view">
-                        <ul class="messages">
-                            <li class="success-msg">
-                                <ul>
-                                    <li><span><?php echo $product->getTitle(); ?> was added to your shopping cart.</span></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                <?php else: ?>
-                    <div id="messages_product_view">
-                        <ul class="error-msg">
-                            <li class="error">
-                                <ul>
-                                    <li><span><?php echo $_SESSION['add_status'][0]; ?></span></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                <?php endif; ?>
+            <?php if ($cart->getErrors('quantity')) : ?>
+            <?php $error = ($cart->getErrors()); ?>
+                <div id="messages_product_view">
+                    <ul class="error-msg">
+                        <li class="error">
+                            <ul>
+                                <li><span><?php echo $error['quantity'][0][0]?></span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            <?php elseif ($_SESSION['add_status'] == 'ok') : ?>
+                <div id="messages_product_view">
+                    <ul class="messages">
+                        <li class="success-msg">
+                            <ul>
+                                <li><span><?php echo $product->getTitle(); ?> was added to your shopping cart.</span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
                 <?php $_SESSION['add_status'] = null; ?>
             <?php endif; ?>
 
+
             <div class="product-view">
                 <div class="product-essential">
-                    <form action="<?php echo url('cart/add_item'); ?>" method="post" id="product_addtocart_form">
+                    <form action="<?php echo url('cart/add_item_quantity'); ?>" method="post" id="product_addtocart_form">
                         <div class="product-shop">
                             <div class="product-name">
                                 <h1><?php echo $product->getTitle(); ?></h1>
@@ -123,7 +123,7 @@
                 </div>
             </div>
         </div>
-            <?php include 'user_cart_sidebar.php'; ?>
+        <?php include 'user_cart_sidebar.php'; ?>
     </div>
 </div>
 

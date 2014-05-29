@@ -1,5 +1,4 @@
 <?php $view->extend('masterpages/front_masterpage'); ?>
-
 <div class="main-container col3-layout">
     <div class="main">
         <div class="breadcrumbs">
@@ -20,7 +19,6 @@
 
         <div class="col-wrapper">
             <div class="col-main">
-                <?php if (isset($_SESSION['add_status'])): ?>
                     <?php if ($_SESSION['add_status'] == 'ok'): ?>
                         <div id="messages_product_view">
                             <ul class="messages">
@@ -31,17 +29,6 @@
                                 </li>
                             </ul>
                         </div>
-                    <?php else: ?>
-                        <div id="messages_product_view">
-                            <ul class="error-msg">
-                                <li class="error">
-                                    <ul>
-                                        <li><span><?php echo $_SESSION['add_status'][0]; ?></span></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    <?php endif; ?>
                     <?php $_SESSION['add_status'] = null; ?>
                 <?php endif; ?>
                 <?php if (sizeof($products) == 0): ?>
@@ -138,15 +125,16 @@
                                         <span class="price"><?php echo $products[$k]->getPrice(); ?> US$</span>
                                     </span>
                                 </div>
-
-                                <div class="actions">
-                                    <form action="<?php echo url('cart/add_item'); ?>" method="post">
-                                        <input type="hidden" name="product_id" value="<?php echo $products[$k]->getId(); ?>" />
-                                        <button type="submit" title="Add to Cart" class="button btn-cart" >
-                                            <span><span>Add to Cart</span></span>
-                                        </button>
-                                    </form>
-                                </div>
+                                <?php if ($view->checkQuantity($cart, $products[$k])): ?>
+                                    <div class="actions">
+                                        <form action="<?php echo url('cart/add_item'); ?>" method="post">
+                                            <input type="hidden" name="product_id" value="<?php echo $products[$k]->getId(); ?>" />
+                                            <button type="submit" title="Add to Cart" class="button btn-cart" >
+                                                <span><span>Add to Cart</span></span>
+                                            </button>
+                                        </form>
+                                    </div>
+                                <?php endif; ?>
                             </li>
 
                             <li class="item">
@@ -165,15 +153,18 @@
                                             <span class="price"><?php echo $products[$k + 1]->getPrice(); ?> US$</span>
                                         </span>
                                     </div>
+                                    <?php if ($view->checkQuantity($cart, $products[$k + 1])): ?>
 
-                                    <div class="actions">
-                                        <form action="<?php echo url('cart/add_item', array('product_id' => $products[$k + 1]->getId())); ?>" method="post">
-                                            <input type="hidden" name="product_id" value="<?php echo $products[$k + 1]->getId(); ?>" />
-                                            <button type="submit" title="Add to Cart" class="button btn-cart" >
-                                                <span><span>Add to Cart</span></span>
-                                            </button>
-                                        </form>
-                                    </div>
+                                        <div class="actions">
+                                            <form action="<?php echo url('cart/add_item', array('product_id' => $products[$k + 1]->getId())); ?>" method="post">
+                                                <input type="hidden" name="product_id" value="<?php echo $products[$k + 1]->getId(); ?>" />
+                                                <button type="submit" title="Add to Cart" class="button btn-cart" >
+                                                    <span><span>Add to Cart</span></span>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    <?php else: $_SESSION['add_status'] = 'not_ok' ?>
+                                    <?php endif; ?>
                                 <?php endif; ?>
                             </li>
 
@@ -193,15 +184,16 @@
                                             <span class="price"><?php echo $products[$k + 2]->getPrice(); ?> US$</span>
                                         </span>
                                     </div>
-
-                                    <div class="actions">
-                                        <form action="<?php echo url('cart/add_item', array('product_id' => $products[$k + 2]->getId())); ?>" method="post">
-                                            <input type="hidden" name="product_id" value="<?php echo $products[$k + 2]->getId(); ?>" />
-                                            <button type="submit" title="Add to Cart" class="button btn-cart" >
-                                                <span><span>Add to Cart</span></span>
-                                            </button>
-                                        </form>
-                                    </div>
+                                    <?php if ($view->checkQuantity($cart, $products[$k + 2])): ?>
+                                        <div class="actions">
+                                            <form action="<?php echo url('cart/add_item', array('product_id' => $products[$k + 2]->getId())); ?>" method="post">
+                                                <input type="hidden" name="product_id" value="<?php echo $products[$k + 2]->getId(); ?>" />
+                                                <button type="submit" title="Add to Cart" class="button btn-cart" >
+                                                    <span><span>Add to Cart</span></span>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    <?php endif; ?>
                                 <?php endif; ?>
                             </li>
                         </ul>

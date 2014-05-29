@@ -4,6 +4,20 @@ namespace Controllers;
 
 class ProductsController extends \Wee\Controller {
     
+    public function initialize() {
+        $cartDao = \Wee\DaoFactory::getDao('Cart');
+        if (empty($_SESSION['cart_id'])) {
+            $this->cart = new \Models\Cart();
+            if (isset($_SESSION['id'])) {
+                $cartDao->addCart($_SESSION['id']);
+            } else {
+                $cartDao->addCart(0);
+            }
+            $_SESSION['cart_id'] = $cartDao->getLastInsertedCart();
+        }
+        $this->cart = $cartDao->getCartById($_SESSION['cart_id']);
+    }
+    
     public function index() {
         $productDao = \Wee\DaoFactory::getDao('Product');
         $products = $productDao->getLastProducts(6);

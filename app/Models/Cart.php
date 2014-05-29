@@ -93,6 +93,7 @@ class Cart extends \Wee\Model {
     }
 
     public function addCartItem($product_id, $quantity) {
+
         $cartItem = new \Models\CartItem();
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
         $oldCartItem = $cartItemDao->getCartItemByProductIdAndCartId($product_id, $this->getId());
@@ -106,19 +107,19 @@ class Cart extends \Wee\Model {
                 $cartItemDao->updateCartItem($cartItem);
                 $_SESSION['add_status'] = 'ok';
             } else {
-                $_SESSION['add_status'] = $cartItem->getError('quantity');
+                $this->addError("quantity", $cartItem->getError('quantity'));
             }
         } else {
             if ($cartItem->isValid()) {
                 $cartItemDao->addCartItemToCart($cartItem);
                 $_SESSION['add_status'] = 'ok';
             } else {
-                $_SESSION['add_status'] = $cartItem->getError('quantity');
+                $this->addError("quantity", $cartItem->getError('quantity'));
             }
         }
         $this->calculateTotal();
     }
-    
+
     public function clearCart() {
         foreach ($this->cart_item as $item) {
             $stock = $item->getProduct()->getStock();
@@ -128,5 +129,10 @@ class Cart extends \Wee\Model {
             $productDao->updateStock($item->getProduct());
         }
     }
-
+    
+    public function getCartItemByProductId($product_id){
+        $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
+        $cartItem = $cartItemDao->getCartItemByProductIdAndCartId($product_id, $this->getId());
+        return $cartItem;
+    }
 }

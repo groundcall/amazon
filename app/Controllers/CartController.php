@@ -15,29 +15,22 @@ class CartController extends \Wee\Controller {
             }
             $_SESSION['cart_id'] = $cartDao->getLastInsertedCart();
         }
-        $this->cart = $this->getCartById($_SESSION['cart_id']);
+        $this->cart = $cartDao->getCartById($_SESSION['cart_id']);
     }
 
     public function index() {
-        
-        $this->render('users/cart');
-    }
 
-    private function getCartById($cart_id) {
-        
-        $cartDao = \Wee\DaoFactory::getDao('Cart');
-        $cart = $cartDao->getCartById($cart_id);
-        return $cart;
+        $this->render('users/cart');
     }
 
     public function showCart() {
 
-        $cart = $this->getCartById($_SESSION['cart_id']);
-        $this->render('users/cart', array('cart' => $cart));
+//        $this->cart->getCartById($_SESSION['cart_id']);
+        $this->render('users/cart', array('cart' => $this->cart));
     }
 
     public function manageCart() {
-        
+
         if (isset($_POST['empty_cart'])) {
             $this->clearCart();
         }
@@ -50,7 +43,7 @@ class CartController extends \Wee\Controller {
     }
 
     private function clearCart() {
-        
+
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
         $cartItemDao->removeAllCartItemsByCartId($this->cart->getId());
         $this->cart->calculateTotal();
@@ -59,7 +52,7 @@ class CartController extends \Wee\Controller {
     }
 
     private function removeCartItem() {
-        
+
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
         $cartItemDao->removeCartItemById($_POST['remove'], $cart->getId());
         $this->cart->calculateTotal();
@@ -78,13 +71,24 @@ class CartController extends \Wee\Controller {
     }
 
     public function addItem() {
-        $quantity = isset($_POST['quantity']) ? $_POST['quantity'] : 1;
-        $this->cart->addCartItem($_POST['product_id'], $quantity);
+
+        $this->cart->addCartItem($_POST['product_id'], 1);
         $this->redirectToUrl($_SERVER['HTTP_REFERER']);
     }
 
-    public function deleteCartItemFromCart() {
+    public function addItemQuantity() {
+        $this->cart->addCartItem($_POST['product_id'], $_POST['quantity']);
         
+        $productDao = \Wee\DaoFactory::getDao('Product');
+        $product = $productDao->getProductById($_POST['product_id']);
+        $randomProducts = $productDao->getRandomProducts($_POST['product_id'], 4);
+        
+        $this->render('users/product_detail', array('product' => $product, 'randomProducts' => $randomProducts, 'cart' => $this->cart));
+        
+    }
+
+    public function deleteCartItemFromCart() {
+
         $cart_item_id = $_GET['cart_item_id'];
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
         $cartItemDao->deleteCartItemFromCart($cart_item_id, $this->cart->getId());

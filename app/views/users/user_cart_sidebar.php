@@ -1,12 +1,11 @@
-<?php if (isset($user)): $cart = $user->getCart(); ?>
-<?php endif; ?>
+<?php $cart = $view->getCartById($_SESSION['cart_id']);?>
 
 <div class="col-right sidebar">
     <div class="block block-cart">
         <div class="block-title">
             <strong><span>My Cart</span></strong>
         </div>
-        <?php if (!isset($cart)): ?>
+        <?php if (!$cart): ?>
             <div class="block-content">
                 <p class="empty">You have no items in your shopping cart.</p>
             </div>

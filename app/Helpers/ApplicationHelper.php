@@ -51,38 +51,57 @@ trait ApplicationHelper {
         $filtering->setStart(null);
         $filtering->setLimit(null);
         $result = $productDao->getFilterProducts3($filtering, 'count');
-        
+
         return $result;
     }
-    
-    public function calculateCartTotal($cart_id){
+
+    public function calculateCartTotal($cart_id) {
         $cartDao = \Wee\DaoFactory::getDao('Cart');
         $total = $cartDao->calculateCartTotal($cart_id);
-        
+
         return $total;
     }
-    
-    public function getNumberOfItemsInCart($cart_id){
+
+    public function getNumberOfItemsInCart($cart_id) {
         $cartDao = \Wee\DaoFactory::getDao('Cart');
         $total = $cartDao->getNumberOfItemsInCart($cart_id);
         return $total;
     }
-    
+
     public function getCountries() {
         $countryDao = \Wee\DaoFactory::getDao('Country');
         $countries = $countryDao->getAllCountries();
         return $countries;
     }
-    
+
     public function getShippingMethods() {
         $shippingMethodDao = \Wee\DaoFactory::getDao('ShippingMethod');
         $shippingMethods = $shippingMethodDao->getAllShippingMethods();
         return $shippingMethods;
     }
-    
+
     public function getPaymentMethods() {
         $paymentMethodDao = \Wee\DaoFactory::getDao('PaymentMethod');
         $paymentMethods = $paymentMethodDao->getAllPaymentMethods();
         return $paymentMethods;
+    }
+
+    public function checkQuantity($cart, $product) {
+        $cartitem = $cart->getCartItemByProductId($product->getId());
+        if ($cartitem){
+            $quantity = $cartitem->getQuantity() + 1;
+        }
+        else{
+            $quantity = 1;
+        }
+        if ($product->getStock() >= $quantity){
+            return true;
+        }
+    }
+    
+    public function getCartById($cart_id){
+        $cartDao = \Wee\DaoFactory::getDao('Cart');
+        $cart = $cartDao->getCartById($cart_id);
+        return $cart;
     }
 }
