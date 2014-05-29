@@ -102,4 +102,9 @@ class CheckoutController extends \Wee\Controller {
     public function showOrderReview() {
         $this->render('users/checkout_review', array('order' => $this->order));
     }
+    
+    public function orderConfirmation() {
+        $order_id = $_POST['order_id'];
+        $this->render('users/checkout_final', array('order_id' => $order_id));
+    }
 }
