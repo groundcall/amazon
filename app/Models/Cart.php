@@ -89,21 +89,16 @@ class Cart extends \Wee\Model {
                 $_SESSION['updated_qty'] = 0;
             }
         }
-
         return $items;
     }
 
     public function addCartItem($product_id, $quantity) {
-        
-
         $cartItem = new \Models\CartItem();
-
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
         $oldCartItem = $cartItemDao->getCartItemByProductIdAndCartId($product_id, $this->getId());
         $cartItem->setProduct($product_id);
         $cartItem->setCart_id($this->getId());
         $cartItem->setQuantity($quantity);
-
         if ($oldCartItem) {
             $cartItem->setQuantity($oldCartItem->getQuantity() + $quantity);
             $cartItem->setId($oldCartItem->getId());
@@ -122,6 +117,16 @@ class Cart extends \Wee\Model {
             }
         }
         $this->calculateTotal();
+    }
+    
+    public function clearCart() {
+        foreach ($this->cart_item as $item) {
+            $stock = $item->getProduct()->getStock();
+            $quantity = $item->getQuantity();
+            $item->getProduct()->setStock($stock - $quantity);
+            $productDao = \Wee\DaoFactory::getDao('Product');
+            $productDao->updateStock($item->getProduct());
+        }
     }
 
 }

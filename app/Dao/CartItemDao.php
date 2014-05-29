@@ -112,4 +112,11 @@ class CartItemDao extends \Wee\Dao {
         $stmt->execute();
         return $this->getCartItem($stmt);
     }
+    
+    public function removeAllCartItems($cart_id) {
+        $sql = 'DELETE FROM cart_items WHERE cart_id = :cart_id';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':cart_id', $cart_id);
+        $stmt->execute();
+    }
 }

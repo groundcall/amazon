@@ -78,7 +78,6 @@ class CartController extends \Wee\Controller {
     }
 
     public function addItem() {
-
         $quantity = isset($_POST['quantity']) ? $_POST['quantity'] : 1;
         $this->cart->addCartItem($_POST['product_id'], $quantity);
         $this->redirectToUrl($_SERVER['HTTP_REFERER']);

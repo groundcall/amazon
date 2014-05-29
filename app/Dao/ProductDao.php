@@ -321,13 +321,12 @@ class ProductDao extends \Wee\Dao {
 
         return $result[0];
     }
-    
-//    
-//    public function updateProductStockByProductId($product_id, $stock) {
-//        $sql = 'UPDATE products SET stock = :stock WHERE id = :product_id';
-//        $stmt = $this->getConnection()->prepare($sql);
-//        $stmt->bindValue(':stock', $stock, \PDO::PARAM_INT);
-//        $stmt->bindValue(':product_id', $product_id, \PDO::PARAM_INT);
-//        $stmt->execute();
-//    }
+        
+    public function updateStock($product) {
+        $sql = 'UPDATE products SET stock = :stock WHERE id = :product_id';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':product_id', $product->getId(), \PDO::PARAM_INT);
+        $stmt->bindValue(':stock', $product->getStock(), \PDO::PARAM_INT);
+        $stmt->execute();
+    }
 }

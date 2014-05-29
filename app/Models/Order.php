@@ -103,9 +103,6 @@ class Order extends \Wee\Model {
 
     public function setUser_id($user_id) {
         $this->user_id = $user_id;
-        $userDao = \Wee\DaoFactory::getDao('User');
-        $user = $userDao->getUserById($user_id);
-        $this->user = $user;
     }
 
     public function setBilling_address_id($billing_address_id) {
@@ -116,11 +113,8 @@ class Order extends \Wee\Model {
         $this->shipping_address_id = $shipping_address_id;
     }
 
-    public function setCart_id($cart_id) {
-        $cartDao = \Wee\DaoFactory::getDao('Cart');
-        $cart = $cartDao->getCartById($cart_id);
-        $this->cart_id = $cart->getId();
-        $this->cart = $cart;
+    public function setCart_id($cart_id) {;
+        $this->cart_id = $cart_id;
     }
 
     public function setTotal() {
@@ -146,20 +140,18 @@ class Order extends \Wee\Model {
     }
 
     public function setShipping_method_id($shipping_method_id) {
-        $shippingMethodDao = \Wee\DaoFactory::getDao('ShippingMethod');
-        $shippingMethod = $shippingMethodDao->getShippingMethodById($shipping_method_id);
         $this->shipping_method_id = $shipping_method_id;
-        $this->shipping_method = $shippingMethod;
     }
 
     public function setPayment_method_id($payment_method_id) {
-        $paymentMethodDao = \Wee\DaoFactory::getDao('PaymentMethod');
-        $paymentMethod = $paymentMethodDao->getPaymentMethodById($payment_method_id);
         $this->payment_method_id = $payment_method_id;
-        $this->payment_method = $paymentMethod;
+    }
+    
+    public function setUser($user) {
+        $this->user = $user;
     }
 
-    public function setUser($user_id) {
+    public function createUser($user_id) {
         $this->user_id = $user_id;
         $userDao = \Wee\DaoFactory::getDao('User');
         $user = $userDao->getUserById($user_id);
@@ -228,7 +220,7 @@ class Order extends \Wee\Model {
         $orderDao->updateShippingAddress($this);
     }
 
-    public function setCart($cart_id) {
+    public function createCart($cart_id) {
         $this->cart_id = $cart_id;
         $cartDao = \Wee\DaoFactory::getDao('Cart');
         $cart = $cartDao->getCartById($cart_id);

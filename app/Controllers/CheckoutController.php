@@ -6,13 +6,12 @@ class CheckoutController extends \Wee\Controller {
     
     public function initialize() {
         //unset($_SESSION['order_id']); die();
-        var_dump($_SESSION);
         if (!empty($_SESSION['id'])) {
             $orderDao = \Wee\DaoFactory::getDao('Order');
             if (empty($_SESSION['order_id'])) {
                 $this->order = new \Models\Order();
-                $this->order->setUser($_SESSION['id']);
-                $this->order->setCart($_SESSION['cart_id']);
+                $this->order->createUser($_SESSION['id']);
+                $this->order->createCart($_SESSION['cart_id']);
                 $this->order->setConfirmation_key();
                 $orderDao->addOrder($this->order);
                 $_SESSION['order_id'] = $orderDao->getLastInsertedOrderId();
@@ -109,13 +108,17 @@ class CheckoutController extends \Wee\Controller {
         $mail = new \Models\Email();
         $mail->sendOrderConfirmationEmail($this->order);
         $this->order->setState_id(1);
+        unset($_SESSION['cart_id']);
         $this->render('users/checkout_final', array('order_id' => $this->order->getId()));
     }
     
     public function orderConfirmation() {
         if (!empty($_GET['order_id']) && !empty($_GET['confirmation_key'])) {
             $orderDao = \Wee\DaoFactory::getDao('Order');
-            $orderDao->updateOrderState($_GET['order_id'], $_GET['confirmation_key']);
+            $orderDao->finalizeOrder($_GET['order_id'], $_GET['confirmation_key']);
+            $order = $orderDao->getOrderById($_GET['order_id']);
+            $order->getCart()->clearCart();
+            $this->render('users/checkout_confirm', array('order' => $order));
         }
         else {
             $this->redirect('products/');

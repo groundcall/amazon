@@ -8,8 +8,8 @@ class OrderDao extends \Wee\Dao {
         $order = new \Models\Order();
         $order->updateAttributes($row);
         $order->setId($row['id']);
-        $order->setUser($row['user_id']);
-        $order->setCart($row['cart_id']);
+        $order->createUser($row['user_id']);
+        $order->createCart($row['cart_id']);
         $order->createBilling_address();
         $order->createShipping_address();
         $order->createShipping_method();
@@ -116,12 +116,14 @@ class OrderDao extends \Wee\Dao {
     }
     
     public function finalizeOrder($order_id, $confirmation_key) {
-        $sql = "UPDATE orders SET confirmation_key = :new_confirmation_key WHERE id = :id AND confirmation_key = :confirmation_key";
+        $sql = "UPDATE orders SET confirmation_key = :new_confirmation_key, state_id = :state_id WHERE id = :id AND confirmation_key = :confirmation_key";
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':id', $order_id);
         $stmt->bindValue(':confirmation_key', $confirmation_key);
         $new_confirmation_key = NULL;
         $stmt->bindValue(':new_confirmation_key', $new_confirmation_key, \PDO::PARAM_NULL);
+        $state = 2;
+        $stmt->bindValue(':state_id', $state);
         $stmt->execute();
     }
 }
