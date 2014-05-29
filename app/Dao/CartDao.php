@@ -38,9 +38,11 @@ class CartDao extends \Wee\Dao {
     }
 
     public function getCartById($cart_id) {
-        $sql = 'SELECT * FROM carts WHERE id = :id';
+        $sql = 'SELECT * FROM carts WHERE id = :id AND active = :active';
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':id', $cart_id);
+        $active = 1;
+        $stmt->bindValue(':active', $active);
         $stmt->execute();
         return $this->getCart($stmt);
     }
@@ -122,11 +124,20 @@ class CartDao extends \Wee\Dao {
         $stmt->bindValue(':cart_id', $cart_id);
         $stmt->execute();
     }
-     public function deactivateCartByUserId($user_id){
+    
+    public function deactivateCartByUserId($user_id){
         $sql = 'UPDATE carts SET active = :active WHERE user_id = :user_id';
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':user_id', $user_id);
         $stmt->bindValue(':active', 0);
+        $stmt->execute();
+    }
+    
+    public function updateCartState($cart) {
+        $sql = 'UPDATE carts SET active = :active WHERE id = :id';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':id', $cart->getId());
+        $stmt->bindValue(':active', $cart->getActive());
         $stmt->execute();
     }
 }

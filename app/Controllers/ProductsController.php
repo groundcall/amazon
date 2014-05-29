@@ -25,38 +25,24 @@ class ProductsController extends \Wee\Controller {
     }
 
     public function showDetails() {
-        $message = null;
-
         $productDao = \Wee\DaoFactory::getDao('Product');
-
-        $cartDao = \Wee\DaoFactory::getDao('Cart');
-        $cart = $cartDao->getCartById($_SESSION['cart_id']);
-
         if (!$productDao->getProductById($_GET['product_id'])) {
             $this->redirect('products/index');
         }
         $product = $productDao->getProductById($_GET['product_id']);
         $randomProducts = $productDao->getRandomProducts($_GET['product_id'], 4);
-        $this->render('users/product_detail', array('product' => $product, 'randomProducts' => $randomProducts, 'cart' => $cart));
+        $this->render('users/product_detail', array('product' => $product, 'randomProducts' => $randomProducts, 'cart' => $this->cart));
     }
 
     public function showProducts() {
-
         $paginator = new \Models\Paginator();
         $filtering = new \Models\Filtering();
-
-        $cartDao = \Wee\DaoFactory::getDao('Cart');
-//        $cart = $cartDao->getCartByUserId($_SESSION['id']);
-         $cart = $cartDao->getCartById($_SESSION['cart_id']);
-
-
-
+        
         if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
             $paginator->setCurrent($_GET['page']);
         } else {
             $paginator->setCurrent(1);
         }
-
         if (isset($_GET)) {
             if (isset($_GET['category'])) {
                 $categoryDao = \Wee\DaoFactory::getDao('Category');
@@ -96,9 +82,7 @@ class ProductsController extends \Wee\Controller {
             $paginator->setPages();
 
             $products = $productDao->getFilterProducts3($filtering, 'no count');
-            $this->render('users/show_products', array('products' => $products, 'filtering' => $filtering, 'paginator' => $paginator, 'cart' => $cart));
+            $this->render('users/show_products', array('products' => $products, 'filtering' => $filtering, 'paginator' => $paginator, 'cart' => $this->cart));
         }
     }
-
-
 }

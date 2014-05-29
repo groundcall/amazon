@@ -19,18 +19,14 @@ class CartController extends \Wee\Controller {
     }
 
     public function index() {
-
         $this->render('users/cart');
     }
 
     public function showCart() {
-
-//        $this->cart->getCartById($_SESSION['cart_id']);
         $this->render('users/cart', array('cart' => $this->cart));
     }
 
     public function manageCart() {
-
         if (isset($_POST['empty_cart'])) {
             $this->clearCart();
         }
@@ -43,7 +39,6 @@ class CartController extends \Wee\Controller {
     }
 
     private function clearCart() {
-
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
         $cartItemDao->removeAllCartItemsByCartId($this->cart->getId());
         $this->cart->calculateTotal();
@@ -52,16 +47,14 @@ class CartController extends \Wee\Controller {
     }
 
     private function removeCartItem() {
-
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
-        $cartItemDao->removeCartItemById($_POST['remove'], $cart->getId());
+        $cartItemDao->removeCartItemById($_POST['remove'], $this->cart->getId());
         $this->cart->calculateTotal();
         $_SESSION['updated_qty'] = 1;
-        $this->showCart();
+        $this->redirectToUrl($_SERVER['HTTP_REFERER']);
     }
 
     private function updateCart() {
-
         $cartItems = $this->cart->getCart_item();
         $quantities = $_POST['cart'];
         $items = $this->cart->updateQuantities($cartItems, $quantities);
@@ -71,7 +64,6 @@ class CartController extends \Wee\Controller {
     }
 
     public function addItem() {
-
         $this->cart->addCartItem($_POST['product_id'], 1);
         $this->redirectToUrl($_SERVER['HTTP_REFERER']);
     }
@@ -88,7 +80,6 @@ class CartController extends \Wee\Controller {
     }
 
     public function deleteCartItemFromCart() {
-
         $cart_item_id = $_GET['cart_item_id'];
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
         $cartItemDao->deleteCartItemFromCart($cart_item_id, $this->cart->getId());

@@ -135,4 +135,10 @@ class Cart extends \Wee\Model {
         $cartItem = $cartItemDao->getCartItemByProductIdAndCartId($product_id, $this->getId());
         return $cartItem;
     }
+    
+    public function makeInactive() {
+        $this->active = 0;
+        $cartDao = \Wee\DaoFactory::getDao('Cart');
+        $cartDao->updateCartState($this);
+    }
 }

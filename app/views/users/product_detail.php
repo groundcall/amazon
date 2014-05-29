@@ -30,7 +30,7 @@
                         </li>
                     </ul>
                 </div>
-            <?php elseif ($_SESSION['add_status'] == 'ok') : ?>
+            <?php elseif (!empty($_SESSION['add_status']) && $_SESSION['add_status'] == 'ok'): ?>
                 <div id="messages_product_view">
                     <ul class="messages">
                         <li class="success-msg">

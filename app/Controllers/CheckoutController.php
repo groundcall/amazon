@@ -5,18 +5,19 @@ namespace Controllers;
 class CheckoutController extends \Wee\Controller {
     
     public function initialize() {
+        //unset($_SESSION['cart_id']);
         //unset($_SESSION['order_id']); die();
         if (!empty($_SESSION['id'])) {
             $orderDao = \Wee\DaoFactory::getDao('Order');
             if (empty($_SESSION['order_id'])) {
                 $this->order = new \Models\Order();
                 $this->order->createUser($_SESSION['id']);
-                $this->order->createCart($_SESSION['cart_id']);
                 $this->order->setConfirmation_key();
                 $orderDao->addOrder($this->order);
                 $_SESSION['order_id'] = $orderDao->getLastInsertedOrderId();
             }
             $this->order = $orderDao->getOrderById($_SESSION['order_id']);
+            $this->order->createCart($_SESSION['cart_id']);
             $this->order->updateTotal();
         }
         else {
@@ -105,11 +106,24 @@ class CheckoutController extends \Wee\Controller {
     }
     
     public function showOrderConfirmation() {
-        $mail = new \Models\Email();
-        $mail->sendOrderConfirmationEmail($this->order);
-        $this->order->setState_id(1);
-        unset($_SESSION['cart_id']);
-        $this->render('users/checkout_final', array('order_id' => $this->order->getId()));
+        $is_in_stock = TRUE;
+        foreach ($this->order->getCart()->getCart_item() as $item) {
+            if ($item->getQuantity() > $item->getProduct()->getStock()) {
+                $is_in_stock = FALSE;
+            }
+        }
+        if ($is_in_stock == TRUE) {
+            $mail = new \Models\Email();
+            $mail->sendOrderConfirmationEmail($this->order);
+            $this->order->setState_id(1);
+            $this->order->getCart()->makeInactive();
+            unset($_SESSION['cart_id']);
+            unset($_SESSION['order_id']);
+            $this->render('users/checkout_final', array('order_id' => $this->order->getId()));
+        }
+        else {
+            $this->redirect('cart/show_cart');
+        }
     }
     
     public function orderConfirmation() {

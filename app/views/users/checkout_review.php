@@ -77,6 +77,7 @@
                                             </tr>
                                             <tr class="first last">
                                                 <td colspan="50" class="a-right first">
+                                                    <?php //var_dump($order); die(); ?>
                                                     Subtotal: <?php echo $order->getCart()->getTotal(), ' US $'; ?><br/>
                                                     Shipping method: <?php echo $order->getShipping_method()->getPrice(), ' US $'; ?><br/>
                                                     Total: <?php echo $order->getTotal(), ' US $'; ?>
