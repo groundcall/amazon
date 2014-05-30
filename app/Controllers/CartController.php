@@ -61,7 +61,6 @@ class CartController extends \Wee\Controller {
     }
 
     private function updateCart() {
-
         $quantities = $_POST['cart'];
         $this->cart->updateQuantities($this->cart, $_POST['cart']);
         $this->render('users/cart', array('cart' => $this->cart));

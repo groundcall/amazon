@@ -38,8 +38,9 @@
 
                 </div>
             </div>
-            <div class="col-left sidebar"></div>
         </div>
+        <br /><br />
+        <?php include 'user_cart_sidebar.php'; ?>
     </div>
 </div>
 

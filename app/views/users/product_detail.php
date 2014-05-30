@@ -10,7 +10,7 @@
                 </li>
 
                 <li class="category10">
-                    <a href="<?php echo url('products/category', array('category' => $product->getCategory_id())); ?>" title=""><?php echo $product->getCategory(); ?></a>
+                    <a href="<?php echo url('products/show_products', array('category' => $product->getCategory_id())); ?>" title=""><?php echo $product->getCategory(); ?></a>
                     <span>/ </span>
                 </li>
                 <li class="product">

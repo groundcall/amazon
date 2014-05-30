@@ -2,9 +2,6 @@
 
 namespace Controllers;
 
-/**
- * The default controller
- */
 class AdminUsersController extends \Wee\Controller {
 
     public function initialize() {

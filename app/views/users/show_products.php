@@ -136,7 +136,7 @@
                                     </div>
                                 <?php else: ?>
                                     <div class="actions">
-                                        <button class="button btn-cart" >
+                                        <button class="button btn-cart">
                                             <span><span>Out of stock</span></span>
                                         </button>
                                     </div>

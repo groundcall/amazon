@@ -47,18 +47,11 @@ class UsersController extends \Wee\Controller {
             $_SESSION['id'] = $user->getId();
             $_SESSION['username'] = $user->getUsername();
             $_SESSION['is_admin'] = $user->getRole_id();
-            
-             $cartDao = \Wee\DaoFactory::getDao('Cart');
-             $cartDao->deactivateCartByUserId($user->getId());
 
-//             if (!$cartDao->getCartByUserId($user->getId())){
-             $cartDao->assignCartToUser();
-//             }
-//             else{
-//                 $cartDao->deleteCartById($_SESSION['cart_id']);
-//             }
-             
-             
+            $cartDao = \Wee\DaoFactory::getDao('Cart');
+            $cartDao->deactivateCartByUserId($user->getId());
+            $cartDao->assignCartToUser();
+
             if ($user->getRole_id() == 1) {
                 $this->redirect('admin_products/');
             } else {
@@ -74,7 +67,6 @@ class UsersController extends \Wee\Controller {
         $_SESSION['username'] = null;
         $_SESSION['cart_id'] = null;
         unset($_SESSION['order_id']);
-//        session_destroy();
         $this->redirect('products/');
     }
 
@@ -102,7 +94,6 @@ class UsersController extends \Wee\Controller {
             $userDao->updateActivationKey($user);
             $mail = new \Models\Email();
             $mail->sendResetPasswordEmail($user);
-            
         }
         $this->render('users/forgot_password', array('resetPassword' => $resetPasswod));
     }

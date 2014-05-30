@@ -2,14 +2,8 @@
 
 namespace Controllers;
 
-/**
- * The default controller
- */
 class AdminProductsController extends \Wee\Controller {
 
-    /**
-     * The default action
-     */
     public function initialize() {
         if (empty($_SESSION) || $_SESSION['is_admin'] != 1) {
             $this->redirect('products/');
@@ -149,5 +143,4 @@ class AdminProductsController extends \Wee\Controller {
             $this->redirect('products/');
         }
     }
-
 }

@@ -125,7 +125,7 @@ class OrderDao extends \Wee\Dao {
     }
     
     public function getLastOrdersByUser($user) {
-        $sql = 'SELECT * FROM orders WHERE user_id = :user_id AND state_id <> :state_id ORDER BY date DESC LIMIT 5';
+        $sql = 'SELECT * FROM orders WHERE user_id = :user_id AND state_id <> :state_id AND id NOT IN (SELECT MAX(id) FROM orders) ORDER BY date DESC LIMIT 5';
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':user_id', $user->getId());
         $state_id = 0;
@@ -135,7 +135,7 @@ class OrderDao extends \Wee\Dao {
     }
     
     public function getAllOrdersByUser($user_id, $start, $limit) {
-        $sql = 'SELECT * FROM orders WHERE user_id = :user_id ORDER BY date DESC LIMIT :start, :limit';
+        $sql = 'SELECT * FROM orders WHERE user_id = :user_id AND id NOT IN (SELECT MAX(id) FROM orders) ORDER BY date DESC LIMIT :start, :limit';
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':user_id', $user_id);
         $stmt->bindParam(':start', $start, \PDO::PARAM_INT);
@@ -145,7 +145,7 @@ class OrderDao extends \Wee\Dao {
     }
     
     public function getOrdersCount($user_id) {
-        $sql = "SELECT COUNT(*) FROM orders WHERE user_id = :user_id";
+        $sql = "SELECT COUNT(*) FROM orders WHERE user_id = :user_id AND id NOT IN (SELECT MAX(id) FROM orders)";
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':user_id', $user_id);
         $stmt->execute();
