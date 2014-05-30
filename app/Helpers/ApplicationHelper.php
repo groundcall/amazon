@@ -104,4 +104,10 @@ trait ApplicationHelper {
         $cart = $cartDao->getCartById($cart_id);
         return $cart;
     }
+    
+    public function getLastOrdersByUser($user) {
+        $orderDao = \Wee\DaoFactory::getDao('Order');
+        $orders = $orderDao->getLastOrdersByUser($user);
+        return $orders;
+    }
 }

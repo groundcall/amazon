@@ -131,7 +131,7 @@ class CheckoutController extends \Wee\Controller {
         }
     }
     
-    public function orderConfirmation() {
+    public function showOrder() {
         if (!empty($_GET['order_id'])) {
             $orderDao = \Wee\DaoFactory::getDao('Order');
             $order = $orderDao->getOrderByIdAndUser($_GET['order_id'], $_SESSION['id']);

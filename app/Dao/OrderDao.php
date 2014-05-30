@@ -14,6 +14,7 @@ class OrderDao extends \Wee\Dao {
         $order->createShipping_address();
         $order->createShipping_method();
         $order->createPayment_method();
+        $order->setState($row['state_id']);
         return $order;
     }
 
@@ -53,7 +54,6 @@ class OrderDao extends \Wee\Dao {
     }
     
     public function addOrder($order) {
-        //var_dump($order);
         $sql = "INSERT INTO orders (user_id, cart_id, state_id, shipping_method_id, payment_method_id, date)"
                 . "VALUES (:user_id, :cart_id, :state_id, :shipping_method_id, :payment_method_id, :date)";
         $stmt = $this->getConnection()->prepare($sql);
@@ -122,5 +122,34 @@ class OrderDao extends \Wee\Dao {
         $stmt->bindValue(':id', $order->getId());
         $stmt->bindValue(':state_id', $order->getState_id());
         $stmt->execute();
+    }
+    
+    public function getLastOrdersByUser($user) {
+        $sql = 'SELECT * FROM orders WHERE user_id = :user_id AND state_id <> :state_id ORDER BY date DESC LIMIT 5';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':user_id', $user->getId());
+        $state_id = 0;
+        $stmt->bindValue(':state_id', $state_id);
+        $stmt->execute();
+        return $this->getOrders($stmt);
+    }
+    
+    public function getAllOrdersByUser($user_id, $start, $limit) {
+        $sql = 'SELECT * FROM orders WHERE user_id = :user_id ORDER BY date DESC LIMIT :start, :limit';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':user_id', $user_id);
+        $stmt->bindParam(':start', $start, \PDO::PARAM_INT);
+        $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
+        $stmt->execute();
+        return $this->getOrders($stmt);
+    }
+    
+    public function getOrdersCount($user_id) {
+        $sql = "SELECT COUNT(*) FROM orders WHERE user_id = :user_id";
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':user_id', $user_id);
+        $stmt->execute();
+        $result = $stmt->fetch();
+        return $result[0];
     }
 }

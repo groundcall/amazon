@@ -21,7 +21,7 @@ class DashboardController extends \Wee\Controller {
     }
 
     public function index() {
-        $this->redirect('dashboard/show_account_dashboard');
+        $this->redirect('dashboard/account_dashboard');
     }
 
 
@@ -71,5 +71,34 @@ class DashboardController extends \Wee\Controller {
             }
         }
         $this->render('users/dashboard_edit_shipping_address', array('user' => $this->user, 'address'=>$address));
+    }
+    
+    public function showOrderDetails() {
+        if (!empty($_GET['order_id'])) {
+            $orderDao = \Wee\DaoFactory::getDao('Order');
+            $order = $orderDao->getOrderByIdAndUser($_GET['order_id'], $_SESSION['id']);
+            $order->get_Cart($order->getCart_id());
+            $this->render('users/dashboard_show_order', array('order' => $order));
+        }
+        else {
+            $this->redirect('products/');
+        }
+    }
+    
+    public function showAllOrders() {
+        $paginator = new \Models\Paginator();
+        $orderDao = \Wee\DaoFactory::getDao('Order');
+        $paginator->setCount($orderDao->getOrdersCount($_SESSION['id']));
+        $paginator->setPerpage();
+        if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
+            $paginator->setCurrent($_GET['page']);
+        } else {
+            $paginator->setCurrent(1);
+        }
+        $paginator->setPages();
+        $start = ($paginator->getCurrent() - 1) * $paginator->getPerpage();
+        $limit = $paginator->getPerpage();
+        $orders = $orderDao->getAllOrdersByUser($_SESSION['id'], $start, $limit);
+        $this->render('users/dashboard_show_orders', array('orders' => $orders, 'paginator' => $paginator));
     }
 }

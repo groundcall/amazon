@@ -79,7 +79,7 @@ class Email extends \Wee\Model {
         $this->message = "Hello, " . $order->getUser()->getFirstname() . " " . $order->getUser()->getLastname() . " !\n"
                 . "Your order has been successfully placed. The order number is " . $order->getId() . ".\n"
                 . "To track your order progress please access the following link: \n"
-                . "http://" . $_SERVER["SERVER_NAME"] . "/checkout/order_confirmation?order_id=" . $order->getId() . "\n";
+                . "http://" . $_SERVER["SERVER_NAME"] . "/checkout/show_order?order_id=" . $order->getId() . "\n";
         $message = \Swift_Message::newInstance($this->title)
                     ->setFrom(array('adumitrache@pitechnologies.ro' => 'bookstore.com'))
                     ->setTo(array($order->getUser()->getEmail() => $order->getUser()->getFirstname() . ' ' . $order->getUser()->getLastname()))

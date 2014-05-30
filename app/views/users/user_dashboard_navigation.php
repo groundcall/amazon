@@ -4,11 +4,11 @@
     </div>
     <div class="block-content">
         <ul>
-            <li class="current"><a href="<?php echo url('dashboard/account_dashboard'); ?>"><strong>Account Dashboard</strong></a></li>
+            <li ><a href="<?php echo url('dashboard/account_dashboard'); ?>">Account Dashboard</a></li>
             <li><a href="#">Account Information</a></li>
-            <li><a href="#">My Orders</a></li>
+            <li><a href="<?php echo url('dashboard/show_all_orders'); ?>">My Orders</a></li>
             <li><a href="<?php echo url('dashboard/billing_address'); ?>">Billing address</a></li>
-            <li class="last"><a href="<?php echo url('dashboard/shipping_address'); ?>">Shipping address</a></li>
+            <li><a href="<?php echo url('dashboard/shipping_address'); ?>">Shipping address</a></li>
         </ul>
     </div>
 </div>
