@@ -150,7 +150,7 @@ class Cart extends \Wee\Model {
     public function removeCartItems() {
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
         $cartItemDao->removeAllCartItemsByCartId($this->getId());
-        $this->cart->calculateTotal();
+        $this->calculateTotal();
     }
     
 //    public function removeCartItem($product_id, $cart_id) {

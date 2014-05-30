@@ -4,7 +4,7 @@
     </div>
     <div class="block-content">
         <ul>
-            <li class="current"><strong>Account Dashboard</strong></li>
+            <li class="current"><a href="<?php echo url('dashboard/account_dashboard'); ?>"><strong>Account Dashboard</strong></a></li>
             <li><a href="#">Account Information</a></li>
             <li><a href="#">My Orders</a></li>
             <li><a href="<?php echo url('dashboard/billing_address'); ?>">Billing address</a></li>

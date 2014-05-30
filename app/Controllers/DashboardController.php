@@ -23,8 +23,6 @@ class DashboardController extends \Wee\Controller {
 
     public function accountDashboard() {
 
-//        var_dump($this->user);
-
         $this->render('users/dashboard', array('user' => $this->user));
     }
 
@@ -39,27 +37,36 @@ class DashboardController extends \Wee\Controller {
     public function billingAddress() {
 
         $address = $this->user->getBilling_address();
-
         if (isset($_POST['billing'])) {
             $addr = $_POST['billing']['street1'] . ' ' . $_POST['billing']['street2'];
             $address->updateAttributes($_POST['billing']);
             $address->setCountry($_POST['billing']['country_id']);
             $address->setAddress($addr);
-
             if ($address->isValid()) {
                 $addressDao = \Wee\DaoFactory::getDao('Address');
-                $address = $addressDao->updateAddress($address->getId(), $address);
+                $addressDao->updateAddress($address->getId(), $address);
+                $this->user->setBilling_address($address->getId());
+                $_SESSION['update_status']='ok';
             }
-            $this->user->setBilling_address($this->user->getBilling_address_id());
         }
-
-        var_dump($this->user->getBilling_address());
-        $this->render('users/dashboard_edit_billing_address', array('user' => $this->user));
+        $this->render('users/dashboard_edit_billing_address', array('user' => $this->user, 'address' => $address));
     }
 
     public function shippingAddress() {
-
-        $this->render('users/dashboard_edit_shipping_address', array('user' => $this->user));
+        
+        $address = $this->user->getShipping_address();
+        if (isset($_POST['shipping'])) {
+            $addr = $_POST['shipping']['street1'] . ' ' . $_POST['shipping']['street2'];
+            $address->updateAttributes($_POST['shipping']);
+            $address->setCountry($_POST['shipping']['country_id']);
+            $address->setAddress($addr);
+            if ($address->isValid()) {
+                $addressDao = \Wee\DaoFactory::getDao('Address');
+                $addressDao->updateAddress($address->getId(), $address);
+                $this->user->setShipping_address($address->getId());
+                $_SESSION['update_status']='ok';
+            }
+        }
+        $this->render('users/dashboard_edit_shipping_address', array('user' => $this->user, 'address'=>$address));
     }
-
 }

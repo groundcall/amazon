@@ -20,6 +20,7 @@
                     </li>
                 </ul>
             <?php endif; ?>
+            <?php $_SESSION['updated_qty'] = null; ?>
             
             <?php if (sizeof($cart->getCart_item()) > 0): ?>
                 <form action="<?php echo url('cart/manage_cart'); ?>" method="post">
