@@ -25,7 +25,7 @@
 
             <ol id="cart-sidebar" class="mini-products-list">
 
-                <?php $cart_items = $cart->getCart_item() ?>
+                <?php $cart_items = $cart->getCart_item() ;?>
                 <?php foreach ($cart_items as $cart_item): ?>
                     <?php $product = $cart_item->getProduct(); ?> 
                     <li class="item">

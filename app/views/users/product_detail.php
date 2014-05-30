@@ -75,7 +75,13 @@
                                         <button type="submit" title="Add to Cart" class="button btn-cart" ><span><span>Add to Cart</span></span></button>
                                     </div>
                                 </div>
-                            <?php endif; ?>
+                            <?php else: ?>
+                                <div class="actions">
+                                    <button class="button outofstock" >
+                                        <span><span>Out of stock</span></span>
+                                    </button>
+                                </div>
+                            <?php endif ?>
 
 
                         </div>

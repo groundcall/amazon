@@ -33,7 +33,7 @@
                                                     <div class="field name-firstname">
                                                         <label for="shipping[firstname]" class="required"><em>*</em>First Name</label>
                                                         <div class="input-box">
-                                                            <input id="shipping:firstname" name="shipping[firstname]" title="First Name" maxlength="255" class="input-text required-entry <?php echo ($address && $view->errorFor($address, "firstname")) ? 'validation-failed' : '' ?>" type="text" value='<?php echo ($address) ? $address->getFirstname() : ""; ?>' />
+                                                            <input id="shipping:firstname" name="shipping[firstname]" title="First Name" maxlength="255" class="input-text required-entry <?php echo ($address && $view->errorFor($address, "firstname")) ? 'validation-failed' : '' ?>" type="text" value='<?php echo ($address) ? $address->getFirstname() : $user->getFirstname(); ?>' />
                                                             <?php if ($address && $address->hasError('firstname')): ?>
                                                                 <div class="validation-advice" id="advice-required-entry-email" style=""><?php echo $view->errorFor($address, "firstname"); ?></div>
                                                             <?php endif; ?>
@@ -42,7 +42,7 @@
                                                     <div class="field name-lastname">
                                                         <label for="shipping[lastname]" class="required"><em>*</em>Last Name</label>
                                                         <div class="input-box">
-                                                            <input id="shipping:lastname" name="shipping[lastname]" title="Last Name" maxlength="255" class="input-text required-entry <?php echo ($address && $view->errorFor($address, "lastname")) ? 'validation-failed' : '' ?>" type="text" value='<?php echo ($address) ? $address->getLastname() : ""; ?>' />
+                                                            <input id="shipping:lastname" name="shipping[lastname]" title="Last Name" maxlength="255" class="input-text required-entry <?php echo ($address && $view->errorFor($address, "lastname")) ? 'validation-failed' : '' ?>" type="text" value='<?php echo ($address) ? $address->getLastname() : $user->getLastname(); ?>' />
                                                             <?php if ($address && $address->hasError('lastname')): ?>
                                                                 <div class="validation-advice" id="advice-required-entry-email" style=""><?php echo $view->errorFor($address, "lastname"); ?></div>
                                                             <?php endif; ?>
@@ -55,7 +55,7 @@
                                                 <div class="field">
                                                     <label for="shipping[email]" class="required"><em>*</em>Email Address</label>
                                                     <div class="input-box">
-                                                        <input name="shipping[email]" id="shipping:email" title="Email Address" class="input-text required-entry <?php echo ($address && $view->errorFor($address, "email")) ? 'validation-failed' : '' ?>" type="text" value='<?php echo ($address) ? $address->getEmail() : ""; ?>' />
+                                                        <input name="shipping[email]" id="shipping:email" title="Email Address" class="input-text required-entry <?php echo ($address && $view->errorFor($address, "email")) ? 'validation-failed' : '' ?>" type="text" value='<?php echo ($address) ? $address->getEmail() : $user->getEmail(); ?>' />
                                                         <?php if ($address && $address->hasError('email')): ?>
                                                             <div class="validation-advice" id="advice-required-entry-email" style=""><?php echo $view->errorFor($address, "email"); ?></div>
                                                         <?php endif; ?>

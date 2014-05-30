@@ -136,7 +136,9 @@
                                     </div>
                                 <?php else: ?>
                                     <div class="actions">
-                                        <button class="button btn-cart">
+
+                                        <button class="button outofstock">
+
                                             <span><span>Out of stock</span></span>
                                         </button>
                                     </div>
@@ -171,7 +173,7 @@
                                         </div>
                                     <?php else: ?>
                                         <div class="actions">
-                                            <button class="button btn-cart" >
+                                            <button class="button outofstock" >
                                                 <span><span>Out of stock</span></span>
                                             </button>
                                         </div>
@@ -206,7 +208,7 @@
                                         </div>
                                     <?php else: ?>
                                         <div class="actions">
-                                            <button class="button btn-cart" >
+                                            <button class="button outofstock" >
                                                 <span><span>Out of stock</span></span>
                                             </button>
                                         </div>

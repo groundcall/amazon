@@ -204,4 +204,11 @@ class User extends \Wee\Model {
     public function setCart($cart) {
         $this->cart = $cart;
     }
+    
+    public function getAllCartsByUserId(){
+        $cartDao = \Wee\DaoFactory::getDao('Cart');
+        $allcarts = $cartDao->getAllCartsByUserId($this->getId());
+        
+        return $allcarts;
+    }
 }

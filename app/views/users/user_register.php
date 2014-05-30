@@ -1,5 +1,7 @@
 <?php $view->extend('masterpages/front_masterpage'); ?>
 
+<div class="main-container col1-layout">
+                <div class="main">
     <div class="account-create">
         <div class="page-title">
             <h1>Create an Account</h1>
@@ -131,3 +133,5 @@
             </div>
         </form>
     </div>
+                </div>
+</div>

@@ -20,7 +20,7 @@ class UsersController extends \Wee\Controller {
                 $user->setId($userDao->getLastInsertedUserId());
                 $mail = new \Models\Email();
                 $mail->sendActivationEmail($user);
-                $this->showUserForm();
+                $this->index();
             } else {
                 $this->render('users/user_register', array('user' => $user));
             }

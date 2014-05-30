@@ -76,7 +76,8 @@ trait UserValidator {
 
                     $object->addError($attributeName, $message);
                 }
-            } else {
+            } 
+            else {
                 if (strlen($object->getPassword()) < 6) {
                     $object->addError($attributeName, $message);
                 }

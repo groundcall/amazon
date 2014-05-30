@@ -38,11 +38,11 @@ class CartDao extends \Wee\Dao {
     }
 
     public function getCartById($cart_id) {
-        $sql = 'SELECT * FROM carts WHERE id = :id AND active = :active';
+        $sql = 'SELECT * FROM carts WHERE id = :id';
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':id', $cart_id);
-        $active = 1;
-        $stmt->bindValue(':active', $active);
+//        $active = 1;
+//        $stmt->bindValue(':active', $active);
         $stmt->execute();
         return $this->getCart($stmt);
     }
@@ -98,7 +98,7 @@ class CartDao extends \Wee\Dao {
     }
 
     public function addCart($user_id) {
-       
+
         $sql = 'INSERT INTO carts (user_id, date, active, total)'
                 . 'VALUES (:user_id, :date, :active, :total)';
         $stmt = $this->getConnection()->prepare($sql);
@@ -132,15 +132,15 @@ class CartDao extends \Wee\Dao {
         $stmt->bindValue(':cart_id', $cart_id);
         $stmt->execute();
     }
-    
-    public function deactivateCartByUserId($user_id){
+
+    public function deactivateCartByUserId($user_id) {
         $sql = 'UPDATE carts SET active = :active WHERE user_id = :user_id';
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':user_id', $user_id);
         $stmt->bindValue(':active', 0);
         $stmt->execute();
     }
-    
+
     public function updateCartState($cart) {
         $sql = 'UPDATE carts SET active = :active WHERE id = :id';
         $stmt = $this->getConnection()->prepare($sql);
@@ -148,4 +148,29 @@ class CartDao extends \Wee\Dao {
         $stmt->bindValue(':active', $cart->getActive());
         $stmt->execute();
     }
+
+    public function getAllCartsByUserId($user_id) {
+        $sql = 'SELECT * FROM carts WHERE user_id = :user_id ';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':user_id', $user_id);
+        $stmt->execute();
+        $allcarts = $this->getCarts($stmt);
+
+        return $allcarts;
+    }
+
+    public function activateCart($cart_id, $user_id) {
+        $sql = 'UPDATE carts SET active = 0 WHERE user_id = :user_id';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':user_id', $user_id);
+        $stmt->execute();
+        
+        $sql = 'UPDATE carts SET active = 1 WHERE id = :cart_id';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':cart_id', $cart_id);
+        $stmt->execute();
+        
+        
+    }
+
 }

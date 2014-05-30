@@ -126,7 +126,7 @@ class UserDao extends \Wee\Dao {
         $stmt->bindValue(':activation_key', $user->getActivation_key());
         $stmt->execute();
     }
-    
+
     public function getLastInsertedUserId() {
         $sql = "SELECT * FROM users WHERE id = LAST_INSERT_ID()";
         $stmt = $this->getConnection()->prepare($sql);
@@ -143,7 +143,11 @@ class UserDao extends \Wee\Dao {
     }
 
     public function updateUser($user) {
-        $sql = "UPDATE users SET username = :username, firstname = :firstname, gender = :gender, lastname = :lastname, email = :email, phone = :phone, password = :password WHERE id = :id";
+        if ($user->getPassword() == '') {
+            $sql = "UPDATE users SET username = :username, firstname = :firstname, gender = :gender, lastname = :lastname, email = :email, phone = :phone  WHERE id = :id";
+        } else {
+            $sql = "UPDATE users SET username = :username, firstname = :firstname, gender = :gender, lastname = :lastname, email = :email, phone = :phone, password = :password WHERE id = :id";
+        }
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':id', $user->getId());
         $stmt->bindValue(':username', $user->getUsername());
@@ -152,7 +156,9 @@ class UserDao extends \Wee\Dao {
         $stmt->bindValue(':email', $user->getEmail());
         $stmt->bindValue(':phone', $user->getPhone());
         $stmt->bindValue(':gender', $user->getGender());
+        if ($user->getPassword() != ''){
         $stmt->bindValue(':password', md5($user->getPassword()));
+        }
         $stmt->execute();
     }
 
@@ -171,7 +177,7 @@ class UserDao extends \Wee\Dao {
         $result = $stmt->fetch();
         return $result[0];
     }
-    
+
     public function getUserByEmailAddress($email) {
         $sql = 'SELECT * FROM users WHERE email = :email';
         $stmt = $this->getConnection()->prepare($sql);
@@ -179,7 +185,7 @@ class UserDao extends \Wee\Dao {
         $stmt->execute();
         return $this->getUser($stmt);
     }
-    
+
     public function getUserByEmailAndPassword($email, $password) {
         $sql = 'SELECT * FROM users WHERE email = :email AND password = :password';
         $stmt = $this->getConnection()->prepare($sql);
@@ -188,7 +194,7 @@ class UserDao extends \Wee\Dao {
         $stmt->execute();
         return $this->getUser($stmt);
     }
-    
+
     public function activateUserByActivationKey($activation_key, $user_id) {
         $sql = "UPDATE users SET activated = :activated, activation_key = :new_activation_key WHERE id = :user_id AND activation_key = :activation_key";
         $stmt = $this->getConnection()->prepare($sql);
@@ -200,7 +206,7 @@ class UserDao extends \Wee\Dao {
         $stmt->bindValue(':new_activation_key', $new_activation_key, \PDO::PARAM_NULL);
         $stmt->execute();
     }
-    
+
     public function updateActivationKey($user) {
         $sql = "UPDATE users SET activation_key = :activation_key WHERE id = :id";
         $stmt = $this->getConnection()->prepare($sql);
@@ -208,7 +214,7 @@ class UserDao extends \Wee\Dao {
         $stmt->bindValue(':activation_key', $user->getActivation_key());
         $stmt->execute();
     }
-    
+
     public function updatePassword($activation_key, $user_id, $password) {
         $sql = "UPDATE users SET password = :password, activation_key = :new_activation_key WHERE id = :user_id AND activation_key = :activation_key";
         $stmt = $this->getConnection()->prepare($sql);
@@ -219,7 +225,7 @@ class UserDao extends \Wee\Dao {
         $stmt->bindValue(':new_activation_key', $new_activation_key, \PDO::PARAM_NULL);
         $stmt->execute();
     }
-    
+
     public function updateBillingAddress($user_id, $address_id) {
         $sql = "UPDATE users SET billing_address_id = :billing_address_id WHERE id = :id";
         $stmt = $this->getConnection()->prepare($sql);
@@ -227,7 +233,7 @@ class UserDao extends \Wee\Dao {
         $stmt->bindValue(':id', $user_id);
         $stmt->execute();
     }
-    
+
     public function updateShippingAddress($user_id, $address_id) {
         $sql = "UPDATE users SET shipping_address_id = :shipping_address_id WHERE id = :id";
         $stmt = $this->getConnection()->prepare($sql);
@@ -235,7 +241,7 @@ class UserDao extends \Wee\Dao {
         $stmt->bindValue(':id', $user_id);
         $stmt->execute();
     }
-    
+
     public function getUserForLogin($user) {
         $sql = 'SELECT * FROM users WHERE email = :email AND password = :password';
         $stmt = $this->getConnection()->prepare($sql);
@@ -244,4 +250,5 @@ class UserDao extends \Wee\Dao {
         $stmt->execute();
         return $this->getUser($stmt);
     }
+
 }
