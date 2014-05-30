@@ -5,7 +5,7 @@
         <div class="block-title">
             <strong><span>My Cart</span></strong>
         </div>
-        <?php if (!$cart): ?>
+        <?php if (!$cart->getCart_item()): ?>
             <div class="block-content">
                 <p class="empty">You have no items in your shopping cart.</p>
             </div>

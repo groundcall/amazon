@@ -121,14 +121,14 @@
                                     <strong>Grand Total</strong>
                                 </td>
                                 <td style="" class="a-right">
-                                    <strong><span class="price"><?php echo $cart->getTotal(); ?></span></strong>
+                                    <strong><span class="price"><?php echo $cart->getTotal(); ?> US$</span></strong>
                                 </td>
                             </tr>
                         </tfoot>
                         <tbody>
                             <tr>
                                 <td style="" class="a-right" colspan="1">Subtotal</td>
-                                <td style="" class="a-right"><span class="price"><?php echo $cart->getTotal(); ?></span></td>
+                                <td style="" class="a-right"><span class="price"><?php echo $cart->getTotal(); ?> US$</span></td>
                             </tr>
                         </tbody>
                     </table>

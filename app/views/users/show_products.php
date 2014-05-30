@@ -19,16 +19,16 @@
 
         <div class="col-wrapper">
             <div class="col-main">
-                    <?php if ($_SESSION['add_status'] == 'ok'): ?>
-                        <div id="messages_product_view">
-                            <ul class="messages">
-                                <li class="success-msg">
-                                    <ul>
-                                        <li><span>The item was added to your shopping cart.</span></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
+                <?php if ($_SESSION['add_status'] == 'ok'): ?>
+                    <div id="messages_product_view">
+                        <ul class="messages">
+                            <li class="success-msg">
+                                <ul>
+                                    <li><span>The item was added to your shopping cart.</span></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
                     <?php $_SESSION['add_status'] = null; ?>
                 <?php endif; ?>
                 <?php if (sizeof($products) == 0): ?>
@@ -134,6 +134,12 @@
                                             </button>
                                         </form>
                                     </div>
+                                <?php else: ?>
+                                    <div class="actions">
+                                        <button class="button btn-cart" >
+                                            <span><span>Out of stock</span></span>
+                                        </button>
+                                    </div>
                                 <?php endif; ?>
                             </li>
 
@@ -163,7 +169,12 @@
                                                 </button>
                                             </form>
                                         </div>
-                                    <?php else: $_SESSION['add_status'] = 'not_ok' ?>
+                                    <?php else: ?>
+                                        <div class="actions">
+                                            <button class="button btn-cart" >
+                                                <span><span>Out of stock</span></span>
+                                            </button>
+                                        </div>
                                     <?php endif; ?>
                                 <?php endif; ?>
                             </li>
@@ -192,6 +203,12 @@
                                                     <span><span>Add to Cart</span></span>
                                                 </button>
                                             </form>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="actions">
+                                            <button class="button btn-cart" >
+                                                <span><span>Out of stock</span></span>
+                                            </button>
                                         </div>
                                     <?php endif; ?>
                                 <?php endif; ?>

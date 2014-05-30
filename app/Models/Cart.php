@@ -73,7 +73,8 @@ class Cart extends \Wee\Model {
         $this->setTotal($cartDao->calculateCartTotal($this->getId()));
     }
 
-    public function updateQuantities($cartItems, $quantities) {
+    public function updateQuantities($cart, $quantities) {
+        $cartItems = $cart->getCart_item();
         $_SESSION['updated_qty'] = 1;
         $items = array();
         $quantities = array_values($quantities);
@@ -89,7 +90,9 @@ class Cart extends \Wee\Model {
                 $_SESSION['updated_qty'] = 0;
             }
         }
-        return $items;
+        $this->calculateTotal();
+        $this->setCart_items($items);
+        return $this;
     }
 
     public function addCartItem($product_id, $quantity) {
@@ -129,16 +132,31 @@ class Cart extends \Wee\Model {
             $productDao->updateStock($item->getProduct());
         }
     }
-    
-    public function getCartItemByProductId($product_id){
+
+    public function getCartItemByProductId($product_id) {
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
         $cartItem = $cartItemDao->getCartItemByProductIdAndCartId($product_id, $this->getId());
         return $cartItem;
     }
+
     
     public function makeInactive() {
         $this->active = 0;
         $cartDao = \Wee\DaoFactory::getDao('Cart');
         $cartDao->updateCartState($this);
     }
+
+
+    public function removeCartItems() {
+        $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
+        $cartItemDao->removeAllCartItemsByCartId($this->getId());
+        $this->cart->calculateTotal();
+    }
+    
+//    public function removeCartItem($product_id, $cart_id) {
+//        $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
+//        $cartItemDao->removeCartItemById($product_id ,$cart_id);
+//    }
+
+
 }

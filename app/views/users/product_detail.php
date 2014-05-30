@@ -20,12 +20,12 @@
         </div>
         <div class="col-main">
             <?php if ($cart->getErrors('quantity')) : ?>
-            <?php $error = ($cart->getErrors()); ?>
+                <?php $error = ($cart->getErrors()); ?>
                 <div id="messages_product_view">
                     <ul class="error-msg">
                         <li class="error">
                             <ul>
-                                <li><span><?php echo $error['quantity'][0][0]?></span></li>
+                                <li><span><?php echo $error['quantity'][0][0] ?></span></li>
                             </ul>
                         </li>
                     </ul>
@@ -66,15 +66,17 @@
                                 </span>
                             </div>
 
-
-                            <div class="add-to-box">
-                                <div class="add-to-cart">
-                                    <label for="qty">Quantity:</label>
-                                    <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>" />
-                                    <input type="text" name="quantity" id="qty" maxlength="12" value="1" title="Quantity" class="input-text qty" />
-                                    <button type="submit" title="Add to Cart" class="button btn-cart" ><span><span>Add to Cart</span></span></button>
+                            <?php if ($view->checkQuantity($cart, $product)): ?>
+                                <div class="add-to-box">
+                                    <div class="add-to-cart">
+                                        <label for="qty">Quantity:</label>
+                                        <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>" />
+                                        <input type="text" name="quantity" id="qty" maxlength="12" value="1" title="Quantity" class="input-text qty" />
+                                        <button type="submit" title="Add to Cart" class="button btn-cart" ><span><span>Add to Cart</span></span></button>
+                                    </div>
                                 </div>
-                            </div>
+                            <?php endif; ?>
+
 
                         </div>
 

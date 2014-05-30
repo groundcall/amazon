@@ -37,7 +37,7 @@ class Email extends \Wee\Model {
     }
     
     private function setEmail() {
-        require_once '/home/adumitrache/Sites/bookstore/team-3/team-3/swift/lib/swift_required.php';
+        require_once '/home/abutnar/Sites/team-3/wee/swift/lib/swift_required.php';
         $transport = \Swift_SmtpTransport::newInstance('smtp.loki.pitechnologies.ro', 25);
         $mailer = \Swift_Mailer::newInstance($transport);
         return $mailer;
