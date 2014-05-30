@@ -37,7 +37,7 @@ class Email extends \Wee\Model {
     }
     
     private function setEmail() {
-        require_once '/home/abutnar/Sites/team-3/wee/swift/lib/swift_required.php';
+        require_once '/home/adumitrache/Sites/bookstore/team-3/team-3/swift/lib/swift_required.php';
         $transport = \Swift_SmtpTransport::newInstance('smtp.loki.pitechnologies.ro', 25);
         $mailer = \Swift_Mailer::newInstance($transport);
         return $mailer;
@@ -73,14 +73,13 @@ class Email extends \Wee\Model {
         $mailer->send($message);
     }
     
-    public function sendOrderConfirmationEmail($order) {
+    public function sendOrderEmail($order) {
         $mailer = $this->setEmail();
         $this->title = 'Book Shop – Order confirmation';
         $this->message = "Hello, " . $order->getUser()->getFirstname() . " " . $order->getUser()->getLastname() . " !\n"
                 . "Your order has been successfully placed. The order number is " . $order->getId() . ".\n"
                 . "To track your order progress please access the following link: \n"
-                . "http://" . $_SERVER["SERVER_NAME"] . "/checkout/order_confirmation?order_id=" . $order->getId()
-                . "&confirmation_key=" . $order->getConfirmation_key() . "\n";
+                . "http://" . $_SERVER["SERVER_NAME"] . "/checkout/order_confirmation?order_id=" . $order->getId() . "\n";
         $message = \Swift_Message::newInstance($this->title)
                     ->setFrom(array('adumitrache@pitechnologies.ro' => 'bookstore.com'))
                     ->setTo(array($order->getUser()->getEmail() => $order->getUser()->getFirstname() . ' ' . $order->getUser()->getLastname()))

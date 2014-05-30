@@ -21,7 +21,7 @@
                                         <tr class='last even'>
                                             <td colspan="50" class="a-left first">
                                                 <span style='text-align: center;'>
-                                                    Your order number is <?php echo $order_id; ?>. <br/>
+                                                    Your order number is <?php echo $order->getId(); ?>. <br/>
                                                     You will receive an order information email with details of your order and a link to track it's progress.
                                                 </span>
                                             </td>

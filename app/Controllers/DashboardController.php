@@ -5,24 +5,27 @@ namespace Controllers;
 class DashboardController extends \Wee\Controller {
 
     public function initialize() {
+        if (empty($_SESSION['id'])) {
+            $this->redirect('users/show_login_form');
+        }
+        else {
+            $userDao = \Wee\DaoFactory::getDao('User');
+            $this->user = $userDao->getUserById($_SESSION['id']);
+            $this->user->setBilling_address($this->user->getBilling_address_id());
+            $this->user->setShipping_address($this->user->getShipping_address_id());
 
-        $userDao = \Wee\DaoFactory::getDao('User');
-        $this->user = $userDao->getUserById($_SESSION['id']);
-        $this->user->setBilling_address($this->user->getBilling_address_id());
-        $this->user->setShipping_address($this->user->getShipping_address_id());
-
-        $cartDao = \Wee\DaoFactory::getDao('Cart');
-        $this->cart = $cartDao->getCartById($_SESSION['cart_id']);
-        $this->user->setCart($this->cart);
+            $cartDao = \Wee\DaoFactory::getDao('Cart');
+            $this->cart = $cartDao->getCartById($_SESSION['cart_id']);
+            $this->user->setCart($this->cart);
+        }
     }
 
     public function index() {
-
-        $this->redirect('dashboard/account_dashboard');
+        $this->redirect('dashboard/show_account_dashboard');
     }
 
-    public function accountDashboard() {
 
+    public function accountDashboard() {
         $this->render('users/dashboard', array('user' => $this->user));
     }
 

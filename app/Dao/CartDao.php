@@ -46,6 +46,14 @@ class CartDao extends \Wee\Dao {
         $stmt->execute();
         return $this->getCart($stmt);
     }
+    
+    public function getCartByIdNotActive($cart_id) {
+        $sql = 'SELECT * FROM carts WHERE id = :id';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':id', $cart_id);
+        $stmt->execute();
+        return $this->getCart($stmt);
+    }
 
     public function getCartByUserId($user_id) {
         $sql = 'SELECT * FROM carts WHERE user_id = :id AND active = 1';

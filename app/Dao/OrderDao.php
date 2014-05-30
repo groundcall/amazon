@@ -43,9 +43,19 @@ class OrderDao extends \Wee\Dao {
         return $this->getOrder($stmt);
     }
     
+    public function getOrderByIdAndUser($id, $user) {
+        $sql = 'SELECT * FROM orders WHERE id = :id AND user_id = :user_id';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':user_id', $user);
+        $stmt->execute();
+        return $this->getOrder($stmt);
+    }
+    
     public function addOrder($order) {
-        $sql = "INSERT INTO orders (user_id, cart_id, state_id, shipping_method_id, payment_method_id, date, confirmation_key)"
-                . "VALUES (:user_id, :cart_id, :state_id, :shipping_method_id, :payment_method_id, :date, :confirmation_key)";
+        //var_dump($order);
+        $sql = "INSERT INTO orders (user_id, cart_id, state_id, shipping_method_id, payment_method_id, date)"
+                . "VALUES (:user_id, :cart_id, :state_id, :shipping_method_id, :payment_method_id, :date)";
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':user_id', $order->getUser_id());
         $stmt->bindValue(':cart_id', $order->getCart_id());
@@ -55,7 +65,6 @@ class OrderDao extends \Wee\Dao {
         $stmt->bindValue(':shipping_method_id', $method);
         $stmt->bindValue(':payment_method_id', $method);
         $stmt->bindValue(':date', date('Y-m-d H:i:s'));
-        $stmt->bindValue(':confirmation_key', $order->getConfirmation_key());
         $stmt->execute();
     }
     
@@ -112,18 +121,6 @@ class OrderDao extends \Wee\Dao {
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':id', $order->getId());
         $stmt->bindValue(':state_id', $order->getState_id());
-        $stmt->execute();
-    }
-    
-    public function finalizeOrder($order_id, $confirmation_key) {
-        $sql = "UPDATE orders SET confirmation_key = :new_confirmation_key, state_id = :state_id WHERE id = :id AND confirmation_key = :confirmation_key";
-        $stmt = $this->getConnection()->prepare($sql);
-        $stmt->bindValue(':id', $order_id);
-        $stmt->bindValue(':confirmation_key', $confirmation_key);
-        $new_confirmation_key = NULL;
-        $stmt->bindValue(':new_confirmation_key', $new_confirmation_key, \PDO::PARAM_NULL);
-        $state = 2;
-        $stmt->bindValue(':state_id', $state);
         $stmt->execute();
     }
 }
