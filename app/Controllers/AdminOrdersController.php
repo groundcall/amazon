@@ -45,11 +45,6 @@ class AdminOrdersController extends \Wee\Controller {
             $paginator->setCurrent(1);
         }
         $paginator->setPerpage();
-        if ($_GET['time'] == 'not') {
-            $time = 0;
-        } else {
-            $stock = $_GET['time'];
-        }
         var_dump($_GET['username']);
         $start = ($paginator->getCurrent() - 1) * $paginator->getPerpage();
         $limit = $paginator->getPerpage();
@@ -57,7 +52,7 @@ class AdminOrdersController extends \Wee\Controller {
 //        $paginator->setCount($orderDao->getFilteredOrderCount($_GET['username'], $_GET['state'], $time));
         $paginator->setCount(10);
         $paginator->setPages();
-        $orders = $orderDao->getFilterOrders($_GET['username'], $_GET['state'], $time, $start, $limit);
+        $orders = $orderDao->getFilterOrders($_GET['username'], $_GET['state'], $_GET['time'], $start, $limit);
         $this->render('admin/list_orders', array('orders' => $orders, 'paginator' => $paginator));
     }
 //
