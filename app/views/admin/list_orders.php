@@ -9,7 +9,6 @@
         <h1>Order list</h1>
     </div>
     <!-- end page-heading -->
-
     <table border="0" width="100%" cellpadding="0" cellspacing="0" id="content-table">
         <tr>
             <th rowspan="3" class="sized"><img src="../images/shared/side_shadowleft.jpg" width="20" height="300" alt="" /></th>
