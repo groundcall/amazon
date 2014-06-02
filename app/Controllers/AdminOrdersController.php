@@ -49,8 +49,7 @@ class AdminOrdersController extends \Wee\Controller {
         $start = ($paginator->getCurrent() - 1) * $paginator->getPerpage();
         $limit = $paginator->getPerpage();
         $orderDao = \Wee\DaoFactory::getDao('Order');
-//        $paginator->setCount($orderDao->getFilteredOrderCount($_GET['username'], $_GET['state'], $time));
-        $paginator->setCount(10);
+        $paginator->setCount($orderDao->getFilteredOrdersCount($_GET['username'], $_GET['state'], $_GET['time']));
         $paginator->setPages();
         $orders = $orderDao->getFilterOrders($_GET['username'], $_GET['state'], $_GET['time'], $start, $limit);
         $this->render('admin/list_orders', array('orders' => $orders, 'paginator' => $paginator));

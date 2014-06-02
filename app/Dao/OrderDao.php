@@ -176,26 +176,22 @@ class OrderDao extends \Wee\Dao {
         $sql = 'SELECT o.id, o.user_id, o.billing_address_id, o.shipping_address_id, o.cart_id, o.total, o.date, o.state_id, '
               . ' o.shipping_method_id, o.payment_method_id FROM orders o INNER JOIN users u ON ' 
               . ' o.user_id = u.id WHERE u.username LIKE :username ';
-        if ($state_id != 0) {
+        if ($state_id != 5) {
             $sql .= 'AND o.state_id = :state_id ';
         }
         if ($time != 'not') {
-            $sql .= 'AND o.date >= NOW() - INTERVAL 1 :time ';
+            $sql .= 'AND o.date >= NOW() - INTERVAL 1 ' . strtoupper($time) . ' ';
         }
-        $sql .= ' ORDER BY id DESC LIMIT :start, :limit';
+        $sql .= ' ORDER BY o.id DESC LIMIT :start, :limit';
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':username', '%' . $username . '%');
-        if ($state_id != 0) {
-            $stmt->bindValue(':state_id', $state_id);
-        }
-        if ($time != 'not') {
-            $stmt->bindValue(':time', strtoupper($time));
+        if ($state_id != 5) {
+            $stmt->bindParam(':state_id', $state_id, \PDO::PARAM_INT);
         }
         $stmt->bindParam(':start', $start, \PDO::PARAM_INT);
         $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
         $stmt->execute();
-        $orders = $this->getOrders($stmt);
-        var_dump($orders); die();
+        return $this->getOrders($stmt);
     }
     
 //    public function getFilteredOrders($username, $state_id, $time, $start, $limit) {
@@ -229,6 +225,25 @@ class OrderDao extends \Wee\Dao {
         $sql = 'DELETE FROM orders WHERE id = :order_id';
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':order_id', $order_id);
+        $stmt->execute();        
+    }
+    
+    public function getFilteredOrdersCount($username, $state_id, $time) {
+        $sql = 'SELECT COUNT(o.id) FROM orders o INNER JOIN users u ON ' 
+              . ' o.user_id = u.id WHERE u.username LIKE :username ';
+        if ($state_id != 5) {
+            $sql .= 'AND o.state_id = :state_id ';
+        }
+        if ($time != 'not') {
+            $sql .= 'AND o.date >= NOW() - INTERVAL 1 ' . strtoupper($time) . ' ';
+        }
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':username', '%' . $username . '%');
+        if ($state_id != 5) {
+            $stmt->bindParam(':state_id', $state_id, \PDO::PARAM_INT);
+        }
         $stmt->execute();
+        $result = $stmt->fetch();
+        return $result[0];
     }
 }

@@ -7,11 +7,11 @@
 
 <table border="0" width="100%" cellpadding="0" cellspacing="0" id="content-table">
     <tr>
-        <th rowspan="3" class="sized"><img src="images/shared/side_shadowleft.jpg" width="20" height="300" alt="" /></th>
+        <th rowspan="3" class="sized"><img src="../images/shared/side_shadowleft.jpg" width="20" height="300" alt="" /></th>
         <th class="topleft"></th>
         <td id="tbl-border-top">&nbsp;</td>
         <th class="topright"></th>
-        <th rowspan="3" class="sized"><img src="images/shared/side_shadowright.jpg" width="20" height="300" alt="" /></th>
+        <th rowspan="3" class="sized"><img src="../images/shared/side_shadowright.jpg" width="20" height="300" alt="" /></th>
     </tr>
     <tr>
         <td id="tbl-border-left"></td>
@@ -32,7 +32,7 @@
                                 <th valign="top">Status:</th>
                                 <td>	
                                     <select name="state">
-                                        <option value="0" <?php echo (isset($_GET['state']) && ($_GET['state'] == 0)) ? 'selected="selected"' : ''; ?>>All states</option>
+                                        <option value="5" <?php echo (isset($_GET['state']) && ($_GET['state'] == 5)) ? 'selected="selected"' : ''; ?>>All states</option>
                                         <?php foreach ($view->getStates() as $state): ?>
                                             <option value="<?php echo $state->getId(); ?>" <?php echo (isset($_GET['state']) && ($_GET['state'] == $state->getId())) ? 'selected="selected"' : ''; ?>><?php echo $state->getLabel(); ?></option>
                                         <?php endforeach; ?>
@@ -120,18 +120,18 @@
                             <?php $paginator->setCurrent($paginator->getPages()); ?>
                         <?php endif; ?>                        
                         <td>
-                            <?php if (!(isset($_GET['product_name']) || isset($_GET['category']) || isset($_GET['stock']))): ?>
+                            <?php if (!(isset($_GET['username']) || isset($_GET['state']) || isset($_GET['time']))): ?>
                                 <a href="<?php echo url('admin_orders', array('page' => 1)); ?>" class="page-far-left"></a>
                                 <a href="<?php echo url("admin_orders", array("page" => ($current = ($paginator->getCurrent() > 1) ? $paginator->getCurrent() - 1 : 1))); ?>" class="page-left"></a>
                                 <div id="page-info">Page <strong><?php echo $paginator->getCurrent(); ?></strong> / <?php echo $paginator->getPages(); ?></div>
                                 <a href="<?php echo url("admin_orders", array("page" => ($current = ($paginator->getCurrent() < $paginator->getPages()) ? $paginator->getCurrent() + 1 : $paginator->getPages()))); ?>" class="page-right"></a>
                                 <a href="<?php echo url('admin_orders', array('page' => $paginator->getPages())); ?>" class="page-far-right"></a>
                             <?php else: ?>
-                                <a href="<?php echo url('admin_orders', array('page' => 1, 'product_name' => $_GET['product_name'], 'category' => $_GET['category'], 'stock' => (isset($_GET['stock']) && $_GET['stock'] == 1) ? 1 : 0)); ?>" class="page-far-left"></a>
-                                <a href="<?php echo url("admin_orders", array("page" => ($current = ($paginator->getCurrent() > 1) ? $paginator->getCurrent() - 1 : 1), 'product_name' => $_GET['product_name'], 'category' => $_GET['category'], 'stock' => (isset($_GET['stock']) && $_GET['stock'] == 1) ? 1 : 0)); ?>" class="page-left"></a>
+                                <a href="<?php echo url('admin_orders', array('page' => 1, 'username' => $_GET['username'], 'state_id' => $_GET['state'], 'time' => $_GET['time'])); ?>" class="page-far-left"></a>
+                                <a href="<?php echo url("admin_orders", array("page" => ($current = ($paginator->getCurrent() > 1) ? $paginator->getCurrent() - 1 : 1), 'username' => $_GET['username'], 'state_id' => $_GET['state'], 'time' => $_GET['time'])); ?>" class="page-left"></a>
                                 <div id="page-info">Page <strong><?php echo $paginator->getCurrent(); ?></strong> / <?php echo $paginator->getPages(); ?></div>
-                                <a href="<?php echo url("admin_orders", array("page" => ($current = ($paginator->getCurrent() < $paginator->getPages()) ? $paginator->getCurrent() + 1 : $paginator->getPages()), 'product_name' => $_GET['product_name'], 'category' => $_GET['category'], 'stock' => (isset($_GET['stock']) && $_GET['stock'] == 1) ? 1 : 0)); ?>" class="page-right"></a>
-                                <a href="<?php echo url('admin_orders', array('page' => $paginator->getPages(), 'product_name' => $_GET['product_name'], 'category' => $_GET['category'], 'stock' => (isset($_GET['stock']) && $_GET['stock'] == 1) ? 1 : 0)); ?>" class="page-far-right"></a>
+                                <a href="<?php echo url("admin_orders", array("page" => ($current = ($paginator->getCurrent() < $paginator->getPages()) ? $paginator->getCurrent() + 1 : $paginator->getPages()), 'username' => $_GET['username'], 'state_id' => $_GET['state'], 'time' => $_GET['time'])); ?>" class="page-right"></a>
+                                <a href="<?php echo url('admin_orders', array('page' => $paginator->getPages(), 'username' => $_GET['username'], 'state_id' => $_GET['state'], 'time' => $_GET['time'])); ?>" class="page-far-right"></a>
                             <?php endif; ?>
                         </td>
                     </tr>
