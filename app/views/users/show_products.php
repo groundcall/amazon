@@ -19,7 +19,7 @@
 
         <div class="col-wrapper">
             <div class="col-main">
-                <?php if ($_SESSION['add_status'] == 'ok'): ?>
+                <?php if (isset($_SESSION['add_status']) && $_SESSION['add_status'] == 'ok'): ?>
                     <div id="messages_product_view">
                         <ul class="messages">
                             <li class="success-msg">

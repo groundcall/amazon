@@ -8,17 +8,17 @@
                     <div class="page-title">
                         <h1>Billing Address</h1>
                     </div>
-                    <?php if ($_SESSION['update_status'] == 'ok'): ?>
-                    <div id="messages_product_view">
-                        <ul class="messages">
-                            <li class="success-msg">
-                                <ul>
-                                    <li><span>Your billing address was updated.</span></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                    <?php $_SESSION['update_status'] = null; ?>
+                    <?php if (isset($_SESSION['update_status']) && $_SESSION['update_status'] == 'ok'): ?>
+                        <div id="messages_product_view">
+                            <ul class="messages">
+                                <li class="success-msg">
+                                    <ul>
+                                        <li><span>Your billing address was updated.</span></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <?php $_SESSION['update_status'] = null; ?>
                     <?php endif; ?>
                     <div id="checkout-step-billing" class="step a-item">
                         <form id="co-billing-form" action="<?php echo url('dashboard/billing_address'); ?>" method="post">
@@ -26,7 +26,7 @@
                                 <ul class="form-list">
                                     <li id="billing-new-address-form">
                                         <fieldset>
-                                            <?php  $address = $user->getBilling_Address(); ?>
+                                            <?php $address = $user->getBilling_Address(); ?>
                                             <!--<input name="billing[address_id]" value="" id="billing:address_id" type="hidden">-->
                                             <ul>
                                                 <li class="fields">

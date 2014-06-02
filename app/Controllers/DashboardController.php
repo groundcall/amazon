@@ -42,10 +42,6 @@ class DashboardController extends \Wee\Controller {
         $this->render('users/dashboard_edit_account_information', array('user' => $this->user));
     }
 
-    public function myOrders() {
-        
-    }
-
     public function billingAddress() {
 
         if ($this->user->getBilling_address()) {

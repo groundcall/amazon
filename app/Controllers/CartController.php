@@ -79,9 +79,9 @@ class CartController extends \Wee\Controller {
     }
 
     public function addItemQuantity() {
-        
-        $_SESSION['previous_url'] = $_SERVER['HTTP_REFERER']; 
-        
+
+        $_SESSION['previous_url'] = $_SERVER['HTTP_REFERER'];
+
         $this->cart->addCartItem($_POST['product_id'], $_POST['quantity']);
 
         $productDao = \Wee\DaoFactory::getDao('Product');
@@ -89,11 +89,10 @@ class CartController extends \Wee\Controller {
         $randomProducts = $productDao->getRandomProducts($_POST['product_id'], 4);
 
         $this->render('users/product_detail', array('product' => $product, 'randomProducts' => $randomProducts, 'cart' => $this->cart));
-
     }
 
     public function deleteCartItemFromCart() {
-        
+
         $cart_item_id = $_GET['cart_item_id'];
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
         $cartItemDao->deleteCartItemFromCart($cart_item_id, $this->cart->getId());
@@ -109,6 +108,12 @@ class CartController extends \Wee\Controller {
 
         $this->redirectToUrl($_SERVER['HTTP_REFERER']);
     }
-    
+
+    public function deleteCart() {
+        $cart_id = $_POST['cart_id'];
+        $cartDao = \Wee\DaoFactory::getDao('Cart');
+        $cartDao->deleteCartById($cart_id);
+        $this->redirectToUrl($_SERVER['HTTP_REFERER']);
+    }
 
 }
