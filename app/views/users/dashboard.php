@@ -1,6 +1,5 @@
 <?php $view->extend('masterpages/front_masterpage'); ?>
 <?php $orders = $view->getLastOrdersByUser($user); ?>
-
 <div class="main-container col2-left-layout">
     <div class="main">
         <div class="col-main">
@@ -30,34 +29,34 @@
                             <col width="1" />
                             <thead>
                                 <?php if (sizeof($orders) > 0): ?>
-                                <tr class="first last">
-                                    <th>Order #</th>
-                                    <th>Date</th>
-                                    <th style="width: 110px;">Ship To</th>
-                                    <th style="width: 50px;"><span class="nobr">Order Total</span></th>
-                                    <th style="width: 50px;">Status</th>
-                                    <th>&nbsp;</th>
-                                </tr>
+                                    <tr class="first last">
+                                        <th>Order #</th>
+                                        <th>Date</th>
+                                        <th style="width: 110px;">Ship To</th>
+                                        <th style="width: 50px;"><span class="nobr">Order Total</span></th>
+                                        <th style="width: 50px;">Status</th>
+                                        <th>&nbsp;</th>
+                                    </tr>
                                 <?php endif; ?>
                             </thead>
                             <tbody>
                                 <?php if (sizeof($orders) <= 0): ?>
-                                <?php echo 'No orders'; ?>
+                                    <?php echo 'No orders'; ?>
                                 <?php else: ?>
-                                <?php foreach ($orders as $order): ?>
-                                <tr class="first last odd">
-                                    <td><?php echo $order->getId(); ?></td>
-                                    <td><span class="nobr"><?php echo $order->getDate(); ?></span></td>
-                                    <td><?php echo $order->getShipping_address()->getFirstname(); ?> <?php echo $order->getShipping_address()->getLastname(); ?></td>
-                                    <td><span class="price"><?php echo $order->getTotal(); ?></span></td>
-                                    <td><em><?php echo $order->getState()->getLabel(); ?></em></td>
-                                    <td class="a-center last">
-                                        <span class="nobr">
-                                            <a href="<?php echo url('dashboard/show_order_details', array('order_id' => $order->getId())); ?>">View Order</a>
-                                        </span>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
+                                    <?php foreach ($orders as $order): ?>
+                                        <tr class="first last odd">
+                                            <td><?php echo $order->getId(); ?></td>
+                                            <td><span class="nobr"><?php echo $order->getDate(); ?></span></td>
+                                            <td><?php echo $order->getShipping_address()->getFirstname(); ?> <?php echo $order->getShipping_address()->getLastname(); ?></td>
+                                            <td><span class="price"><?php echo $order->getTotal(); ?></span></td>
+                                            <td><em><?php echo $order->getState()->getLabel(); ?></em></td>
+                                            <td class="a-center last">
+                                                <span class="nobr">
+                                                    <a href="<?php echo url('dashboard/show_order_details', array('order_id' => $order->getId())); ?>">View Order</a>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
                                 <?php endif; ?>
                             </tbody>
                         </table>
@@ -82,19 +81,15 @@
                                 </div>
                             </div>
                         </div>
-                        <?php if ($user->getBilling_address() && $user->getShiping_address()): ?>
-                        <div class="col2-set">
-                            <div class="box">
-                                <div class="box-title">
-                                    <h3>Address Book</h3>
-                                </div>
-                                <div class="box-content">
+                        <?php if ($user->getBilling_address() || $user->getShipping_address()): ?>
+                            <div class="col2-set">
+                                <div class="box">
+                                    <div class="box-title">
+                                        <h3>Address Book</h3>
+                                    </div>
+                                    <div class="box-content">
 
-                                    <div class="col-1">
-                                        <h4>Billing Address</h4>
-                                        <address>
-
-                                            <?php if ($user->getBilling_address()): ?>
+                                        <?php if ($user->getBilling_address()): ?>
                                             <div class="col-1">
                                                 <h4>Billing Address</h4>
                                                 <address>
@@ -108,9 +103,8 @@
                                                     <a href="<?php echo url('dashboard/billing_address'); ?>">Edit Address</a>
                                                 </address>
                                             </div>
-                                            <?php endif; ?>
-                                            <?php if ($user->getShipping_address()): ?>
-
+                                        <?php endif; ?>
+                                        <?php if ($user->getShipping_address()): ?>
                                             <div class="col-2">
                                                 <h4>Shipping Address</h4>
                                                 <address>
@@ -124,20 +118,19 @@
                                                     <a href="<?php echo url('dashboard/shipping_address'); ?>">Edit Address</a>
                                                 </address>
                                             </div>
-                                            <?php endif; ?>
-
-
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
-                            <?php endif; ?>
-                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
-            <div class="col-left sidebar">
-                <?php include 'user_dashboard_navigation.php'; ?>
-                <?php include 'user_cart_sidebar.php'; ?>
-            </div>
+        </div>
+        <div class="col-left sidebar">
+            <?php include 'user_dashboard_navigation.php'; ?>
+            <?php include 'user_cart_sidebar.php'; ?>
         </div>
     </div>
+</div>
+</div>

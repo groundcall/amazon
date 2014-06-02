@@ -211,4 +211,9 @@ class User extends \Wee\Model {
         
         return $allcarts;
     }
+    
+    public function updateUser(){
+        $userDao = \Wee\DaoFactory::getDao('User');
+        $userDao -> updateUser($this);
+    }
 }

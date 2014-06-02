@@ -7,8 +7,7 @@ class DashboardController extends \Wee\Controller {
     public function initialize() {
         if (empty($_SESSION['id'])) {
             $this->redirect('users/show_login_form');
-        }
-        else {
+        } else {
             $userDao = \Wee\DaoFactory::getDao('User');
             $this->user = $userDao->getUserById($_SESSION['id']);
             $this->user->setBilling_address($this->user->getBilling_address_id());
@@ -24,18 +23,16 @@ class DashboardController extends \Wee\Controller {
         $this->redirect('dashboard/account_dashboard');
     }
 
-
     public function accountDashboard() {
         $this->render('users/dashboard', array('user' => $this->user));
     }
 
     public function accountInformation() {
-        
-        var_dump($_POST);
+
         if (!empty($_POST['data'])) {
             $this->user->updateAttributes($_POST['data']);
             $this->user->setEducation_id($_POST['data']['education']);
-            
+
             if ($this->user->isValid()) {
                 $userDao = \Wee\DaoFactory::getDao('User');
                 $userDao->updateUser($this->user);
@@ -51,48 +48,48 @@ class DashboardController extends \Wee\Controller {
 
     public function billingAddress() {
 
-        $address = $this->user->getBilling_address();
+        if ($this->user->getBilling_address()) {
+            $address = $this->user->getBilling_address();
+        } else {
+            $address = new \Models\Address();
+        }
         if (isset($_POST['billing'])) {
             $addr = $_POST['billing']['street1'] . ' ' . $_POST['billing']['street2'];
             $address->updateAttributes($_POST['billing']);
             $address->setCountry($_POST['billing']['country_id']);
             $address->setAddress($addr);
-            if ($address->isValid()) {
-                $addressDao = \Wee\DaoFactory::getDao('Address');
-                $addressDao->updateAddress($address->getId(), $address);
-                $this->user->setBilling_address($address->getId());
-                $_SESSION['update_status'] = 'ok';
-            }
+            $address->addAddress();
+            $this->user->setBilling_address($address->getId());
+            $this->user->updateUser($this->user);
         }
         $this->render('users/dashboard_edit_billing_address', array('user' => $this->user, 'address' => $address));
     }
 
     public function shippingAddress() {
 
-        $address = $this->user->getShipping_address();
+        if ($this->user->getShipping_address()) {
+            $address = $this->user->getShipping_address();
+        } else {
+            $address = new \Models\Address();
+        }
         if (isset($_POST['shipping'])) {
             $addr = $_POST['shipping']['street1'] . ' ' . $_POST['shipping']['street2'];
             $address->updateAttributes($_POST['shipping']);
             $address->setCountry($_POST['shipping']['country_id']);
             $address->setAddress($addr);
-            if ($address->isValid()) {
-                $addressDao = \Wee\DaoFactory::getDao('Address');
-                $addressDao->updateAddress($address->getId(), $address);
-                $this->user->setShipping_address($address->getId());
-                $_SESSION['update_status'] = 'ok';
-            }
+            $address->addAddress();
+            $this->user->setShipping_address_id($address->getId());
+            $this->user->updateUser($this->user);
         }
         $this->render('users/dashboard_edit_shipping_address', array('user' => $this->user, 'address' => $address));
     }
 
-    public function cartHistory(){
-        
-      $allcarts = $this->user->getAllCartsByUserId();
-      
-      $this->render('users/dashboard_view_cart_history', array('user' => $this->user, 'allcarts' => $allcarts));
+    public function cartHistory() {
 
+        $allcarts = $this->user->getAllCartsByUserId();
+
+        $this->render('users/dashboard_view_cart_history', array('user' => $this->user, 'allcarts' => $allcarts));
     }
-    
 
     public function showOrderDetails() {
         if (!empty($_GET['order_id'])) {
@@ -100,12 +97,11 @@ class DashboardController extends \Wee\Controller {
             $order = $orderDao->getOrderByIdAndUser($_GET['order_id'], $_SESSION['id']);
             $order->get_Cart($order->getCart_id());
             $this->render('users/dashboard_show_order', array('order' => $order));
-        }
-        else {
+        } else {
             $this->redirect('products/');
         }
     }
-    
+
     public function showAllOrders() {
         $paginator = new \Models\Paginator();
         $orderDao = \Wee\DaoFactory::getDao('Order');

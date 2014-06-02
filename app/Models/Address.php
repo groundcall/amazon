@@ -88,4 +88,20 @@ class Address extends \Wee\Model {
         $this->country = $country;
     }
 
+    public function addAddress() {
+        if ($this->isValid()) {
+            $addressDao = \Wee\DaoFactory::getDao('Address');
+            if ($this->getId()){
+            $addressDao->updateAddress($this->getId(), $this);
+            }
+            else{
+                $addressDao->addAddress($this);
+                $id = $addressDao->getLastInsertedAddressId();
+                $this->setId($id);
+                
+            }
+            $_SESSION['update_status'] = 'ok';
+        }
+    }
+
 }

@@ -144,9 +144,9 @@ class UserDao extends \Wee\Dao {
 
     public function updateUser($user) {
         if ($user->getPassword() == '') {
-            $sql = "UPDATE users SET username = :username, firstname = :firstname, gender = :gender, lastname = :lastname, email = :email, phone = :phone  WHERE id = :id";
+            $sql = "UPDATE users SET username = :username, billing_address_id = :billing_address_id, shipping_address_id = :shipping_address_id, firstname = :firstname, gender = :gender, lastname = :lastname, email = :email, phone = :phone  WHERE id = :id";
         } else {
-            $sql = "UPDATE users SET username = :username, firstname = :firstname, gender = :gender, lastname = :lastname, email = :email, phone = :phone, password = :password WHERE id = :id";
+            $sql = "UPDATE users SET username = :username, billing_address_id = :billing_address_id, shipping_address_id = :shipping_address_id, firstname = :firstname, gender = :gender, lastname = :lastname, email = :email, phone = :phone, password = :password WHERE id = :id";
         }
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':id', $user->getId());
@@ -156,8 +156,23 @@ class UserDao extends \Wee\Dao {
         $stmt->bindValue(':email', $user->getEmail());
         $stmt->bindValue(':phone', $user->getPhone());
         $stmt->bindValue(':gender', $user->getGender());
-        if ($user->getPassword() != ''){
-        $stmt->bindValue(':password', md5($user->getPassword()));
+
+        if ($user->getShipping_address_id()) {
+            $shipping_address = $user->getShipping_address_id();
+        } else {
+            $shipping_address = null;
+        }
+        $stmt->bindValue(':shipping_address_id', $shipping_address);
+
+        if ($user->getBilling_address_id()) {
+            $billing_address = $user->getBilling_address_id();
+        } else {
+            $billing_address = null;
+        }
+        $stmt->bindValue(':billing_address_id', $billing_address);
+
+        if ($user->getPassword() != '') {
+            $stmt->bindValue(':password', md5($user->getPassword()));
         }
         $stmt->execute();
     }
