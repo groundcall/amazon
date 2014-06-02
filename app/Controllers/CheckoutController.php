@@ -20,7 +20,6 @@ class CheckoutController extends \Wee\Controller {
                 $_SESSION['order_id'] = $orderDao->getLastInsertedOrderId();
             }
             $this->order = $orderDao->getOrderById($_SESSION['order_id']);
-            //var_dump($this->order);
             $this->order->createCart($_SESSION['cart_id']);
             $this->order->updateTotal();
         }
@@ -34,60 +33,40 @@ class CheckoutController extends \Wee\Controller {
     }
     
     public function showBillingAddress() {
-        $address = $this->order->getBilling_address();
-        $this->render('users/checkout_billing', array('address' => $address));
+        $this->render('users/checkout_billing', array('order' => $this->order));
     }
 
     public function addBillingAddress() {
-        $address = new \Models\Address();
-        $addr = $_POST['billing']['street1'] . ' ' . $_POST['billing']['street2'];
-        $address->updateAttributes($_POST['billing']);
-        $address->setCountry($_POST['billing']['country_id']);
-        $address->setAddress($addr);
-        if ($address->isValid()) {
-            $this->order->updateBillingAddress($address);
-            if (!empty($_POST['billing']['use_for_shipping']) && $_POST['billing']['use_for_shipping'] == 1) {
-                $this->order->updateShippingAddress($address);
+        $this->order->updateBillingAddress($_POST);
+        if ($this->order->getBilling_address()->isValid()) {
+            if (!empty($_POST['use_for_shipping']) && $_POST['use_for_shipping'] == 1) {
                 $this->redirect('checkout/show_shipping_method');
             }
             else {
                 $this->redirect('checkout/show_shipping_address');
             }
-        } 
+        }
         else {
-            $this->render('users/checkout_billing', array('address' => $address));
+            $this->render('users/checkout_billing', array('order' => $this->order));
         }
     }
     
     public function showShippingAddress() {
-        $address = $this->order->getShipping_address();
-        $this->render('users/checkout_shipping', array('address' => $address));
+        $this->render('users/checkout_shipping', array('order' => $this->order));
     }
     
     public function addShippingAddress() {
-        $address = new \Models\Address();
-        $addr = $_POST['shipping']['street1'] . ' ' . $_POST['shipping']['street2'];
-        $address->updateAttributes($_POST['shipping']);
-        $address->setCountry($_POST['shipping']['country_id']);
-        $address->setAddress($addr);
-        if (!empty($_POST['shipping']['same_as_billing']) && $_POST['shipping']['same_as_billing'] == 1) {
-            $this->order->updateShippingAddress($this->order->getBilling_address());
+        $this->order->updateShippingAddress($_POST);
+        if ($this->order->getShipping_address()->isValid()) {
             $this->redirect('checkout/show_shipping_method');
         }
         else {
-            if ($address->isValid()) {
-                $this->order->updateShippingAddress($address);
-                $this->redirect('checkout/show_shipping_method');
-            }
-            else {
-                $this->render('users/checkout_shipping', array('address' => $address));
-            }
+            $this->render('users/checkout_shipping', array('order' => $this->order));
         }
     }
     
     public function showShippingMethod() {
-        $shipping = $this->order->getShipping_method();
-        $this->render('users/checkout_shipping_method', array('shipping' => $shipping));
+        $this->render('users/checkout_shipping_method', array('order' => $this->order));
     }
     
     public function selectShippingMethod() {
@@ -96,8 +75,7 @@ class CheckoutController extends \Wee\Controller {
     }
     
     public function showPaymentMethod() {
-        $payment = $this->order->getPayment_method();
-        $this->render('users/checkout_payment_method', array('payment' => $payment));
+        $this->render('users/checkout_payment_method', array('order' => $this->order));
     }
     
     public function selectPaymentMethod() {

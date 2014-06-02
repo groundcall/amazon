@@ -4,6 +4,8 @@ namespace Models;
 
 class Order extends \Wee\Model {
     
+    use \Validators\AddressValidator;
+    
     protected $id;
     protected $user_id;
     protected $billing_address_id;
@@ -26,6 +28,8 @@ class Order extends \Wee\Model {
     public function __construct() {
         $this->setAttrAccessible(array('user_id', 'billing_address_id', 'shipping_address_id',
             'cart_id', 'total', 'date', 'state_id', 'shipping_method_id', 'payment_method_id'));
+        
+        
     }
     
     public function getId() {
@@ -172,20 +176,39 @@ class Order extends \Wee\Model {
         }
     }
     
+    public function setBilling_address($billing_address) {
+        $this->billing_address = $billing_address;
+    }
+    
+    public function setShipping_address($shipping_address) {
+        $this->shipping_address = $shipping_address;
+    }
+    
     public function updateBillingAddress($billing_address) {
-        $addressDao = \Wee\DaoFactory::getDao('Address');
-        $userDao = \Wee\DaoFactory::getDao('User');
-        if ($this->user->getBilling_address_id() != null) {
-            $addressDao->updateAddress($this->user->getBilling_address_id(), $billing_address);
-            $this->billing_address_id = $this->user->getBilling_address_id();
+        $address = new \Models\Address();
+        $addr = strip_tags(trim($billing_address['street1'])) . ' ' . strip_tags(trim($billing_address['street2']));
+        $address->setAddress($addr);
+        $address->updateAttributes($billing_address);
+        $address->setCountry($billing_address['country_id']);
+        $this->setBilling_address($address);
+        if ($this->getBilling_address()->isValid()) {
+            $addressDao = \Wee\DaoFactory::getDao('Address');
+            $userDao = \Wee\DaoFactory::getDao('User');
+            if ($this->user->getBilling_address_id() != null) {
+                $addressDao->updateAddress($this->user->getBilling_address_id(), $address);
+                $this->billing_address_id = $this->user->getBilling_address_id();
+            }
+            else {
+                $addressDao->addAddress($address);
+                $this->billing_address_id = $addressDao->getLastInsertedAddressId();
+                $userDao->updateBillingAddress($this->user_id, $this->billing_address_id);
+            }
+            if ($billing_address['use_for_shipping'] != null && $billing_address['use_for_shipping'] == 1) {
+                $this->updateShippingAddress($billing_address);
+            } 
+            $orderDao = \Wee\DaoFactory::getDao('Order');
+            $orderDao->updateBillingAddress($this);
         }
-        else {
-            $addressDao->addAddress($billing_address);
-            $this->billing_address_id = $addressDao->getLastInsertedAddressId();
-            $userDao->updateBillingAddress($this->user_id, $this->billing_address_id);
-        }
-        $orderDao = \Wee\DaoFactory::getDao('Order');
-        $orderDao->updateBillingAddress($this);
     }
 
     public function createShipping_address() {
@@ -204,19 +227,31 @@ class Order extends \Wee\Model {
     }
     
     public function updateShippingAddress($shipping_address) {
-        $addressDao = \Wee\DaoFactory::getDao('Address');
-        $userDao = \Wee\DaoFactory::getDao('User');
-        if ($this->user->getShipping_address_id() != null) {
-            $addressDao->updateAddress($this->user->getShipping_address_id(), $shipping_address);
-            $this->shipping_address_id = $this->user->getShipping_address_id();
+        $address = new \Models\Address();
+        $addr = strip_tags(trim($shipping_address['street1'])) . ' ' . strip_tags(trim($shipping_address['street2']));
+        $address->setAddress($addr);
+        $address->setCountry($shipping_address['country_id']);
+        $address->updateAttributes($shipping_address);
+        $this->setShipping_address($address);
+        if ($this->getShipping_address()->isValid()) {
+            $addressDao = \Wee\DaoFactory::getDao('Address');
+            $userDao = \Wee\DaoFactory::getDao('User');
+            if ($this->user->getShipping_address_id() != null) {
+                $addressDao->updateAddress($this->user->getShipping_address_id(), $address);
+                $this->shipping_address_id = $this->user->getShipping_address_id();
+            }
+            else {
+                $addressDao->addAddress($address);
+                $this->shipping_address_id = $addressDao->getLastInsertedAddressId();
+                $userDao->updateShippingAddress($this->user_id, $this->shipping_address_id);
+            }
+            if ($shipping_address['same_as_billing'] != null && $shipping_address['same_as_billing'] == 1) {
+                $this->setShipping_address($this->getBilling_address());
+                $addressDao->updateAddress($this->user->getShipping_address_id(), $this->getBilling_address());
+            }
+            $orderDao = \Wee\DaoFactory::getDao('Order');
+            $orderDao->updateShippingAddress($this);
         }
-        else {
-            $addressDao->addAddress($shipping_address);
-            $this->shipping_address_id = $addressDao->getLastInsertedAddressId();
-            $userDao->updateShippingAddress($this->user_id, $this->shipping_address_id);
-        }
-        $orderDao = \Wee\DaoFactory::getDao('Order');
-        $orderDao->updateShippingAddress($this);
     }
 
     public function createCart($cart_id) {

@@ -110,4 +110,10 @@ trait ApplicationHelper {
         $orders = $orderDao->getLastOrdersByUser($user);
         return $orders;
     }
+    
+    public function getStates() {
+        $stateDao = \Wee\DaoFactory::getDao('State');
+        $states = $stateDao->getAllStates();
+        return $states;
+    }
 }

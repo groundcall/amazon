@@ -19,7 +19,7 @@
                                 <?php $shippingMethods = $view->getShippingMethods(); ?>
                                 <?php foreach ($shippingMethods as $shippingMethod): ?>
                                     <dt>
-                                    <input <?php echo ($shipping->getId() == $shippingMethod->getId()) ? 'checked' : ''; ?> id="p_method_checkmo" value="<?php echo $shippingMethod->getId(); ?>" name="shipping" title="Check / Money order" class="radio" type="radio" />
+                                    <input <?php echo ($order->getShipping_method()->getId() == $shippingMethod->getId()) ? 'checked' : ''; ?> id="p_method_checkmo" value="<?php echo $shippingMethod->getId(); ?>" name="shipping" title="Check / Money order" class="radio" type="radio" />
                                     <label for="p_method_checkmo"><?php echo $shippingMethod->getName(), ': ', $shippingMethod->getPrice(), ' US $'; ?></label>
                                     </dt>
                                 <?php endforeach; ?>

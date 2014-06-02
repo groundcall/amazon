@@ -24,10 +24,10 @@
 
     <div class="nav-divider">&nbsp;</div>
 
-    <ul class="select"><li><a href="#nogo"><b>Orders</b></a>
+    <ul class="select"><li><a href="<?php echo url('admin_orders'); ?>"><b>Orders</b></a>
             <div class="select_sub">
                 <ul class="sub">
-                    <li><a href="cpanel.php?link=order/orderlist.php">List Orders</a></li>
+                    <li><a href="<?php echo url('admin_orders'); ?>">List Orders</a></li>
                 </ul>
             </div>
         </li>

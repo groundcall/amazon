@@ -36,5 +36,12 @@ class StateDao extends \Wee\Dao {
         $stmt->execute();
         return $this->getState($stmt);
     }
+    
+    public function getAllStates() {
+        $sql = 'SELECT * FROM states';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->execute();
+        return $this->getStates($stmt);
+    }
 }
 

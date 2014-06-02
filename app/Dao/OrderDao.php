@@ -152,4 +152,60 @@ class OrderDao extends \Wee\Dao {
         $result = $stmt->fetch();
         return $result[0];
     }
+    
+    public function getAllOrders($start, $limit) {
+        $sql = 'SELECT * FROM orders WHERE id NOT IN (SELECT MAX(id) FROM orders) ORDER BY date DESC LIMIT :start, :limit';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindParam(':start', $start, \PDO::PARAM_INT);
+        $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $this->getOrders($stmt);
+    }
+    
+    public function getOrderCount() {
+        $sql = "SELECT COUNT(*) FROM orders";
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch();
+
+        return $result[0];
+    }
+    
+    public function getFilterOrders($username, $state_id, $time, $start, $limit) {
+        $sql = 'SELECT o.id, o.user_id, o.billing_address_id, o.shipping_address_id, o.cart_id, o.total, o.date, o.state_id, '
+              . ' o.shipping_method_id, o.payment_method_id FROM orders o INNER JOIN users u ON ' 
+              . ' o.user_id = u.id WHERE u.username LIKE :username ';
+        if ($state_id != 0) {
+            $sql .= 'AND o.state_id = :state_id ';
+        }
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':username', '%' . $username . '%');
+        if ($state_id != 0) {
+            $stmt->bindValue(':state_id', $state_id);
+        }
+        $stmt->execute();
+        $orders = $this->getOrders($stmt);
+        var_dump($orders); die();
+        if ($category_id != 0) {
+            $sql .= ' AND category_id = :category_id';
+        }
+        if ($stock != 0) {
+            $sql .= ' AND stock >= :stock';
+        }
+        $sql .= ' ORDER BY id DESC LIMIT :start, :limit';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':title', '%' . $title . '%');
+        if ($category_id != 0) {
+            $stmt->bindValue(':category_id', $category_id);
+        }
+        if ($stock != 0) {
+            $stmt->bindValue(':stock', 1);
+        }
+        $stmt->bindParam(':start', $start, \PDO::PARAM_INT);
+        $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $this->getProducts($stmt);
+    }
 }

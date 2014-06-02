@@ -21,7 +21,7 @@
                                 <?php $paymentMethods = $view->getPaymentMethods(); ?>
                                 <?php foreach ($paymentMethods as $paymentMethod): ?>
                                     <dt>
-                                    <input <?php echo ($payment->getId() == $paymentMethod->getId()) ? 'checked' : ''; ?> id="p_method_checkmo" value="<?php echo $paymentMethod->getId(); ?>" name="payment" title="Check / Money order" class="radio" type="radio" />
+                                    <input <?php echo ($order->getPayment_method()->getId() == $paymentMethod->getId()) ? 'checked' : ''; ?> id="p_method_checkmo" value="<?php echo $paymentMethod->getId(); ?>" name="payment" title="Check / Money order" class="radio" type="radio" />
                                     <label for="p_method_checkmo"><?php echo $paymentMethod->getName(); ?></label>
                                     </dt>
                                 <?php endforeach; ?>
