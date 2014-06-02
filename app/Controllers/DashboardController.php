@@ -29,17 +29,23 @@ class DashboardController extends \Wee\Controller {
 
     public function accountInformation() {
 
-        if (!empty($_POST['data'])) {
-            $this->user->updateAttributes($_POST['data']);
-            $this->user->setEducation_id($_POST['data']['education']);
+        if (!isset($_POST['edit_account_info'])) {
+            $this->render('users/dashboard_view_account_information', array('user' => $this->user));
+        } else {
 
-            if ($this->user->isValid()) {
-                $userDao = \Wee\DaoFactory::getDao('User');
-                $userDao->updateUser($this->user);
-                $_SESSION['update_status'] = 'ok';
+            if (!empty($_POST['data'])) {
+                $this->user->updateAttributes($_POST['data']);
+                $this->user->setEducation_id($_POST['data']['education']);
+
+                if ($this->user->isValid()) {
+                    $userDao = \Wee\DaoFactory::getDao('User');
+                    $userDao->updateUser($this->user);
+                    $_SESSION['update_status'] = 'ok';
+                }
             }
+
+            $this->render('users/dashboard_edit_account_information', array('user' => $this->user));
         }
-        $this->render('users/dashboard_edit_account_information', array('user' => $this->user));
     }
 
     public function billingAddress() {
