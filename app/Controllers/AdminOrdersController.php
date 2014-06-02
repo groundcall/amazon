@@ -11,7 +11,11 @@ class AdminOrdersController extends \Wee\Controller {
     }
 
     public function index() {
-        $this->showAllOrders();
+        if (isset($_GET['username']) || isset($_GET['state']) || isset($_GET['time'])) {
+            $this->filterOrders();
+        } else {
+            $this->showAllOrders();
+        }
     }
 
     public function showAllOrders() {
@@ -19,7 +23,6 @@ class AdminOrdersController extends \Wee\Controller {
         $orderDao = \Wee\DaoFactory::getDao('Order');
         $paginator->setCount($orderDao->getOrderCount());
         $paginator->setPerpage();
-
         if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
             $paginator->setCurrent($_GET['page']);
         } else {
@@ -40,7 +43,6 @@ class AdminOrdersController extends \Wee\Controller {
             $paginator->setCurrent(1);
         }
         $paginator->setPerpage();
-        var_dump($_GET['username']);
         $start = ($paginator->getCurrent() - 1) * $paginator->getPerpage();
         $limit = $paginator->getPerpage();
         $orderDao = \Wee\DaoFactory::getDao('Order');

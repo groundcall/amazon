@@ -47,7 +47,7 @@
                                     <th valign="top">Created at:</th>
                                     <td>	
                                         <select name="time">
-                                            <option value="not" <?php echo (isset($_GET['time']) && ($_GET['time'] == 'not')) ? 'selected="selected"' : ''; ?>></option>
+                                            <option value="not" <?php echo (isset($_GET['time']) && ($_GET['time'] == 'not')) ? 'selected="selected"' : ''; ?>>All</option>
                                             <option value="day" <?php echo (isset($_GET['time']) && ($_GET['time'] == 'day')) ? 'selected="selected"' : ''; ?>>1 day ago</option>
                                             <option value="week" <?php echo (isset($_GET['time']) && ($_GET['time'] == 'week')) ? 'selected="selected"' : ''; ?>>1 week ago</option>
                                             <option value="month" <?php echo (isset($_GET['time']) && ($_GET['time'] == 'month')) ? 'selected="selected"' : ''; ?>>1 month ago</option>
@@ -88,7 +88,8 @@
                                     <td><?php echo $order->getUser()->getUsername(); ?></td>
                                     <td><?php echo $order->getUser()->getFirstname(); ?></td>
                                     <td><?php echo $order->getUser()->getLastname(); ?></td>
-                                    <td> <form action="<?php echo url('admin_orders/update_order_status'); ?>" method="post" >
+                                    <td> 
+                                        <form action="<?php echo url('admin_orders/update_order_status'); ?>" method="post" >
                                             <select name="state">
                                                 <?php foreach ($view->getStates() as $state): ?>
                                                     <option value="<?php echo $state->getId(); ?>" <?php echo ($order->getState() && ($order->getState()->getId() == $state->getId())) ? 'selected="selected"' : ''; ?>><?php echo $state->getLabel(); ?></option>
@@ -97,7 +98,6 @@
                                             <input type="hidden" name="order_id" value="<?php echo $order->getId(); ?>" />
                                             <input type="submit" value="Save"/>
                                         </form>
-
                                     </td>
                                     <td><?php echo $order->getDate(); ?></td>
                                     <td><?php echo $order->getTotal(); ?></td>
@@ -135,11 +135,11 @@
                                     <a href="<?php echo url("admin_orders", array("page" => ($current = ($paginator->getCurrent() < $paginator->getPages()) ? $paginator->getCurrent() + 1 : $paginator->getPages()))); ?>" class="page-right"></a>
                                     <a href="<?php echo url('admin_orders', array('page' => $paginator->getPages())); ?>" class="page-far-right"></a>
                                 <?php else: ?>
-                                    <a href="<?php echo url('admin_orders', array('page' => 1, 'username' => $_GET['username'], 'state_id' => $_GET['state'], 'time' => $_GET['time'])); ?>" class="page-far-left"></a>
-                                    <a href="<?php echo url("admin_orders", array("page" => ($current = ($paginator->getCurrent() > 1) ? $paginator->getCurrent() - 1 : 1), 'username' => $_GET['username'], 'state_id' => $_GET['state'], 'time' => $_GET['time'])); ?>" class="page-left"></a>
+                                    <a href="<?php echo url('admin_orders', array('page' => 1, 'username' => $_GET['username'], 'state' => $_GET['state'], 'time' => $_GET['time'])); ?>" class="page-far-left"></a>
+                                    <a href="<?php echo url("admin_orders", array("page" => ($current = ($paginator->getCurrent() > 1) ? $paginator->getCurrent() - 1 : 1), 'username' => $_GET['username'], 'state' => $_GET['state'], 'time' => $_GET['time'])); ?>" class="page-left"></a>
                                     <div id="page-info">Page <strong><?php echo $paginator->getCurrent(); ?></strong> / <?php echo $paginator->getPages(); ?></div>
-                                    <a href="<?php echo url("admin_orders", array("page" => ($current = ($paginator->getCurrent() < $paginator->getPages()) ? $paginator->getCurrent() + 1 : $paginator->getPages()), 'username' => $_GET['username'], 'state_id' => $_GET['state'], 'time' => $_GET['time'])); ?>" class="page-right"></a>
-                                    <a href="<?php echo url('admin_orders', array('page' => $paginator->getPages(), 'username' => $_GET['username'], 'state_id' => $_GET['state'], 'time' => $_GET['time'])); ?>" class="page-far-right"></a>
+                                    <a href="<?php echo url("admin_orders", array("page" => ($current = ($paginator->getCurrent() < $paginator->getPages()) ? $paginator->getCurrent() + 1 : $paginator->getPages()), 'username' => $_GET['username'], 'state' => $_GET['state'], 'time' => $_GET['time'])); ?>" class="page-right"></a>
+                                    <a href="<?php echo url('admin_orders', array('page' => $paginator->getPages(), 'username' => $_GET['username'], 'state' => $_GET['state'], 'time' => $_GET['time'])); ?>" class="page-far-right"></a>
                                 <?php endif; ?>
                             </td>
                         </tr>

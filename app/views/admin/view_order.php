@@ -95,8 +95,13 @@
                                         <th valign="top"><br /><br />PRODUCTS</th>
                                         <td></td>
                                     </tr>
-
+                                    
+                                    <?php $i = 1; ?>
                                     <?php foreach ($order->getCart()->getCart_item() as $item): ?>
+                                        <tr>
+                                            <th valign="top"><?php echo $i, '.'; ?></th>
+                                            <td></td>
+                                        </tr>
                                         <tr>
                                             <th valign="top">Product title:</th>
                                             <td><input type="text" readonly class="inp-form" readonly value="<?php echo $item->getProduct()->getTitle(); ?>" style="height: 18px;" /></td>
@@ -111,11 +116,18 @@
                                             <th valign="top">Price:</th>
                                             <td><input type="text" readonly class="inp-form" readonly value="<?php echo $item->getPrice(), ' US $'; ?>" style="height: 18px;" /></td>
                                         </tr>
+                                        
+                                        <?php $i++; ?>
                                     <?php endforeach; ?>
+                                    
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
                                 <?php endif; ?>
-                                
+                                        
                                 <tr>
-                                    <th valign="top">Subtotal:</th>
+                                    <th valign="top">SUBTOTAL:</th>
                                     <td><input type="text" readonly class="inp-form" name="subtotal" value="<?php echo ($order) ? $order->getCart()->getTotal() : ""; ?>" style="height: 18px;" /></td>
                                 </tr>
                                 
@@ -151,8 +163,31 @@
                                 </tr>
                                 
                                 <tr> 
-                                    <th valign="top" style="font-size: 20px;">Total:</th>
+                                    <th valign="top" style="font-size: 20px;">TOTAL:</th>
                                     <td><input type="text" readonly class="inp-form" name="payment_method" value="<?php echo ($order) ? $order->getTotal() : ""; ?>" style="font-size: 20px; height: 22px;" /></td>
+                                </tr>
+                                
+                                <tr>
+                                    <th valign="top"><br /><br /><br />CHANGE STATUS:</th>
+                                </tr>
+                                
+                                <tr>
+                                    <th>
+                                        <form action="<?php echo url('admin_orders/update_order_status'); ?>" method="post" >
+                                        <select name="state">
+                                        <?php foreach ($view->getStates() as $state): ?>
+                                            <option value="<?php echo $state->getId(); ?>" <?php echo ($order->getState() && ($order->getState()->getId() == $state->getId())) ? 'selected="selected"' : ''; ?>><?php echo $state->getLabel(); ?></option>
+                                        <?php endforeach; ?>
+                                        </select>
+                                        <input type="hidden" name="order_id" value="<?php echo $order->getId(); ?>" /><input type="submit" value="Save"/>
+                                        </form>
+                                    </th>
+                                </tr>
+                                
+                                <tr>
+                                    <th>
+                                        <button type="button" class="button" onclick="window.location = '<?php echo url('admin_orders/'); ?>'"><span><span>Back</span></span></button>
+                                    </th>
                                 </tr>
                             </table>
                             <!-- end id-form  -->

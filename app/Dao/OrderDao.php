@@ -125,7 +125,7 @@ class OrderDao extends \Wee\Dao {
     }
     
     public function getLastOrdersByUser($user) {
-        $sql = 'SELECT * FROM orders WHERE user_id = :user_id AND state_id <> :state_id AND id NOT IN (SELECT MAX(id) FROM orders) ORDER BY date DESC LIMIT 5';
+        $sql = 'SELECT * FROM orders WHERE user_id = :user_id AND state_id <> :state_id AND billing_address_id IS NOT NULL AND shipping_address_id IS NOT NULL ORDER BY date DESC LIMIT 5';
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':user_id', $user->getId());
         $state_id = 0;
@@ -135,7 +135,7 @@ class OrderDao extends \Wee\Dao {
     }
     
     public function getAllOrdersByUser($user_id, $start, $limit) {
-        $sql = 'SELECT * FROM orders WHERE user_id = :user_id AND id NOT IN (SELECT MAX(id) FROM orders) ORDER BY date DESC LIMIT :start, :limit';
+        $sql = 'SELECT * FROM orders WHERE user_id = :user_id AND billing_address_id IS NOT NULL AND shipping_address_id IS NOT NULL ORDER BY date DESC LIMIT :start, :limit';
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':user_id', $user_id);
         $stmt->bindParam(':start', $start, \PDO::PARAM_INT);
@@ -145,7 +145,7 @@ class OrderDao extends \Wee\Dao {
     }
     
     public function getOrdersCount($user_id) {
-        $sql = "SELECT COUNT(*) FROM orders WHERE user_id = :user_id AND id NOT IN (SELECT MAX(id) FROM orders)";
+        $sql = "SELECT COUNT(*) FROM orders WHERE user_id = :user_id AND billing_address_id IS NOT NULL AND shipping_address_id IS NOT NULL";
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':user_id', $user_id);
         $stmt->execute();
@@ -154,7 +154,7 @@ class OrderDao extends \Wee\Dao {
     }
     
     public function getAllOrders($start, $limit) {
-        $sql = 'SELECT * FROM orders WHERE id ORDER BY date DESC LIMIT :start, :limit';
+        $sql = 'SELECT * FROM orders WHERE billing_address_id IS NOT NULL AND shipping_address_id IS NOT NULL ORDER BY date DESC LIMIT :start, :limit';
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindParam(':start', $start, \PDO::PARAM_INT);
         $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
@@ -164,7 +164,7 @@ class OrderDao extends \Wee\Dao {
     }
     
     public function getOrderCount() {
-        $sql = "SELECT COUNT(*) FROM orders";
+        $sql = "SELECT COUNT(*) FROM orders WHERE billing_address_id IS NOT NULL AND shipping_address_id IS NOT NULL";
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch();
@@ -175,7 +175,7 @@ class OrderDao extends \Wee\Dao {
     public function getFilterOrders($username, $state_id, $time, $start, $limit) {
         $sql = 'SELECT o.id, o.user_id, o.billing_address_id, o.shipping_address_id, o.cart_id, o.total, o.date, o.state_id, '
               . ' o.shipping_method_id, o.payment_method_id FROM orders o INNER JOIN users u ON ' 
-              . ' o.user_id = u.id WHERE u.username LIKE :username ';
+              . ' o.user_id = u.id WHERE o.billing_address_id IS NOT NULL AND o.shipping_address_id IS NOT NULL AND u.username LIKE :username ';
         if ($state_id != 5) {
             $sql .= 'AND o.state_id = :state_id ';
         }
@@ -230,7 +230,7 @@ class OrderDao extends \Wee\Dao {
     
     public function getFilteredOrdersCount($username, $state_id, $time) {
         $sql = 'SELECT COUNT(o.id) FROM orders o INNER JOIN users u ON ' 
-              . ' o.user_id = u.id WHERE u.username LIKE :username ';
+              . ' o.user_id = u.id WHERE o.billing_address_id IS NOT NULL AND o.shipping_address_id IS NOT NULL AND u.username LIKE :username ';
         if ($state_id != 5) {
             $sql .= 'AND o.state_id = :state_id ';
         }
