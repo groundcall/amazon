@@ -10,8 +10,8 @@ class DashboardController extends \Wee\Controller {
         } else {
             $userDao = \Wee\DaoFactory::getDao('User');
             $this->user = $userDao->getUserById($_SESSION['id']);
-            $this->user->setBilling_address($this->user->getBilling_address_id());
-            $this->user->setShipping_address($this->user->getShipping_address_id());
+            $this->user->createBillingAddress($this->user->getBilling_address_id());
+            $this->user->createShippingAddress($this->user->getShipping_address_id());
 
             $cartDao = \Wee\DaoFactory::getDao('Cart');
             $this->cart = $cartDao->getCartById($_SESSION['cart_id']);
@@ -55,7 +55,7 @@ class DashboardController extends \Wee\Controller {
             $address->setCountry($_POST['billing']['country_id']);
             $address->setAddress($addr);
             $address->addAddress();
-            $this->user->setBilling_address($address->getId());
+            $this->user->createBillingAddress($address->getId());
             $this->user->updateUser($this->user);
         }
         $this->render('users/dashboard_edit_billing_address', array('user' => $this->user, 'address' => $address));
@@ -74,7 +74,7 @@ class DashboardController extends \Wee\Controller {
             $address->setCountry($_POST['shipping']['country_id']);
             $address->setAddress($addr);
             $address->addAddress();
-            $this->user->setShipping_address_id($address->getId());
+            $this->user->createShippingAddress($address->getId());
             $this->user->updateUser($this->user);
         }
         $this->render('users/dashboard_edit_shipping_address', array('user' => $this->user, 'address' => $address));

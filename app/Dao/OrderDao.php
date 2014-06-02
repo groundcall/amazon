@@ -154,7 +154,7 @@ class OrderDao extends \Wee\Dao {
     }
     
     public function getAllOrders($start, $limit) {
-        $sql = 'SELECT * FROM orders WHERE id NOT IN (SELECT MAX(id) FROM orders) ORDER BY date DESC LIMIT :start, :limit';
+        $sql = 'SELECT * FROM orders WHERE id ORDER BY date DESC LIMIT :start, :limit';
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindParam(':start', $start, \PDO::PARAM_INT);
         $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);

@@ -183,14 +183,14 @@ class User extends \Wee\Model {
         return $this->shipping_address;
     }
 
-    public function setBilling_address($billing_address_id) {
+    public function createBillingAddress($billing_address_id) {
         $this->billing_address_id = $billing_address_id;
         $addressDao = \Wee\DaoFactory::getDao('Address');
         $address = $addressDao->getAddressById($billing_address_id);
         $this->billing_address = $address;
     }
 
-    public function setShipping_address($shipping_address_id) {
+    public function createShippingAddress($shipping_address_id) {
         $this->shipping_address_id = $shipping_address_id;
         $addressDao = \Wee\DaoFactory::getDao('Address');
         $address = $addressDao->getAddressById($shipping_address_id);

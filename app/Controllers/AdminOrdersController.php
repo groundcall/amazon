@@ -11,11 +11,6 @@ class AdminOrdersController extends \Wee\Controller {
     }
 
     public function index() {
-//        if (isset($_GET['product_name']) || isset($_GET['category']) || isset($_GET['stock'])) {
-//            $this->filterProducts();
-//        } else {
-//            $this->showAllProducts();
-//        }
         $this->showAllOrders();
     }
 
@@ -58,6 +53,14 @@ class AdminOrdersController extends \Wee\Controller {
     public function deleteOrder(){ 
          $orderDao = \Wee\DaoFactory::getDao('Order');
          $orderDao->deleteOrderById($_POST['order_id']);
+         $this->redirectToUrl($_SERVER['HTTP_REFERER']);
+    }
+    
+    public function updateOrderStatus(){
+         $orderDao = \Wee\DaoFactory::getDao('Order');
+         $order = $orderDao->getOrderById($_POST['order_id']);
+         $order->setState($_POST['state']);
+         $orderDao->updateOrderState($order);
          $this->redirectToUrl($_SERVER['HTTP_REFERER']);
     }
 //
