@@ -55,6 +55,12 @@ class AdminOrdersController extends \Wee\Controller {
         $orders = $orderDao->getFilterOrders($_GET['username'], $_GET['state'], $_GET['time'], $start, $limit);
         $this->render('admin/list_orders', array('orders' => $orders, 'paginator' => $paginator));
     }
+    
+    public function deleteOrder(){ 
+         $orderDao = \Wee\DaoFactory::getDao('Order');
+         $orderDao->deleteOrderById($_POST['order_id']);
+         $this->redirectToUrl($_SERVER['HTTP_REFERER']);
+    }
 //
 //    public function deleteProduct() {
 //        $productDao = \Wee\DaoFactory::getDao('Product');

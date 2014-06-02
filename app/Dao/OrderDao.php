@@ -224,4 +224,11 @@ class OrderDao extends \Wee\Dao {
 //        var_dump($orders); die();
 //        
 //    }
+    
+    public function deleteOrderById($order_id) {
+        $sql = 'DELETE FROM orders WHERE id = :order_id';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':order_id', $order_id);
+        $stmt->execute();
+    }
 }

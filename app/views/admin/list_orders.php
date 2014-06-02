@@ -64,49 +64,53 @@
                     </form>
                     <!--  end filter form  -->
                 </div>
-                <!--  start table-content  -->
-                <div id="table-content">
-                    <!--  start product-table ..................................................................................... -->
+                <?php if ($orders): ?>
+                    <!--  start table-content  -->
+                    <div id="table-content">
+                        <!--  start product-table ..................................................................................... -->
 
-                    <table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
-                        <tr>
-                            <th class="table-header-repeat line-left minwidth-1"><a href="">Username</a>	</th>
-                            <th class="table-header-repeat line-left minwidth-1"><a href="">First Name</a>	</th>
-                            <th class="table-header-repeat line-left minwidth-1"><a href="">Last Name</a></th>
-                            <th class="table-header-repeat line-left minwidth-1"><a href="">Status</a></th>
-                            <th class="table-header-repeat line-left"><a href="">Created at</a></th>
-                            <th class="table-header-repeat line-left"><a href="">Total value</a></th>
-                            <th class="table-header-options line-left"><a href="">Options</a></th>
-                        </tr>
-                        <?php $i = 0; ?>
-                        <?php foreach ($orders as $order): ?>
-
-                            <tr <?php echo $i % 2 == 0 ? "" : "class='alternate-row'"; ?>>
-                                <td><?php echo $order->getUser()->getUsername(); ?></td>
-                                <td><?php echo $order->getUser()->getFirstname(); ?></td>
-                                <td><?php echo $order->getUser()->getLastname(); ?></td>
-                                <td><?php echo $order->getState()->getLabel(); ?></td>
-                                <td><?php echo $order->getDate(); ?></td>
-                                <td><?php echo $order->getTotal(); ?></td>
-                                <td class="options-width">
-                                    <select name="state">
-                                        <?php foreach ($view->getStates() as $state): ?>
-                                            <option value="<?php echo $state->getId(); ?>" <?php echo (isset($_GET['state']) && ($_GET['state'] == $state->getId())) ? 'selected="selected"' : ''; ?>><?php echo $state->getLabel(); ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <form action="<?php echo url('admin_orders/view_order'); ?>" method="get" >
-                                        <input type="hidden" name="order_id" value="<?php echo $order->getId(); ?>" />
-                                        <input type='submit' value='View' />
-                                    </form>
-                                    <a href="" title="Delete" class="icon-2 info-tooltip"></a>
-                                </td>
+                        <table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
+                            <tr>
+                                <th class="table-header-repeat line-left minwidth-1"><a href="">Username</a>	</th>
+                                <th class="table-header-repeat line-left minwidth-1"><a href="">First Name</a>	</th>
+                                <th class="table-header-repeat line-left minwidth-1"><a href="">Last Name</a></th>
+                                <th class="table-header-repeat line-left minwidth-1"><a href="">Status</a></th>
+                                <th class="table-header-repeat line-left"><a href="">Created at</a></th>
+                                <th class="table-header-repeat line-left"><a href="">Total value</a></th>
+                                <th class="table-header-options line-left"><a href="">Options</a></th>
                             </tr>
-                            <?php $i = $i + 1; ?>
-                        <?php endforeach; ?>
-                    </table>
-                    <!--  end product-table................................... --> 
-                    </form>
-                </div>
+                            <?php $i = 0; ?>
+                            <?php foreach ($orders as $order): ?>
+
+                                <tr <?php echo $i % 2 == 0 ? "" : "class='alternate-row'"; ?>>
+                                    <td><?php echo $order->getUser()->getUsername(); ?></td>
+                                    <td><?php echo $order->getUser()->getFirstname(); ?></td>
+                                    <td><?php echo $order->getUser()->getLastname(); ?></td>
+                                    <td><?php echo $order->getState()->getLabel(); ?></td>
+                                    <td><?php echo $order->getDate(); ?></td>
+                                    <td><?php echo $order->getTotal(); ?></td>
+                                    <td class="options-width">
+                                        <select name="state">
+                                            <?php foreach ($view->getStates() as $state): ?>
+                                                <option value="<?php echo $state->getId(); ?>" <?php echo ($order->getState() && ($order->getState()->getId() == $state->getId())) ? 'selected="selected"' : ''; ?>><?php echo $state->getLabel(); ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <form action="<?php echo url('admin_orders/view_order'); ?>" method="get" >
+                                            <input type="hidden" name="order_id" value="<?php echo $order->getId(); ?>" />
+                                            <input type='submit' value='View' />
+                                        </form>
+                                        <form action="<?php echo url('admin_orders/delete_order'); ?>" method="post" >
+                                            <input type="hidden" name="order_id" value="<?php echo $order->getId(); ?>" />
+                                            <input type="submit" value="Delete"/>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <?php $i = $i + 1; ?>
+                            <?php endforeach; ?>
+                        </table>
+                        <!--  end product-table................................... --> 
+                    </div>
+                <?php endif; ?>
                 <!--  end content-table  -->
 
                 <!--  start paging..................................................... -->
