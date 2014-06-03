@@ -125,7 +125,13 @@ class ProductDao extends \Wee\Dao {
             $price = '';
         }
         if ($filtering->getSort() && $filtering->getOrder()) {
+            if (!($filtering->getSort() == 'title' || $filtering->getSort() == 'price')) {
+                $filtering->setSort('title');
+            }
             $sort = ' ORDER BY ' . $filtering->getSort();
+            if (!($filtering->getOrder() == 'ASC' || $filtering->getOrder() == 'DESC')) {
+                $filtering->setOrder('ASC');
+            }
             $order = ' ' . $filtering->getOrder();
         } else {
             $sort = '';
@@ -168,11 +174,11 @@ class ProductDao extends \Wee\Dao {
     public function addProduct($product) {
         $sql = "INSERT INTO products(title, category_id, price, description, short_description, stock) VALUES (:title, :category_id, :price, :description, :short_description, :stock)";
         $stmt = $this->getConnection()->prepare($sql);
-        $stmt->bindValue(':title', $product->getTitle());
+        $stmt->bindValue(':title', strip_tags(trim($product->getTitle())));
         $stmt->bindValue(':category_id', $product->getCategory_id());
         $stmt->bindValue(':price', $product->getPrice());
-        $stmt->bindValue(':description', $product->getDescription());
-        $stmt->bindValue(':short_description', $product->getShort_description());
+        $stmt->bindValue(':description', strip_tags(trim($product->getDescription())));
+        $stmt->bindValue(':short_description', strip_tags(trim($product->getShort_description())));
         $stmt->bindValue(':stock', $product->getStock());
         $stmt->execute();
     }
@@ -199,11 +205,11 @@ class ProductDao extends \Wee\Dao {
         $sql = "UPDATE products SET title = :title, category_id = :category_id, price = :price, description = :description, short_description = :short_description, stock = :stock WHERE id = :id";
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':id', $product->getId());
-        $stmt->bindValue(':title', $product->getTitle());
+        $stmt->bindValue(':title', strip_tags(trim($product->getTitle())));
         $stmt->bindValue(':category_id', $product->getCategory_id());
         $stmt->bindValue(':price', $product->getPrice());
-        $stmt->bindValue(':description', $product->getDescription());
-        $stmt->bindValue(':short_description', $product->getShort_description());
+        $stmt->bindValue(':description', strip_tags(trim($product->getDescription())));
+        $stmt->bindValue(':short_description', strip_tags(trim($product->getShort_description())));
         $stmt->bindValue(':stock', $product->getStock());
         $stmt->execute();
     }

@@ -114,7 +114,7 @@ class UserDao extends \Wee\Dao {
         $stmt->bindValue(':lastname', $user->getLastname());
         $stmt->bindValue(':email', $user->getEmail());
         $stmt->bindValue(':phone', $user->getPhone());
-        $stmt->bindValue(':password', md5($user->getPassword()));
+        $stmt->bindValue(':password', md5(trim($user->getPassword())));
         $stmt->bindValue(':gender', $user->getGender());
         $stmt->bindValue(':created_at', date('Y-m-d H:i:s'));
         if ($user->getEducation_id() == null) {
@@ -172,7 +172,7 @@ class UserDao extends \Wee\Dao {
         $stmt->bindValue(':billing_address_id', $billing_address);
 
         if ($user->getPassword() != '') {
-            $stmt->bindValue(':password', md5($user->getPassword()));
+            $stmt->bindValue(':password', md5(trim($user->getPassword())));
         }
         $stmt->execute();
     }
@@ -235,7 +235,7 @@ class UserDao extends \Wee\Dao {
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':activation_key', $activation_key, \PDO::PARAM_STR);
         $stmt->bindValue(':user_id', $user_id);
-        $stmt->bindValue(':password', md5($password), \PDO::PARAM_STR);
+        $stmt->bindValue(':password', md5(trim($password)), \PDO::PARAM_STR);
         $new_activation_key = NULL;
         $stmt->bindValue(':new_activation_key', $new_activation_key, \PDO::PARAM_NULL);
         $stmt->execute();

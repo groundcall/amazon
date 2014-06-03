@@ -94,9 +94,9 @@ class DashboardController extends \Wee\Controller {
     }
 
     public function showOrderDetails() {
-        if (!empty($_GET['order_id'])) {
-            $orderDao = \Wee\DaoFactory::getDao('Order');
-            $order = $orderDao->getOrderByIdAndUser($_GET['order_id'], $_SESSION['id']);
+        $orderDao = \Wee\DaoFactory::getDao('Order');
+        $order = $orderDao->getOrderByIdAndUser($_GET['order_id'], $_SESSION['id']);
+        if (!empty($_GET['order_id']) && $order != null) {
             $order->get_Cart($order->getCart_id());
             $this->render('users/dashboard_show_order', array('order' => $order));
         } else {

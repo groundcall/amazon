@@ -3,9 +3,7 @@
 namespace Models;
 
 class Order extends \Wee\Model {
-    
-    use \Validators\AddressValidator;
-    
+        
     protected $id;
     protected $user_id;
     protected $billing_address_id;
@@ -203,11 +201,12 @@ class Order extends \Wee\Model {
                 $this->billing_address_id = $addressDao->getLastInsertedAddressId();
                 $userDao->updateBillingAddress($this->user_id, $this->billing_address_id);
             }
-            if ($billing_address['use_for_shipping'] != null && $billing_address['use_for_shipping'] == 1) {
-                $this->updateShippingAddress($billing_address);
-            } 
             $orderDao = \Wee\DaoFactory::getDao('Order');
             $orderDao->updateBillingAddress($this);
+            if ($billing_address['use_for_shipping'] != null && $billing_address['use_for_shipping'] == 1) {
+                $this->updateShippingAddress($billing_address);
+                $orderDao->updateShippingAddressId($this, $this->getBilling_address_id());
+            } 
         }
     }
 
@@ -233,9 +232,14 @@ class Order extends \Wee\Model {
         $address->setCountry($shipping_address['country_id']);
         $address->updateAttributes($shipping_address);
         $this->setShipping_address($address);
+        $addressDao = \Wee\DaoFactory::getDao('Address');
+        $userDao = \Wee\DaoFactory::getDao('User');
+        $orderDao = \Wee\DaoFactory::getDao('Order');
+        if (isset($shipping_address['same_as_billing']) && $shipping_address['same_as_billing'] == 1) {
+            $this->setShipping_address($this->getBilling_address());
+        }
         if ($this->getShipping_address()->isValid()) {
-            $addressDao = \Wee\DaoFactory::getDao('Address');
-            $userDao = \Wee\DaoFactory::getDao('User');
+            
             if ($this->user->getShipping_address_id() != null) {
                 $addressDao->updateAddress($this->user->getShipping_address_id(), $address);
                 $this->shipping_address_id = $this->user->getShipping_address_id();
@@ -245,12 +249,11 @@ class Order extends \Wee\Model {
                 $this->shipping_address_id = $addressDao->getLastInsertedAddressId();
                 $userDao->updateShippingAddress($this->user_id, $this->shipping_address_id);
             }
-            if ($shipping_address['same_as_billing'] != null && $shipping_address['same_as_billing'] == 1) {
-                $this->setShipping_address($this->getBilling_address());
-                $addressDao->updateAddress($this->user->getShipping_address_id(), $this->getBilling_address());
-            }
-            $orderDao = \Wee\DaoFactory::getDao('Order');
             $orderDao->updateShippingAddress($this);
+            if (isset($shipping_address['same_as_billing']) && $shipping_address['same_as_billing'] == 1) {
+                $addressDao->updateAddress($this->user->getShipping_address_id(), $this->getBilling_address());
+                $orderDao->updateShippingAddressId($this, $this->getBilling_address_id());
+            }
         }
     }
 

@@ -67,7 +67,6 @@ class ProductsController extends \Wee\Controller {
             if (isset($_GET['title'])) {
                 $filtering->setTitle($_GET['title']);
             }
-
             $productDao = \Wee\DaoFactory::getDao('Product');
             $numberOfProducts = $productDao->getFilterProducts3($filtering, 'count');
             $paginator->setPerpage();

@@ -109,8 +109,8 @@ class CheckoutController extends \Wee\Controller {
     }
 
     public function showOrder() {
-        if (!empty($_GET['order_id'])) {
-            $orderDao = \Wee\DaoFactory::getDao('Order');
+        $orderDao = \Wee\DaoFactory::getDao('Order');
+        if (!empty($_GET['order_id']) && $orderDao->getOrderByIdAndUser($_GET['order_id'], $_SESSION['id']) != null) {
             $order = $orderDao->getOrderByIdAndUser($_GET['order_id'], $_SESSION['id']);
             $order->get_Cart($order->getCart_id());
             $this->render('users/checkout_confirm', array('order' => $order));

@@ -9,8 +9,6 @@ class CategoryDao extends \Wee\Dao {
         $category->updateAttributes($row);
         $category->setId($row['id']);
 
-//        $category->setLabel($row['label']);
-
         return $category;
     }
 
@@ -25,8 +23,9 @@ class CategoryDao extends \Wee\Dao {
     
     private function getCategory($stmt) {
         $row = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        if ($row == null)
+        if ($row == null) {
             return null;
+        }
         $result = $this->readRow($row[0]);
         return $result;
     }

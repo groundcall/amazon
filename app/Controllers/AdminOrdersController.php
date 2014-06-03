@@ -69,6 +69,11 @@ class AdminOrdersController extends \Wee\Controller {
     public function viewOrder() {
         $orderDao = \Wee\DaoFactory::getDao('Order');
         $order = $orderDao->getOrderById($_GET['order_id']);
-        $this->render('admin/view_order', array('order' => $order));
+        if ($order != null) {
+            $this->render('admin/view_order', array('order' => $order));
+        }
+        else {
+            $this->redirect('admin_orders/');
+        }
     }
 }

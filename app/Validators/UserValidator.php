@@ -70,15 +70,13 @@ trait UserValidator {
 
     public function verifyPassword($attributeName = 'password', $message = 'Password must have at least 6 characters.') {
         $this->registerValidator(function($object) use ($attributeName, $message) {
-
             if ($object->getId()) {
-                if ($object->getPassword() != '' && strlen($object->getPassword()) < 6) {
-
+                if ($object->getPassword() != '' && strlen(trim($object->getPassword())) < 6) {
                     $object->addError($attributeName, $message);
                 }
             } 
             else {
-                if (strlen($object->getPassword()) < 6) {
+                if (strlen(trim($object->getPassword())) < 6) {
                     $object->addError($attributeName, $message);
                 }
             }

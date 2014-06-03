@@ -22,8 +22,7 @@ class CartController extends \Wee\Controller {
         $this->render('users/cart');
     }
 
-    public function showCart() {
-
+    public function showCart() {        
         if (isset($_GET['cart_id'])) {
             $_SESSION['cart_id'] = $_GET['cart_id'];
             $cartDao = \Wee\DaoFactory::getDao('Cart');
@@ -47,12 +46,9 @@ class CartController extends \Wee\Controller {
     }
 
     private function clearCart() {
-
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
         $cartItemDao->removeAllCartItemsByCartId($this->cart->getId());
         $this->cart->calculateTotal();
-
-
         $this->cart->removeCartItems();
 
         $_SESSION['updated_qty'] = 1;
@@ -79,7 +75,6 @@ class CartController extends \Wee\Controller {
     }
 
     public function addItemQuantity() {
-
         $_SESSION['previous_url'] = $_SERVER['HTTP_REFERER'];
 
         $this->cart->addCartItem($_POST['product_id'], $_POST['quantity']);
@@ -92,7 +87,6 @@ class CartController extends \Wee\Controller {
     }
 
     public function deleteCartItemFromCart() {
-
         $cart_item_id = $_GET['cart_item_id'];
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
         $cartItemDao->deleteCartItemFromCart($cart_item_id, $this->cart->getId());

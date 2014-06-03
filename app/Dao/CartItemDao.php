@@ -53,7 +53,6 @@ class CartItemDao extends \Wee\Dao {
                 . "VALUES (:cart_id, :product_id, :title, :quantity, :price)";
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':cart_id', $cart_item->getCart_id());
-
         $stmt->bindValue(':product_id', $cart_item->getProduct()->getId());
         $stmt->bindValue(':title', $cart_item->getProduct()->getTitle());
         $stmt->bindValue(':quantity', $cart_item->getQuantity());

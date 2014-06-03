@@ -13,16 +13,6 @@ class AddressDao extends \Wee\Dao {
         return $address;
     }
 
-//    private function getAddresses($stmt) {
-//        $result = array();
-//        $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-//        foreach ($rows as $row) {
-//            $result[] = $this->readRow($row);
-//        }
-//
-//        return $result;
-//    }
-
     private function getAddress($stmt) {
         $row = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($row == null) {
@@ -37,8 +27,8 @@ class AddressDao extends \Wee\Dao {
         $sql = 'INSERT INTO addresses (address, city, country_id, firstname, lastname, email) VALUES '
                 . '(:address, :city, :country_id, :firstname, :lastname, :email)';
         $stmt = $this->getConnection()->prepare($sql);
-        $stmt->bindValue(':address', $address->getAddress());
-        $stmt->bindValue(':city', $address->getCity());
+        $stmt->bindValue(':address', strip_tags(trim($address->getAddress())));
+        $stmt->bindValue(':city', strip_tags(trim($address->getCity())));
         $stmt->bindValue(':country_id', $address->getCountry_id());
         $stmt->bindValue(':firstname', $address->getFirstname());
         $stmt->bindValue(':lastname', $address->getLastname());
@@ -67,8 +57,8 @@ class AddressDao extends \Wee\Dao {
                 . ' lastname = :lastname, email = :email WHERE id = :id';
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':id', $id);
-        $stmt->bindValue(':address', $address->getAddress());
-        $stmt->bindValue(':city', $address->getCity());
+        $stmt->bindValue(':address', strip_tags(trim($address->getAddress())));
+        $stmt->bindValue(':city', strip_tags(trim($address->getCity())));
         $stmt->bindValue(':country_id', $address->getCountry_id());
         $stmt->bindValue(':firstname', $address->getFirstname());
         $stmt->bindValue(':lastname', $address->getLastname());

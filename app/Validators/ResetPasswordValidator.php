@@ -6,7 +6,7 @@ trait ResetPasswordValidator {
     
     public function valiatePasswordFormat() {
         $this->registerValidator(function($ressetPassword) {
-            if (strlen($ressetPassword->getPassword()) < 6) {
+            if (strlen(trim($ressetPassword->getPassword())) < 6) {
                 $ressetPassword->addError('password', 'Password format incorrect.');
             }
         });
@@ -14,7 +14,7 @@ trait ResetPasswordValidator {
     
     public function valiateConfirmPasswordFormat() {
         $this->registerValidator(function($ressetPassword) {
-            if (strlen($ressetPassword->getPassword2()) < 6) {
+            if (strlen(trim($ressetPassword->getPassword2())) < 6) {
                 $ressetPassword->addError('password2', 'Password format incorrect.');
             }
         });

@@ -6,7 +6,7 @@ trait ProductValidator {
 
     public function validateProductTitle() {
         $this->registerValidator(function($product) {
-            if (strlen($product->getTitle()) < 2) {
+            if (strlen(strip_tags(trim($product->getTitle()))) < 2) {
                 $product->addError("title", "Product title must have at least 2 characters.");
             }
         });
@@ -30,7 +30,7 @@ trait ProductValidator {
 
     public function validateProductDescription() {
         $this->registerValidator(function($product) {
-            if (strlen(strip_tags($product->getDescription())) < 5) {
+            if (strlen(strip_tags(trim($product->getDescription()))) < 5) {
                 $product->addError("description", "Description must have at least 5 characters.");
             }
         });
@@ -38,7 +38,7 @@ trait ProductValidator {
 
     public function validateProductShort_description() {
         $this->registerValidator(function($product) {
-            if (strlen($product->getShort_description()) < 5) {
+            if (strlen(strip_tags(trim($product->getShort_description()))) < 5) {
                 $product->addError("short_description", "Short description must have at least 5 characters.");
             }
         });
