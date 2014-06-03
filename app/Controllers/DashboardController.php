@@ -40,6 +40,7 @@ class DashboardController extends \Wee\Controller {
                 if ($this->user->isValid()) {
                     $userDao = \Wee\DaoFactory::getDao('User');
                     $userDao->updateUser($this->user);
+                    $userDao->updateUserEducation($this->user);
                     $_SESSION['update_status'] = 'ok';
                 }
             }

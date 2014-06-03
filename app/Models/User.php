@@ -28,7 +28,7 @@ class User extends \Wee\Model {
 
     function __construct() {
         $this->setAttrAccessible(array('username', 'password', 'password2', 'firstname', 'lastname', 'email', 'phone', 'gender', 'activated', 'role_id', 'activation_key',
-            'billing_address_id', 'shipping_address_id', 'created_at'));
+            'billing_address_id', 'shipping_address_id', 'created_at', 'education_id'));
 
         $this->validateUserFirstname();
         $this->validateUserLastname();

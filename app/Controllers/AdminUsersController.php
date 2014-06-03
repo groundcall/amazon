@@ -80,8 +80,6 @@ class AdminUsersController extends \Wee\Controller {
         $user = null;
         if (!empty($_POST['data']) && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1) {
             $userDao = \Wee\DaoFactory::getDao('User');
-
-
             $user = $userDao->getUserById($_POST['data']['id']);
             $user->updateAttributes($_POST['data']);
 

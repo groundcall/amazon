@@ -34,7 +34,7 @@ class PaypalCheckout extends \Wee\Model {
             'currency' => 'USD', //paypal currency
             'cursymbol' => '$;', //currency symbol
             'location' => 'US', //location code  (ex GB)
-            'returnurl' => 'http://bookstore.dev/dashboard/account_dashboard', //where to go back when the transaction is done.
+            'returnurl' => 'http://bookstore.com/dashboard/account_dashboard', //where to go back when the transaction is done.
             'returntxt' => 'Return to bookstore.dev', //What is written on the return button in paypal
             'cancelurl' => 'http://bookstore.dev/checkout/paypal', //Where to go if the user cancels.
             'shipping' => 0, //Shipping Cost
@@ -94,7 +94,7 @@ class PaypalCheckout extends \Wee\Model {
         $cpt = 1;
         if (!empty($items)) {
             foreach ($items as $item) {
-                $amount = $item->getQuantity() * $item->getPrice();
+                $amount = $item->getProduct()->getPrice();
                 $content.='<li class="cartitem">' . $item->getQuantity() . ' x "' . $item->getProduct()->getTitle() . '" at ' . $this->cursymbol . '' . $item->getPrice();
 //                if ($item['shipping'] > 0)
 //                    $content.= ' + ' . $this->cursymbol . '' . $item['shipping'] . ' shipping ';
@@ -153,7 +153,7 @@ class PaypalCheckout extends \Wee\Model {
           <div id="item_' . $cpt . '" class="itemwrap">
             <input type="hidden" name="item_name_' . $cpt . '" value="' . $item->getProduct()->getTitle() . '" />
             <input type="hidden" name="quantity_' . $cpt . '" value="' . $item->getQuantity() . '" />
-            <input type="hidden" name="amount_' . $cpt . '" value="' . $item->getPrice() . '" />
+            <input type="hidden" name="amount_' . $cpt . '" value="' . $item->getProduct()->getPrice() . '" />
          </div>';
                 $cpt++;
             }

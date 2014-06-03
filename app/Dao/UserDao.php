@@ -176,6 +176,14 @@ class UserDao extends \Wee\Dao {
         }
         $stmt->execute();
     }
+    
+    public function updateUserEducation($user) {
+        $sql = 'UPDATE users SET education_id = :education_id WHERE id = :id';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':id', $user->getId());
+        $stmt->bindValue(':education_id', $user->getEducation_id());
+        $stmt->execute();
+    }
 
     public function setUserActivity($user_id, $active) {
         $sql = "UPDATE users SET activated = :activated WHERE id = :id";

@@ -116,14 +116,13 @@ class AdminProductsController extends \Wee\Controller {
     }
 
     public function editProduct() {
-        $product = null;
         if (!empty($_POST['data']) && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1) {
             $productDao = \Wee\DaoFactory::getDao('Product');
             $product = $productDao->getProductById($_POST['data']['id']);
+            $product->updateAttributes($_POST['data']);
             $imageDao = \Wee\DaoFactory::getDao('Image');
             $image = $imageDao->getImageByProductId($_POST['data']['id']);
             $product->setImage($image);
-
 
             if (!empty($_FILES['image']['name'])) {
                 $product->createImage($_FILES['image']['tmp_name'], $_FILES['image']['name'], $_FILES['image']['type'], $_FILES['image']['tmp_name']);
@@ -138,6 +137,9 @@ class AdminProductsController extends \Wee\Controller {
                     $product->getImage()->updateImage();
                 }
                 $this->redirect('admin_products');
+            }
+            else {
+                $this->render('admin/edit_product', array('product' => $product));
             }
         } else {
             $this->redirect('products/');

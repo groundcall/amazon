@@ -87,16 +87,16 @@
                                                         </div>
                                                     </div>
                                                     <div class="field">
-                                                        <label for="billing[country_id]" class="required"><em>*</em>Country</label>
-                                                        <div class="input-box">
-                                                            <select name="billing[country_id]" title="Country" id="billing:country_id" class="select">
-                                                                <?php $countries = $view->getCountries(); ?>
-                                                                <?php foreach ($countries as $country): ?>
-                                                                    <option value="<?php echo $country->getId(); ?>"><?php echo $country->getName(); ?></option>
-                                                                <?php endforeach; ?> 
-                                                            </select>
-                                                        </div>
+                                                    <label for="billing[country_id]" class="required"><em>*</em>Country</label>
+                                                    <div class="input-box">
+                                                        <select name="billing[country_id]" title="Country" id="billing:country_id" class="select">
+                                                            <?php $countries = $view->getCountries(); ?>
+                                                            <?php foreach ($countries as $country): ?>
+                                                                <option value="<?php echo $country->getId(); ?>" <?php echo ($address && $address->getCountry_id() == $country->getId()) ? 'selected' : ''; ?>><?php echo $country->getName(); ?></option>
+                                                            <?php endforeach; ?> 
+                                                        </select>
                                                     </div>
+                                                </div>
                                                 </li>
                                                 <li class="no-display"><input name="billing[save_in_address_book]" value="1" type="hidden"></li>
                                             </ul>
