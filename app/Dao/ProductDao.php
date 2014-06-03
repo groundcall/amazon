@@ -149,8 +149,9 @@ class ProductDao extends \Wee\Dao {
             }
         }
 
-        $sql = 'Select * FROM products WHERE title LIKE :title' . $category . $stock . $price . $sort . $order . $limit;
+        $sql = 'Select * FROM products WHERE active = :active AND title LIKE :title' . $category . $stock . $price . $sort . $order . $limit;
         $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindValue(':active', 1);
         $stmt->bindValue(':title', '%' . $filtering->getTitle() . '%');
         $stmt->execute();
 

@@ -36,7 +36,7 @@ class PaypalCheckout extends \Wee\Model {
             'location' => 'US', //location code  (ex GB)
             'returnurl' => 'http://bookstore.com/dashboard/account_dashboard', //where to go back when the transaction is done.
             'returntxt' => 'Return to bookstore.dev', //What is written on the return button in paypal
-            'cancelurl' => 'http://bookstore.dev/checkout/paypal', //Where to go if the user cancels.
+            'cancelurl' => 'http://bookstore.com/checkout/paypal', //Where to go if the user cancels.
             'shipping' => 0, //Shipping Cost
             'custom' => ''                           //Custom attribute
         );
@@ -83,7 +83,6 @@ class PaypalCheckout extends \Wee\Model {
 //            }
 //        }
 //    }
-
     //==================================================//
     //==> Returns a summary list of the cart content <==//
     //==================================================//
@@ -96,8 +95,8 @@ class PaypalCheckout extends \Wee\Model {
             foreach ($items as $item) {
                 $amount = $item->getProduct()->getPrice();
                 $content.='<li class="cartitem">' . $item->getQuantity() . ' x "' . $item->getProduct()->getTitle() . '" at ' . $this->cursymbol . '' . $item->getPrice();
-//                if ($item['shipping'] > 0)
-//                    $content.= ' + ' . $this->cursymbol . '' . $item['shipping'] . ' shipping ';
+                if ($order->getShipping_method()->getPrice() > 0)
+                    $content.= ' + ' . $this->cursymbol . '' . $order->getShipping_method()->getPrice() . ' shipping ';
                 $content.=' for ' . $this->cursymbol . '' . $amount;
                 $content.='</li>';
                 $total+=$amount;
@@ -115,7 +114,7 @@ class PaypalCheckout extends \Wee\Model {
     //=====================//
     //==> Checkout Form <==//
     //=====================//
-    public function getCheckoutForm($items) {
+    public function getCheckoutForm($items, $order) {
 
 
         $form = '
@@ -146,14 +145,16 @@ class PaypalCheckout extends \Wee\Model {
         if (!empty($items)) {
             foreach ($items as $item) {
                 ?>
-                
+
                 <?php $item->setProduct($item->getProduct_id()); ?>
                 <?php
+
                 $form.='
           <div id="item_' . $cpt . '" class="itemwrap">
             <input type="hidden" name="item_name_' . $cpt . '" value="' . $item->getProduct()->getTitle() . '" />
             <input type="hidden" name="quantity_' . $cpt . '" value="' . $item->getQuantity() . '" />
             <input type="hidden" name="amount_' . $cpt . '" value="' . $item->getProduct()->getPrice() . '" />
+                <input type="hidden" name="shipping_' . $cpt . '" value="' . ($order->getShipping_method()->getPrice())/2 . '" />
          </div>';
                 $cpt++;
             }

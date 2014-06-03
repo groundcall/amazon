@@ -26,7 +26,7 @@
                                 <ul class="form-list">
                                     <li id="billing-new-address-form">
                                         <fieldset>
-                                            <?php $address = $user->getBilling_Address(); ?>
+                                            <?php //$address = $user->getBilling_Address(); ?>
                                             <!--<input name="billing[address_id]" value="" id="billing:address_id" type="hidden">-->
                                             <ul>
                                                 <li class="fields">

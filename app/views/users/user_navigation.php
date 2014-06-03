@@ -8,11 +8,12 @@
                     <button type="submit" title="Search" class="button"><span><span>Search</span></span></button>
                 </div>
             </form>
-            <?php if (!empty($_SESSION['username'])): ?>
+            <?php if (!empty($_SESSION['id'])): ?>
+                <?php $username = $view->getUserById($_SESSION['id']); ?>
                 <?php if ($_SESSION['is_admin'] != 1): ?>
-                    <p class="welcome-msg"><?php echo 'Welcome, ' . $_SESSION['username']; ?><br /></p>;
+                    <p class="welcome-msg"><?php echo 'Welcome, ' . $username; ?><br /></p>;
                 <?php else: ?>
-                    <a href="<?php echo url("admin_products"); ?>" class="welcome-msg"><?php echo 'Welcome, ' . $_SESSION['username']; ?><br /></a>
+                    <a href="<?php echo url("admin_products"); ?>" class="welcome-msg"><?php echo 'Welcome, ', $username; ?><br /></a>
                 <?php endif; ?>
             <?php endif; ?>
             
@@ -28,6 +29,7 @@
                 <?php else: ?>
                     <li class="first" ><a href="<?php echo url('users/show_login_form'); ?>" title="Log In" >Log In</a></li>
                     <li ><a href="<?php echo url('users/show_user_form'); ?>" title="Register" class="top-link-cart">Register</a></li>
+                    <li ><a href="<?php echo url('cart/show_cart'); ?>" title="My Cart" class="top-link-cart">My Cart</a></li>
                 <?php endif; ?>
             </ul>
 

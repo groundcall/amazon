@@ -77,7 +77,7 @@
                                 </div>
                             <?php else: ?>
                                 <div class="actions">
-                                    <button class="button outofstock" >
+                                    <button class="button outofstock" disabled="disabled">
                                         <span><span>Out of stock</span></span>
                                     </button>
                                 </div>

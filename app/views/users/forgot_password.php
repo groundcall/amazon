@@ -7,6 +7,18 @@
                     <h2 class="legend">Forgot password</h2>
 
                     <div>
+                        <?php if (isset($_SESSION['change_password']) && $_SESSION['change_password'] == 'ok'): ?>
+                        <div id="messages_product_view">
+                                <ul class="messages">
+                                    <li class="success-msg">
+                                        <ul>
+                                            <li><span>An email was sent to <?php echo $resetPassword->getEmail(); ?>. Further instructions there.</span></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                            <?php $_SESSION['change_password'] = null; ?>
+                        <?php endif; ?>
                         <fieldset>
                             <h4>Forgot your password?</h4>
                             <p>Please enter your email below:</p>

@@ -6,6 +6,8 @@ class CheckoutController extends \Wee\Controller {
 
     public function initialize() {
         //unset($_SESSION['cart_id']);
+        //unset($_SESSION['id']);
+        //unset($_SESSION['is_admin']);
         //unset($_SESSION['order_id']); die();
         if (empty($_SESSION['cart_id'])) {
             $this->redirect('products/');
@@ -103,7 +105,8 @@ class CheckoutController extends \Wee\Controller {
             unset($_SESSION['cart_id']);
             unset($_SESSION['order_id']);
             $this->render('users/checkout_final', array('order' => $this->order));
-        } else {
+        } 
+        else {
             $this->redirect('cart/show_cart');
         }
     }
@@ -114,13 +117,13 @@ class CheckoutController extends \Wee\Controller {
             $order = $orderDao->getOrderByIdAndUser($_GET['order_id'], $_SESSION['id']);
             $order->get_Cart($order->getCart_id());
             $this->render('users/checkout_confirm', array('order' => $order));
-        } else {
+        } 
+        else {
             $this->redirect('products/');
         }
     }
 
     public function paypal() {
-
         if (isset($_POST['auth'])) {
             $this->order->setState_id(1);
             $this->order->getCart()->clearCart();
@@ -128,12 +131,12 @@ class CheckoutController extends \Wee\Controller {
             $_SESSION['cart_id'] == null ;
             $_SESSION['order_id'] == null;
             $this->render('users/dashboard', array('order' => $this->order));
-        } else {
-
+        } 
+        else {
             $pp = new \Models\PaypalCheckout();
             $cartitemDao = \Wee\DaoFactory::getDao('Cartitem');
             $items = $cartitemDao->getAllCartItemsByCartId($_SESSION['cart_id']);
-            $checkoutform = $pp->getCheckoutForm($items);
+            $checkoutform = $pp->getCheckoutForm($items, $this->order);
 
             $this->render('users/paypal', array('order' => $this->order, 'checkoutform' => $checkoutform));
         }

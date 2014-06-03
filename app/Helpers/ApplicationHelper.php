@@ -88,66 +88,73 @@ trait ApplicationHelper {
 
     public function checkQuantity($cart, $product) {
         $cartitem = $cart->getCartItemByProductId($product->getId());
-        if ($cartitem){
+        if ($cartitem) {
             $quantity = $cartitem->getQuantity() + 1;
-        }
-        else{
+        } else {
             $quantity = 1;
         }
-        if ($product->getStock() >= $quantity){
+        if ($product->getStock() >= $quantity) {
             return true;
         }
     }
-    
-    public function getCartById($cart_id){
+
+    public function getCartById($cart_id) {
         $cartDao = \Wee\DaoFactory::getDao('Cart');
         $cart = $cartDao->getCartById($cart_id);
         return $cart;
     }
-    
+
     public function getLastOrdersByUser($user) {
         $orderDao = \Wee\DaoFactory::getDao('Order');
         $orders = $orderDao->getLastOrdersByUser($user);
         return $orders;
     }
-    
+
     public function getStates() {
         $stateDao = \Wee\DaoFactory::getDao('State');
         $states = $stateDao->getAllStates();
         return $states;
     }
-    public function getAvailableStates($state){
+
+    public function getAvailableStates($state) {
         $stateDao = \Wee\DaoFactory::getDao('State');
         $states = array();
-        
-        if ($state->getId()==0){
-            $states[] = $stateDao -> getStateById(0);
-            $states[] = $stateDao -> getStateById(1);
-            $states[] = $stateDao -> getStateById(3);
+
+        if ($state->getId() == 0) {
+            $states[] = $stateDao->getStateById(0);
+            $states[] = $stateDao->getStateById(1);
+            $states[] = $stateDao->getStateById(3);
         }
-        
-        if ($state->getId()==1){
-            $states[] = $stateDao -> getStateById(1);
-            $states[] = $stateDao -> getStateById(2);
-            $states[] = $stateDao -> getStateById(3);
+
+        if ($state->getId() == 1) {
+            $states[] = $stateDao->getStateById(1);
+            $states[] = $stateDao->getStateById(2);
+            $states[] = $stateDao->getStateById(3);
         }
-        
-        if ($state->getId()==2){
-            $states[] = $stateDao -> getStateById(2);
-            $states[] = $stateDao -> getStateById(3);
-            $states[] = $stateDao -> getStateById(4);
+
+        if ($state->getId() == 2) {
+            $states[] = $stateDao->getStateById(2);
+            $states[] = $stateDao->getStateById(3);
+            $states[] = $stateDao->getStateById(4);
         }
-        
-        if ($state->getId()==3){
-            $states[] = $stateDao -> getStateById(3);
+
+        if ($state->getId() == 3) {
+            $states[] = $stateDao->getStateById(3);
         }
-        
-        if ($state->getId()==4){
-            $states[] = $stateDao -> getStateById(4);
+
+        if ($state->getId() == 4) {
+            $states[] = $stateDao->getStateById(4);
         }
-        
+
         return $states;
-        
     }
-        
+
+    public function getUserById($user_id) {
+        $userDao = \Wee\DaoFactory::getDao('User');
+        $user = $userDao->getUserById($user_id);
+        if ($user != null) {
+            return $user->getUsername();
+        }
+    }
+
 }

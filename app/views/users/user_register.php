@@ -57,7 +57,7 @@
                                 </div>
                             </div>
                             <div class="field">
-                                <label for="mobile">Mobile</label>
+                                <label for="mobile" class="required"><em>*</em>Mobile</label>
                                 <div class="input-box">
                                     <input type="text" name="data[phone]" id="mobile" value="<?php echo ($user) ? $user->getPhone() : ""; ?>" title="Mobile" class="input-text <?php echo ($user && $view->errorFor($user, "phone")) ? ' validation-failed' : '' ?>" />
                                     <?php if ($user && $user->hasError('phone')): ?>

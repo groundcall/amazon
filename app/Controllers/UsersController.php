@@ -18,8 +18,8 @@ class UsersController extends \Wee\Controller {
                 $userDao = \Wee\DaoFactory::getDao('User');
                 $userDao->addUser($user);
                 $user->setId($userDao->getLastInsertedUserId());
-//                $mail = new \Models\Email();
-//                $mail->sendActivationEmail($user);
+                $mail = new \Models\Email();
+                $mail->sendActivationEmail($user);
                 $_SESSION['registration_ok'] = 'ok';
                 $this->index();
             } else {
@@ -97,6 +97,7 @@ class UsersController extends \Wee\Controller {
             $userDao->updateActivationKey($user);
             $mail = new \Models\Email();
             $mail->sendResetPasswordEmail($user);
+            $_SESSION['change_password'] = 'ok';
         }
         $this->render('users/forgot_password', array('resetPassword' => $resetPasswod));
     }
