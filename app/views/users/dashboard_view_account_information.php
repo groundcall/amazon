@@ -1,5 +1,6 @@
 
 <?php $view->extend('masterpages/front_masterpage'); ?>
+<?php $_SESSION['edit_account_info'] = '';?>
 <div class="main-container col2-left-layout">
     <div class="main">
         <div class="col-main">

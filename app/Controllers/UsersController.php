@@ -20,11 +20,14 @@ class UsersController extends \Wee\Controller {
                 $user->setId($userDao->getLastInsertedUserId());
                 $mail = new \Models\Email();
                 $mail->sendActivationEmail($user);
+                $_SESSION['registration_ok'] = 'ok';
                 $this->index();
             } else {
+                $_SESSION['registration_ok'] = 'not_ok';
                 $this->render('users/user_register', array('user' => $user));
             }
         } else {
+            $_SESSION['registration_ok'] = 'not_ok';
             $this->render('users/user_register', array('user' => $user));
         }
     }
