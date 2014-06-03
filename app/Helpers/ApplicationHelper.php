@@ -116,4 +116,38 @@ trait ApplicationHelper {
         $states = $stateDao->getAllStates();
         return $states;
     }
+    public function getAvailableStates($state){
+        $stateDao = \Wee\DaoFactory::getDao('State');
+        $states = array();
+        
+        if ($state->getId()==0){
+            $states[] = $stateDao -> getStateById(0);
+            $states[] = $stateDao -> getStateById(1);
+            $states[] = $stateDao -> getStateById(3);
+        }
+        
+        if ($state->getId()==1){
+            $states[] = $stateDao -> getStateById(1);
+            $states[] = $stateDao -> getStateById(2);
+            $states[] = $stateDao -> getStateById(3);
+        }
+        
+        if ($state->getId()==2){
+            $states[] = $stateDao -> getStateById(2);
+            $states[] = $stateDao -> getStateById(3);
+            $states[] = $stateDao -> getStateById(4);
+        }
+        
+        if ($state->getId()==3){
+            $states[] = $stateDao -> getStateById(3);
+        }
+        
+        if ($state->getId()==4){
+            $states[] = $stateDao -> getStateById(4);
+        }
+        
+        return $states;
+        
+    }
+        
 }

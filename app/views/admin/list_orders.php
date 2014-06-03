@@ -89,9 +89,11 @@
                                     <td><?php echo $order->getUser()->getFirstname(); ?></td>
                                     <td><?php echo $order->getUser()->getLastname(); ?></td>
                                     <td> 
+                                        <?php // var_dump($order->getState());?>
+                                        <?php $states = $view->getAvailableStates($order->getState()); ?>
                                         <form action="<?php echo url('admin_orders/update_order_status'); ?>" method="post" >
                                             <select name="state">
-                                                <?php foreach ($view->getStates() as $state): ?>
+                                                <?php foreach ($states as $state): ?>
                                                     <option value="<?php echo $state->getId(); ?>" <?php echo ($order->getState() && ($order->getState()->getId() == $state->getId())) ? 'selected="selected"' : ''; ?>><?php echo $state->getLabel(); ?></option>
                                                 <?php endforeach; ?>
                                             </select>

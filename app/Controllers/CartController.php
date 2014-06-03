@@ -22,7 +22,7 @@ class CartController extends \Wee\Controller {
         $this->render('users/cart');
     }
 
-    public function showCart() {        
+    public function showCart() {
         if (isset($_GET['cart_id'])) {
             $_SESSION['cart_id'] = $_GET['cart_id'];
             $cartDao = \Wee\DaoFactory::getDao('Cart');
@@ -71,6 +71,7 @@ class CartController extends \Wee\Controller {
 
     public function addItem() {
         $this->cart->addCartItem($_POST['product_id'], 1);
+        $_SESSION['previous_url'] = null;
         $this->redirectToUrl($_SERVER['HTTP_REFERER']);
     }
 
@@ -90,7 +91,11 @@ class CartController extends \Wee\Controller {
         $cart_item_id = $_GET['cart_item_id'];
         $cartItemDao = \Wee\DaoFactory::getDao('CartItem');
         $cartItemDao->deleteCartItemFromCart($cart_item_id, $this->cart->getId());
-        $this->redirectToUrl($_SESSION['previous_url']);
+        if (isset($_SESSION['previous_url'])) {
+            $this->redirectToUrl($_SESSION['previous_url']);
+        } else {
+            $this->redirectToUrl($_SERVER['HTTP_REFERER']);
+        }
     }
 
     public function activateCart() {

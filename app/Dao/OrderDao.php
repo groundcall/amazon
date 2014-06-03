@@ -125,11 +125,11 @@ class OrderDao extends \Wee\Dao {
     }
     
     public function getLastOrdersByUser($user) {
-        $sql = 'SELECT * FROM orders WHERE user_id = :user_id AND state_id <> :state_id AND billing_address_id IS NOT NULL AND shipping_address_id IS NOT NULL ORDER BY date DESC LIMIT 5';
+        $sql = 'SELECT * FROM orders WHERE user_id = :user_id AND billing_address_id IS NOT NULL AND shipping_address_id IS NOT NULL ORDER BY date DESC LIMIT 5';
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(':user_id', $user->getId());
         $state_id = 0;
-        $stmt->bindValue(':state_id', $state_id);
+//        $stmt->bindValue(':state_id', $state_id);
         $stmt->execute();
         return $this->getOrders($stmt);
     }

@@ -76,8 +76,8 @@ class CheckoutController extends \Wee\Controller {
 
     public function selectPaymentMethod() {
         $this->order->updatePaymentMethod($_POST['payment']);
-        if ($_POST['payment'] = 'By Paypal') {
-            $this->paypal();
+        if ($_POST['payment'] == 3) {
+            $this->redirect('checkout/paypal');
         } else {
             $this->redirect('checkout/show_order_review');
         }

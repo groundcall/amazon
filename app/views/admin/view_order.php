@@ -24,7 +24,7 @@
                                     <th valign="top">USER</th>
                                     <td></td>
                                 </tr>
-                                
+
                                 <tr>
                                     <th valign="top">Username:</th>
                                     <td><input type="text" class="inp-form" name="username" readonly value="<?php echo ($order) ? $order->getUser()->getUsername() : ""; ?>" style="height: 18px;" /></td>
@@ -39,63 +39,63 @@
                                     <th valign="top">Last Name:</th>
                                     <td><input type="text" class="inp-form" readonly name="lastname" value="<?php echo ($order) ? $order->getUser()->getLastname() : ""; ?>" style="height: 18px;" /></td>
                                 </tr>         
-                                        
+
                                 <tr>
                                     <th valign="top"><br /><br />BILLING ADDRESS</th>
                                     <td></td>
                                 </tr>
-                                
+
                                 <tr>
                                     <th valign="top">Name:</th>
                                     <td><input type="text" readonly class="inp-form" name="billing_name" value="<?php echo ($order) ? $order->getBilling_address()->getFirstname() . ' ' . $order->getBilling_address()->getLastname() : ""; ?>" style="height: 18px;"/></td>
                                 </tr>
-                                
+
                                 <tr>
                                     <th valign="top">Address:</th>
                                     <td><input type="text" readonly class="inp-form" name="billing_address" value="<?php echo ($order) ? $order->getBilling_address()->getAddress() : ""; ?>" style="height: 18px;" /></td>
                                 </tr>
-                                
+
                                 <tr>
                                     <th valign="top">City:</th>
                                     <td><input type="text" readonly class="inp-form" name="billing_city" value="<?php echo ($order) ? $order->getBilling_address()->getCity() : ""; ?>" style="height: 18px;" /></td>
                                 </tr>
-                                
+
                                 <tr>
                                     <th valign="top">Country:</th>
                                     <td><input type="text" readonly class="inp-form" name="billing_country" value="<?php echo ($order) ? $order->getBilling_address()->getCountry()->getName() : ""; ?>" style="height: 18px;" /></td>
                                 </tr>
-                                
+
                                 <tr>
                                     <th valign="top"><br /><br />SHIPPING ADDRESS</th>
                                     <td></td>
                                 </tr>
-                                
+
                                 <tr>
                                     <th valign="top">Name:</th>
                                     <td><input type="text" readonly class="inp-form" name="shipping_name" value="<?php echo ($order) ? $order->getShipping_address()->getFirstname() . ' ' . $order->getShipping_address()->getLastname() : ""; ?>" style="height: 18px;" /></td>
                                 </tr>
-                                
+
                                 <tr>
                                     <th valign="top">Address:</th>
                                     <td><input type="text" readonly class="inp-form" name="shipping_address" value="<?php echo ($order) ? $order->getShipping_address()->getAddress() : ""; ?>" style="height: 18px;" /></td>
                                 </tr>
-                                
+
                                 <tr>
                                     <th valign="top">City:</th>
                                     <td><input type="text" readonly class="inp-form" name="shipping_city" value="<?php echo ($order) ? $order->getShipping_address()->getCity() : ""; ?>" style="height: 18px;"/></td>
                                 </tr>
-                                
+
                                 <tr>
                                     <th valign="top">Country:</th>
                                     <td><input type="text" readonly class="inp-form" name="shipping_country" value="<?php echo ($order) ? $order->getShipping_address()->getCountry()->getName() : ""; ?>" style="height: 18px;" /></td>
                                 </tr>
-                                
+
                                 <?php if (sizeof($order->getCart()->getCart_item()) > 0): ?>
                                     <tr>
                                         <th valign="top"><br /><br />PRODUCTS</th>
                                         <td></td>
                                     </tr>
-                                    
+
                                     <?php $i = 1; ?>
                                     <?php foreach ($order->getCart()->getCart_item() as $item): ?>
                                         <tr>
@@ -111,41 +111,41 @@
                                             <th valign="top">Quantity:</th>
                                             <td><input type="text" readonly class="inp-form" readonly value="<?php echo $item->getQuantity(); ?>" style="height: 18px;" /></td>
                                         </tr>
-                                        
+
                                         <tr>
                                             <th valign="top">Price:</th>
                                             <td><input type="text" readonly class="inp-form" readonly value="<?php echo $item->getPrice(), ' US $'; ?>" style="height: 18px;" /></td>
                                         </tr>
-                                        
+
                                         <?php $i++; ?>
                                     <?php endforeach; ?>
-                                    
+
                                     <tr>
                                         <td>&nbsp;</td>
                                         <td>&nbsp;</td>
                                     </tr>
                                 <?php endif; ?>
-                                        
+
                                 <tr>
                                     <th valign="top">SUBTOTAL:</th>
                                     <td><input type="text" readonly class="inp-form" name="subtotal" value="<?php echo ($order) ? $order->getCart()->getTotal() : ""; ?>" style="height: 18px;" /></td>
                                 </tr>
-                                
+
                                 <tr>
                                     <th valign="top"><br /><br />SHIPPING METHOD:</th>
                                     <td></td>
                                 </tr>
-                                
+
                                 <tr>
                                     <th valign="top">Shipping Method:</th>
                                     <td><input type="text" readonly class="inp-form" name="shipping_method" value="<?php echo ($order) ? $order->getShipping_method()->getName() : ""; ?>" style="height: 18px;" /></td>
                                 </tr>
-                                
+
                                 <tr>
                                     <th valign="top">Price:</th>
                                     <td><input type="text" readonly class="inp-form" name="shipping_method" value="<?php echo ($order) ? $order->getShipping_method()->getPrice() : ""; ?>" style="height: 18px;" /></td>
                                 </tr>
-                                
+
                                 <tr>
                                     <th valign="top"><br /><br />PAYMENT METHOD:</th>
                                     <td></td>
@@ -155,58 +155,59 @@
                                     <th valign="top">Payment Method:</th>
                                     <td><input type="text" readonly class="inp-form" name="payment_method" value="<?php echo ($order) ? $order->getPayment_method()->getName() : ""; ?>" style="height: 18px;" /></td>
                                 </tr>
-                                
+
                                 <tr>
                                     <th>
                                         <br/><br/>
                                     </th>
                                 </tr>
-                                
+
                                 <tr> 
                                     <th valign="top" style="font-size: 20px;">TOTAL:</th>
                                     <td><input type="text" readonly class="inp-form" name="payment_method" value="<?php echo ($order) ? $order->getTotal() : ""; ?>" style="font-size: 20px; height: 22px;" /></td>
                                 </tr>
-                                
+
                                 <tr>
                                     <th valign="top"><br /><br /><br />CHANGE STATUS:</th>
                                 </tr>
-                                
+
                                 <tr>
                                     <th>
-                                        <form action="<?php echo url('admin_orders/update_order_status'); ?>" method="post" >
-                                        <select name="state">
-                                        <?php foreach ($view->getStates() as $state): ?>
+                                <form action="<?php echo url('admin_orders/update_order_status'); ?>" method="post" >
+                                    <select name="state">
+                                        <?php $states = $view->getAvailableStates($order->getState()); ?>
+                                        <?php foreach ($states as $state): ?>
                                             <option value="<?php echo $state->getId(); ?>" <?php echo ($order->getState() && ($order->getState()->getId() == $state->getId())) ? 'selected="selected"' : ''; ?>><?php echo $state->getLabel(); ?></option>
                                         <?php endforeach; ?>
-                                        </select>
-                                        <input type="hidden" name="order_id" value="<?php echo $order->getId(); ?>" /><input type="submit" value="Save"/>
-                                        </form>
-                                    </th>
-                                </tr>
-                                
-                                <tr>
-                                    <th>
-                                        <button type="button" class="button" onclick="window.location = '<?php echo url('admin_orders/'); ?>'"><span><span>Back</span></span></button>
-                                    </th>
-                                </tr>
-                            </table>
-                            <!-- end id-form  -->
-                        </td>
+                                    </select>
+                                    <input type="hidden" name="order_id" value="<?php echo $order->getId(); ?>" /><input type="submit" value="Save"/>
+                                </form>
+                                </th>
                     </tr>
+
                     <tr>
-                        <td><img src="../images/shared/blank.gif" width="695" height="1" alt="blank" /></td>
-                        <td></td>
+                        <th>
+                            <button type="button" class="button" onclick="window.location = '<?php echo url('admin_orders/'); ?>'"><span><span>Back</span></span></button>
+                        </th>
                     </tr>
                 </table>
-                <div class="clear"></div>
-            </div>
-            <!--  end content-table-inner  -->
+                <!-- end id-form  -->
         </td>
-        <td id="tbl-border-right"></td>
     </tr>
     <tr>
-        <th class="sized bottomleft"></th>
-        <td id="tbl-border-bottom">&nbsp;</td>
-        <th class="sized bottomright"></th>
+        <td><img src="../images/shared/blank.gif" width="695" height="1" alt="blank" /></td>
+        <td></td>
     </tr>
+</table>
+<div class="clear"></div>
+</div>
+<!--  end content-table-inner  -->
+</td>
+<td id="tbl-border-right"></td>
+</tr>
+<tr>
+    <th class="sized bottomleft"></th>
+    <td id="tbl-border-bottom">&nbsp;</td>
+    <th class="sized bottomright"></th>
+</tr>
 </table>
